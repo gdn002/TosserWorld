@@ -10,7 +10,7 @@ namespace Entity.Type
     {
         private bool ShowNPCEntity = true;
 
-        private NPCEntity Entity { get { return target as NPCEntity; } }
+        private NPCEntity Target { get { return target as NPCEntity; } }
 
         public override void OnInspectorGUI()
         {
@@ -19,8 +19,8 @@ namespace Entity.Type
             ShowNPCEntity = EditorGUILayout.Foldout(ShowNPCEntity, "NPC Entity");
             if (ShowNPCEntity)
             {
-                Entity.Speed = EditorGUILayout.Slider("Speed: ", Entity.Speed, 0, 10);
-                EditorGUILayout.SelectableLabel("Speed/Frame: " + Entity.FrameSpeed.ToString());
+                Target.Speed = EditorGUILayout.Slider("Speed: ", Target.Speed, 0, 10);
+                EditorGUILayout.SelectableLabel("Speed/Frame: " + Target.FrameSpeed.ToString());
             }
         }
 

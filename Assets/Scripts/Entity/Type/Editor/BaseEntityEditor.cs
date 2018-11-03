@@ -12,11 +12,11 @@ namespace Entity.Type
         private bool ShowBaseEntity = true;
         private ReorderableList TagList;
 
-        private BaseEntity Entity { get { return target as BaseEntity; } }
+        private BaseEntity Target { get { return target as BaseEntity; } }
 
         public void OnEnable()
         {
-            TagList = new ReorderableList(Entity.Tags, typeof(EntityTags), true, true, true, true);
+            TagList = new ReorderableList(Target.Tags, typeof(EntityTags), true, true, true, true);
             TagList.drawHeaderCallback = OnDrawHeader;
             TagList.drawElementCallback = OnDrawElement;
             TagList.onAddCallback = OnAddElement;
@@ -27,13 +27,13 @@ namespace Entity.Type
             ShowBaseEntity = EditorGUILayout.Foldout(ShowBaseEntity, "Base Entity");
             if (ShowBaseEntity)
             {
-                Entity.Name = EditorGUILayout.TextField("Entity name: ", Entity.Name);
-                Entity.DefaultInteraction = (EntityInteractions)EditorGUILayout.EnumPopup("Right click interaction: ", Entity.DefaultInteraction);
+                Target.Name = EditorGUILayout.TextField("Entity name: ", Target.Name);
+                Target.DefaultInteraction = (EntityInteractions)EditorGUILayout.EnumPopup("Right click interaction: ", Target.DefaultInteraction);
 
-                if (TagList != null && Entity.Tags != null)
+                if (TagList != null && Target.Tags != null)
                     TagList.DoLayoutList();
 
-                Entity.InventorySprite = EditorGUILayout.ObjectField("Inventory sprite: ", Entity.InventorySprite, typeof(Sprite), false) as Sprite;
+                Target.InventorySprite = EditorGUILayout.ObjectField("Inventory sprite: ", Target.InventorySprite, typeof(Sprite), false) as Sprite;
             }
         }
 
@@ -48,13 +48,13 @@ namespace Entity.Type
         {
             Rect tagPopupRect = new Rect();
             tagPopupRect.Set(rect.x, rect.y + 2, rect.width, rect.height);
-            Entity.Tags[index] = (EntityTags)EditorGUI.EnumPopup(tagPopupRect, Entity.Tags[index]);
+            Target.Tags[index] = (EntityTags)EditorGUI.EnumPopup(tagPopupRect, Target.Tags[index]);
         }
 
         private void OnAddElement(ReorderableList list)
         {
             EntityTags tag = EntityTags.Any;
-            Entity.Tags.Add(tag);
+            Target.Tags.Add(tag);
         }
     }
 }

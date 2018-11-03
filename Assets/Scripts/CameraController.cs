@@ -15,28 +15,40 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public class CameraOrientation
     {
-        public enum Orientations
+        public enum Orientation
         {
-            North = 0,
-            East,
-            South,
-            West
+            N = 0,
+            NE,
+            E,
+            SE,
+            S,
+            SW,
+            W,
+            NW,
         }
 
-        public Orientations CurrentOrientation;
+        public Orientation CurrentOrientation;
 
         public float RotationAngle()
         {
             switch (CurrentOrientation)
             {
-                case Orientations.North:
+                case Orientation.N:
                     return 0;
-                case Orientations.East:
+                case Orientation.NE:
+                    return -45;
+                case Orientation.E:
                     return -90;
-                case Orientations.South:
+                case Orientation.SE:
+                    return -135;
+                case Orientation.S:
                     return -180;
-                case Orientations.West:
+                case Orientation.SW:
+                    return -225;
+                case Orientation.W:
                     return -270;
+                case Orientation.NW:
+                    return -315;
             }
 
             return 0;
@@ -45,18 +57,26 @@ public class CameraController : MonoBehaviour
         public float RelativeHorizontal(Vector2 vector)
         {
             // Rotate 45 degrees to match the isometric camera
-            vector = Quaternion.Euler(0, 0, -45) * vector;
+            Vector2 adjusted = Quaternion.Euler(0, 0, -45) * vector;
 
             // Extract the relative horizontal value
             switch(CurrentOrientation)
             {
-                case Orientations.North:
+                case Orientation.N:
+                    return adjusted.x;
+                case Orientation.NE:
                     return vector.x;
-                case Orientations.East:
+                case Orientation.E:
+                    return -adjusted.y;
+                case Orientation.SE:
                     return -vector.y;
-                case Orientations.South:
+                case Orientation.S:
+                    return -adjusted.x;
+                case Orientation.SW:
                     return -vector.x;
-                case Orientations.West:
+                case Orientation.W:
+                    return adjusted.y;
+                case Orientation.NW:
                     return vector.y;
             }
 
@@ -66,18 +86,26 @@ public class CameraController : MonoBehaviour
         public float RelativeVertical(Vector2 vector)
         {
             // Rotate 45 degrees to match the isometric camera
-            vector = Quaternion.Euler(0, 0, -45) * vector;
+            Vector2 adjusted = Quaternion.Euler(0, 0, -45) * vector;
 
             // Extract the relative horizontal value
             switch (CurrentOrientation)
             {
-                case Orientations.North:
+                case Orientation.N:
+                    return adjusted.y;
+                case Orientation.NE:
                     return vector.y;
-                case Orientations.East:
+                case Orientation.E:
+                    return adjusted.x;
+                case Orientation.SE:
                     return vector.x;
-                case Orientations.South:
+                case Orientation.S:
+                    return -adjusted.y;
+                case Orientation.SW:
                     return -vector.y;
-                case Orientations.West:
+                case Orientation.W:
+                    return -adjusted.x;
+                case Orientation.NW:
                     return -vector.x;
             }
 
@@ -88,17 +116,29 @@ public class CameraController : MonoBehaviour
         {
             switch (CurrentOrientation)
             {
-                case Orientations.North:
-                    CurrentOrientation = clockwise ? Orientations.East : Orientations.West;
+                case Orientation.N:
+                    CurrentOrientation = clockwise ? Orientation.NE : Orientation.NW;
                     break;
-                case Orientations.East:
-                    CurrentOrientation = clockwise ? Orientations.South : Orientations.North;
+                case Orientation.NE:
+                    CurrentOrientation = clockwise ? Orientation.E : Orientation.N;
                     break;
-                case Orientations.South:
-                    CurrentOrientation = clockwise ? Orientations.West : Orientations.East;
+                case Orientation.E:
+                    CurrentOrientation = clockwise ? Orientation.SE : Orientation.NE;
                     break;
-                case Orientations.West:
-                    CurrentOrientation = clockwise ? Orientations.North : Orientations.South;
+                case Orientation.SE:
+                    CurrentOrientation = clockwise ? Orientation.S : Orientation.E;
+                    break;
+                case Orientation.S:
+                    CurrentOrientation = clockwise ? Orientation.SW : Orientation.SE;
+                    break;
+                case Orientation.SW:
+                    CurrentOrientation = clockwise ? Orientation.W : Orientation.S;
+                    break;
+                case Orientation.W:
+                    CurrentOrientation = clockwise ? Orientation.NW : Orientation.SW;
+                    break;
+                case Orientation.NW:
+                    CurrentOrientation = clockwise ? Orientation.N : Orientation.W;
                     break;
             }
         }
@@ -160,7 +200,7 @@ public class CameraController : MonoBehaviour
         IsRotating = true;
 
         float from = Orientation.RotationAngle();
-        float to = from + (clockwise ? -90 : 90);
+        float to = from + (clockwise ? -45 : 45);
 
         Orientation.Rotate(clockwise);
 

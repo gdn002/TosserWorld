@@ -82,17 +82,24 @@ namespace Entity.Component.Brain
                 return nearest;
             }
 
+            public IEnumerator<BaseEntity> GetEnumerator()
+            {
+                foreach (var entity in Awareness)
+                {
+                    yield return entity;
+                }
+            }
 
             private void Add(BaseEntity entity)
             {
-                Debug.Log("Detected: " + entity.name);
                 Awareness.Add(entity);
+                Owner.OnDetectEntity(entity);
             }
 
             private void Remove(BaseEntity entity)
             {
                 Awareness.Remove(entity);
-                Debug.Log("Lost: " + entity.name);
+                Owner.OnLoseEntity(entity);
             }
         }
 
@@ -218,6 +225,18 @@ namespace Entity.Component.Brain
             CurrentLoop = null;
         }
 
+        //// ---- EVENTS ----
+
+        protected virtual void OnDetectEntity(BaseEntity entity)
+        {
+            Debug.Log("Detected: " + entity.name);
+        }
+
+        protected virtual void OnLoseEntity(BaseEntity entity)
+        {
+            Debug.Log("Lost: " + entity.name);
+        }
+
 
         //// ---- SECONDARY ACTIONS ----
 
@@ -238,7 +257,7 @@ namespace Entity.Component.Brain
                 // Calculate the needed walk to reach the destination
                 Vector2 walk = destination - position;
 
-                if (walk.magnitude > Owner.WalkDelta)
+                if (walk.magnitude > Owner.FrameSpeed)
                 {
                     // If the distance remaining is greater than the NPC's walk delta, walk at full speed
                     Owner.Walk(walk);
@@ -263,15 +282,15 @@ namespace Entity.Component.Brain
 
             // Calculate the needed walk to reach the target
             Vector2 walk = destination - position;
-            if (walk.magnitude > far)
-            {
-                // Within go threshold
-                Owner.Walk(walk);
-            }
-            else if (walk.magnitude < near)
+            if (walk.magnitude < near)
             {
                 // Within stop threshold
                 Owner.Stop();
+            }
+            else if (Owner.Movement.WalkVector.magnitude != 0 || walk.magnitude > far)
+            {
+                // Within go threshold
+                Owner.Walk(walk);
             }
 
             return true;

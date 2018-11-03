@@ -7,11 +7,10 @@ using Entity.Type;
 
 namespace Entity.Component
 {
-    public class ContainerComponent : MonoBehaviour
+    public class ContainerComponent : BaseComponent
     {
         private static GameObject UIPrefab;
         private static Canvas UICanvas;
-
 
         public InventorySpace Storage;
 
@@ -31,24 +30,17 @@ namespace Entity.Component
 
         }
 
-        // Use this for initialization
-        protected virtual void Start()
+        protected override void OnStart()
         {
             if (UICanvas == null)
             {
                 UICanvas = GameObject.FindObjectOfType<Canvas>();
             }
 
-            if (GetComponent<BaseEntity>() == null)
-            {
-                Debug.LogWarning("ContainerComponent in non-entity object: " + name);
-            }
-
             Storage = new InventorySpace(SlotCount);
         }
 
-        // Update is called once per frame
-        protected virtual void Update()
+        protected override void OnUpdate()
         {
             for (int i = 0; i < Storage.Length; ++i)
             {
@@ -71,7 +63,7 @@ namespace Entity.Component
             {
                 if (Storage[i] != null)
                 {
-                    if (Storage[i].Entity.EntityName == stack.Entity.EntityName)
+                    if (Storage[i].Entity.Name == stack.Entity.Name)
                     {
                         // Merge stacks
                         stack = Storage[i].CombineStack(stack);
@@ -111,7 +103,7 @@ namespace Entity.Component
             EntityStack current = Storage[slot];
             if (current != null)
             {
-                if (current.Entity.EntityName == stack.Entity.EntityName)
+                if (current.Entity.Name == stack.Entity.Name)
                 {
                     // Merge stacks
                     stack = Storage[slot].CombineStack(stack);

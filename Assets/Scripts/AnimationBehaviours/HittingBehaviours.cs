@@ -18,15 +18,7 @@ public class HittingBehaviours : StateMachineBehaviour {
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        NPCEntity playerControler = animator.GetComponent<NPCEntity>();
-        if (playerControler == null)
-        {
-            Debug.LogWarning("PlayerController not found within object making use of the player animation set.");
-        }
-        else
-        {
-            playerControler.EndHit();
-        }
+        
 	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here

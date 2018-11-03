@@ -27,7 +27,7 @@ namespace Entity.Type
             ShowBaseEntity = EditorGUILayout.Foldout(ShowBaseEntity, "Base Entity");
             if (ShowBaseEntity)
             {
-                Entity.EntityName = EditorGUILayout.TextField("Entity name: ", Entity.EntityName);
+                Entity.Name = EditorGUILayout.TextField("Entity name: ", Entity.Name);
                 Entity.DefaultInteraction = (EntityInteractions)EditorGUILayout.EnumPopup("Right click interaction: ", Entity.DefaultInteraction);
 
                 if (TagList != null && Entity.Tags != null)

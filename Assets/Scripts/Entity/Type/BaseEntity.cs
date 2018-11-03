@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 using Entity.Component;
+using Entity.Util;
 
 namespace Entity.Type
 {
@@ -15,25 +16,41 @@ namespace Entity.Type
         // TODO: Move this somewhere better
         public static EntityChunk GlobalChunk = new EntityChunk();
 
+        //// ---- ENTITY IDENTIFICATION ----
+
         // Name
-        public string EntityName;
+        public string Name;
 
         // Tags
         public List<EntityTags> Tags = new List<EntityTags>();
         public EntityInteractions DefaultInteraction = EntityInteractions.None;
 
+
+        //// ---- ENTITY STATS ----
+
+        public Stat Radiation;
+
+        public Vector2 Position { get { return transform.position; } }
+
+        // References for components
+        public struct EntityComponents
+        {
+            // Unity components
+            public Rigidbody2D RigidBody;
+            public Animator Animator;
+            public Collider2D MainCollider;
+
+            // Custom components
+            public PhysicsComponent Physics;
+            public ContainerComponent Container;
+
+            // Hierarchy
+            public GameObject Render;
+        }
+        public EntityComponents Components;
+
         // Sprites
         public Sprite InventorySprite;
-
-        // References for Unity components
-        public Rigidbody2D RigidBody { get; private set; }
-        public Animator Animator { get; private set; }
-
-        // References for Entity components
-        public PhysicsComponent Physics { get; private set; }
-        public ContainerComponent Container { get; private set; }
-
-        public GameObject Render { get; private set; }
 
         // Use this for initialization
         void Start()
@@ -41,19 +58,19 @@ namespace Entity.Type
             GlobalChunk.AddEntity(this);
 
             // Detect and fill Unity component references
-            RigidBody = GetComponent<Rigidbody2D>();
-            Animator = GetComponentInChildren<Animator>();
+            Components.RigidBody = GetComponent<Rigidbody2D>();
+            Components.Animator = GetComponentInChildren<Animator>();
+            Components.MainCollider = GetComponent<Collider2D>();
 
             // Detect and fill Entity component references
-            Physics = GetComponent<PhysicsComponent>();
-            Container = GetComponent<ContainerComponent>();
+            Components.Physics = GetComponent<PhysicsComponent>();
+            Components.Container = GetComponent<ContainerComponent>();
 
-            Render = transform.Find("Render").gameObject;
+            Components.Render = transform.Find("Render").gameObject;
 
             OnStart();
         }
 
-        // Update is called once per frame
         void Update()
         {
             OnUpdate();
@@ -173,8 +190,8 @@ namespace Entity.Type
 
         public void SetEnable(bool enable)
         {
-            Render.SetActive(enable);
-            RigidBody.isKinematic = !enable;
+            Components.Render.SetActive(enable);
+            Components.RigidBody.isKinematic = !enable;
         }
 
         public bool HasTag(EntityTags tag)

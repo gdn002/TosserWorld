@@ -24,7 +24,7 @@ namespace Entity.Component.Brain
             gameObject.transform.SetParent(owner.transform, false);
 
             // Set it to ignore raycast 
-            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+            gameObject.layer = LayerMask.NameToLayer("Awareness");
 
             // Add a kinematic rigidbody
             var rigidbody = gameObject.AddComponent<Rigidbody2D>();

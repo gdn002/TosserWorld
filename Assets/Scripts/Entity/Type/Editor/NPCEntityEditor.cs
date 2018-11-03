@@ -19,10 +19,8 @@ namespace Entity.Type
             ShowNPCEntity = EditorGUILayout.Foldout(ShowNPCEntity, "NPC Entity");
             if (ShowNPCEntity)
             {
-                Entity.WalkSpeed = EditorGUILayout.Slider("Walk speed: ", Entity.WalkSpeed, 0, 100);
-                EditorGUILayout.SelectableLabel("Walk delta: " + Entity.WalkDelta.ToString());
-
-                Entity.HandSprite = EditorGUILayout.ObjectField("Hand sprite: ", Entity.HandSprite, typeof(SpriteRenderer), true) as SpriteRenderer;
+                Entity.Speed = EditorGUILayout.Slider("Speed: ", Entity.Speed, 0, 10);
+                EditorGUILayout.SelectableLabel("Speed/Frame: " + Entity.FrameSpeed.ToString());
             }
         }
 

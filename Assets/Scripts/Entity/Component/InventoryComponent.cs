@@ -11,7 +11,7 @@ namespace Entity.Component
         public EntityStack HandSlot;
 
 
-        private NPCEntity Entity;
+        private new NPCEntity Owner { get { return base.Owner as NPCEntity; } }
 
         protected override void Awake()
         {
@@ -19,21 +19,15 @@ namespace Entity.Component
         }
 
         // Use this for initialization
-        protected override void Start()
+        protected override void OnStart()
         {
-            base.Start();
-
-            Entity = GetComponent<NPCEntity>();
-            if (Entity == null)
-            {
-                Debug.LogWarning("InventoryComponent in non-NPC entity: " + name);
-            }
+            base.OnStart();
         }
 
         // Update is called once per frame
-        protected override void Update()
+        protected override void OnUpdate()
         {
-            base.Update();
+            base.OnUpdate();
         }
 
 
@@ -43,7 +37,7 @@ namespace Entity.Component
 
             if (current != null)
             {
-                if (current.Entity.EntityName == stack.Entity.EntityName)
+                if (current.Entity.Name == stack.Entity.Name)
                 {
                     // Merge stacks
                     stack = current.CombineStack(stack);
@@ -72,7 +66,7 @@ namespace Entity.Component
 
         private void UpdateHand()
         {
-            Entity.UpdateHand();
+            Owner.UpdateHand();
         }
     }
 }

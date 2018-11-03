@@ -6,17 +6,16 @@ using Entity.Type;
 
 namespace Entity.Component
 {
-    public class PhysicsComponent : MonoBehaviour
+    public class PhysicsComponent : BaseComponent
     {
-
-        class PhysicsState
+        public class PhysicsState
         {
             // Vertical movement data
             public float VerticalVelocity;
             public float Height;
 
-            public bool IsInPhysicsMode = false;
-            public int  CollisionCount  = 0;
+            public bool Active = false;
+            public bool Grounded { get { return Height <= 0; } }
         }
 
         // The child transform contains the actual item which will move vertically
@@ -36,33 +35,77 @@ namespace Entity.Component
 
         public bool EnableOnCollisions = true;
 
-        // Component references
-        private Rigidbody2D RigidBody;
+        // Shortcuts
+        private Rigidbody2D RigidBody { get { return Owner.Components.RigidBody; } }
+        private Collider2D MainCollider { get { return Owner.Components.MainCollider; } }
 
         // Physics state data
-        private PhysicsState State;
-
-        public bool IsInPhysicsMode { get { return State.IsInPhysicsMode; } }
-        public bool IsColliding     { get { return State.CollisionCount > 0; } }
+        public PhysicsState State { get; private set; }
 
         private float ScaledGravity { get { return Physics2D.gravity.y * GravityScale; } }
 
         // Use this for initialization
-        void Start()
+        protected override void OnStart()
         {
-            BaseEntity entity = GetComponent<BaseEntity>();
-            if (entity == null)
-            {
-                Debug.LogWarning("PhysicsComponent in non-entity object: " + name);
-            }
-
             State = new PhysicsState();
 
-            RigidBody = entity.RigidBody;
-            if (RigidBody == null)
+            InitializeEntitySpace();
+        }
+
+        private void InitializeEntitySpace()
+        {
+            GameObject obj = new GameObject();
+            obj.name = "Space";
+            obj.layer = LayerMask.NameToLayer("Entity");
+
+            obj.transform.SetParent(transform, false);
+
+            GenerateEntitySpaceCollider(obj);
+        }
+
+        private void GenerateEntitySpaceCollider(GameObject obj)
+        {
+            // Copy the main collider as this entity's spatial collider
+            System.Type type = MainCollider.GetType();
+            var spaceCollider = obj.AddComponent(type);
+
+            // NOT SUPPORTED: Composite and Edge colliders
+            if (type == typeof(CircleCollider2D))
             {
-                Debug.LogWarning("PhysicsComponent could not find a Rigidbody2D in " + transform.name);
+                CircleCollider2D from = MainCollider as CircleCollider2D;
+                CircleCollider2D to = spaceCollider as CircleCollider2D;
+
+                to.offset = from.offset;
+                to.radius = from.radius;
             }
+            else if (type == typeof(BoxCollider2D))
+            {
+                BoxCollider2D from = MainCollider as BoxCollider2D;
+                BoxCollider2D to = spaceCollider as BoxCollider2D;
+
+                to.offset = from.offset;
+                to.size = from.size;
+                to.edgeRadius = from.edgeRadius;
+            }
+            else if (type == typeof(CapsuleCollider2D))
+            {
+                CapsuleCollider2D from = MainCollider as CapsuleCollider2D;
+                CapsuleCollider2D to = spaceCollider as CapsuleCollider2D;
+
+                to.offset = from.offset;
+                to.size = from.size;
+                to.direction = from.direction;
+            }
+            else if (type == typeof(PolygonCollider2D))
+            {
+                PolygonCollider2D from = MainCollider as PolygonCollider2D;
+                PolygonCollider2D to = spaceCollider as PolygonCollider2D;
+
+                to.offset = from.offset;
+                to.points = from.points;
+            }
+
+            (spaceCollider as Collider2D).isTrigger = true;
         }
 
         /// <summary>
@@ -73,7 +116,7 @@ namespace Entity.Component
         /// <returns></returns>
         public void EnablePhysicsMode()
         {
-            State.IsInPhysicsMode = true;
+            State.Active = true;
         }
 
         /// <summary>
@@ -144,12 +187,6 @@ namespace Entity.Component
             State.VerticalVelocity = 0;
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
         void FixedUpdate()
         {
             if (VerifyPhysicsMode())
@@ -160,25 +197,23 @@ namespace Entity.Component
 
         private bool VerifyPhysicsMode()
         {
-            if (!IsInPhysicsMode)
+            if (!State.Active)
             {
                 return false;
             }
 
             if (IsCurrentlyStill() && State.Height == 0)
             {
-                State.IsInPhysicsMode = false;
+                State.Active = false;
             }
 
-            return IsInPhysicsMode;
+            return State.Active;
         }
 
         void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.rigidbody != null)
             {
-                State.CollisionCount++;
-
                 if (EnableOnCollisions)
                     EnablePhysicsMode();
             }
@@ -186,10 +221,7 @@ namespace Entity.Component
 
         void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.rigidbody != null)
-            {
-                State.CollisionCount--;
-            }
+            
         }
 
         private void HandlePhysics()
@@ -204,11 +236,13 @@ namespace Entity.Component
 
             // Move child object to correct position
             PhysicsBody.localPosition = new Vector3(0, State.Height, 0);
+
+            MainCollider.enabled = State.Grounded;
         }
 
         private void HandleGravity()
         {
-            if (State.Height > 0)
+            if (!State.Grounded)
             {
                 // If the height is over zero, the object is in the air and should have gravity force applied to it
                 State.VerticalVelocity += ScaledGravity * Time.fixedDeltaTime;

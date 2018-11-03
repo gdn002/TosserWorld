@@ -26,7 +26,7 @@ namespace Entity.Type
             // TEST
             if (Input.GetKeyDown("x"))
             {
-                Physics.ApplyForce(new Vector3(7, 7, 3.5f));
+                Components.Physics.ApplyForce(new Vector3(5, 7, 0));
             }
 
             HandleInput();
@@ -37,7 +37,7 @@ namespace Entity.Type
         private void HandleInput()
         {
             // Ensure the player is able to receive inputs
-            if (State.IsMovementAllowed())
+            if (!Movement.Knockback)
             {
                 HandleKeyboard();
                 HandleMouse();
@@ -56,7 +56,7 @@ namespace Entity.Type
                 if (walk.magnitude > 0)
                 {
                     // If there's movement input, signal the brain to walk
-                    Brain.Triggers.Set("player_walk_keyboard", walk);
+                    NPCComponents.Brain.Triggers.Set("player_walk_keyboard", walk);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace Entity.Type
                         if (worldPlane.Raycast(ray, out enter))
                         {
                             // If the world was clicked, signal the brain to go to the location
-                            Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                            NPCComponents.Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
                         }
                     }
                 }

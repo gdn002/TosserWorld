@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+using Utility.Enumerations;
+
 namespace Utility
 {
     public class SpriteOrientation : MonoBehaviour
@@ -17,134 +19,123 @@ namespace Utility
         }
 
         public Mode OrientationMode = Mode.None;
-        public CameraController.CameraOrientation.Orientation Orientation = CameraController.CameraOrientation.Orientation.N;
 
         public Sprite[] Sprites = new Sprite[8];
 
         private SpriteRenderer Renderer;
-        private CameraController.CameraOrientation.Orientation? Current = null;
-        
+
 
         void Start()
         {
             Renderer = GetComponent<SpriteRenderer>();
         }
 
-        void Update()
+        public void UpdateOrientation(Orientation local, Orientation camera)
         {
-            UpdateOrientation();
-        }
-
-        private void UpdateOrientation()
-        {
-            if (Current == null || Current != CameraController.Controller.Orientation.CurrentOrientation)
+            switch (OrientationMode)
             {
-                Current = CameraController.Controller.Orientation.CurrentOrientation;
-                switch (OrientationMode)
-                {
-                    case Mode.None:
-                        None();
-                        break;
-                    case Mode.Quarter:
-                        Quarter();
-                        break;
-                    case Mode.Half:
-                        Half();
-                        break;
-                    case Mode.Full:
-                        Half();
-                        break;
-                }
+                case Mode.None:
+                    None(local, camera);
+                    break;
+                case Mode.Quarter:
+                    Quarter(local, camera);
+                    break;
+                case Mode.Half:
+                    Half(local, camera);
+                    break;
+                case Mode.Full:
+                    Half(local, camera);
+                    break;
             }
         }
 
-        private void None()
+        private void None(Orientation local, Orientation camera)
         {
             Renderer.sprite = Sprites[0];
             Flip(false);
         }
 
-        private void Quarter()
+        private void Quarter(Orientation local, Orientation camera)
         {
-            switch (RelativeOrientation())
+            switch (RelativeOrientation(local, camera))
             {
-                case CameraController.CameraOrientation.Orientation.N:
-                case CameraController.CameraOrientation.Orientation.S:
+                case Utility.Enumerations.Orientation.N:
+                case Utility.Enumerations.Orientation.S:
                     Renderer.sprite = Sprites[0];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.E:
-                case CameraController.CameraOrientation.Orientation.W:
+                case Utility.Enumerations.Orientation.E:
+                case Utility.Enumerations.Orientation.W:
                     Renderer.sprite = Sprites[2];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.NE:
-                case CameraController.CameraOrientation.Orientation.SW:
+                case Utility.Enumerations.Orientation.NE:
+                case Utility.Enumerations.Orientation.SW:
                     Renderer.sprite = Sprites[1];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.SE:
-                case CameraController.CameraOrientation.Orientation.NW:
+                case Utility.Enumerations.Orientation.SE:
+                case Utility.Enumerations.Orientation.NW:
                     Renderer.sprite = Sprites[1];
                     Flip(true);
                     break;
             }
         }
 
-        private void Half()
+        private void Half(Orientation local, Orientation camera)
         {
-            switch(RelativeOrientation())
+            switch(RelativeOrientation(local, camera))
             {
-                case CameraController.CameraOrientation.Orientation.N:
+                case Utility.Enumerations.Orientation.N:
                     Renderer.sprite = Sprites[0];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.S:
+                case Utility.Enumerations.Orientation.S:
                     Renderer.sprite = Sprites[4];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.E:
+                case Utility.Enumerations.Orientation.E:
                     Renderer.sprite = Sprites[2];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.W:
+                case Utility.Enumerations.Orientation.W:
                     Renderer.sprite = Sprites[2];
                     Flip(true);
                     break;
-                case CameraController.CameraOrientation.Orientation.NE:
+                case Utility.Enumerations.Orientation.NE:
                     Renderer.sprite = Sprites[1];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.NW:
+                case Utility.Enumerations.Orientation.NW:
                     Renderer.sprite = Sprites[1];
                     Flip(true);
                     break;
-                case CameraController.CameraOrientation.Orientation.SE:
+                case Utility.Enumerations.Orientation.SE:
                     Renderer.sprite = Sprites[3];
                     Flip(false);
                     break;
-                case CameraController.CameraOrientation.Orientation.SW:
+                case Utility.Enumerations.Orientation.SW:
                     Renderer.sprite = Sprites[3];
                     Flip(true);
                     break;
             }
         }
 
-        private void Full()
+        private void Full(Orientation local, Orientation camera)
         {
-            Renderer.sprite = Sprites[(int)RelativeOrientation()];
+            Renderer.sprite = Sprites[(int)RelativeOrientation(local, camera)];
             Flip(false);
         }
 
-        private CameraController.CameraOrientation.Orientation RelativeOrientation()
+        private Orientation RelativeOrientation(Orientation local, Orientation camera)
         {
-            int value = (int)Orientation - (int)Current;
-            if (value < 0)
+            int value = (int)local - (int)camera;
+            if (value < (int)Utility.Enumerations.Orientation.N)
             {
-                value += 8;
+                value += (int)Utility.Enumerations.Orientation.NW + 1;
             }
 
-            return (CameraController.CameraOrientation.Orientation)value;
+            return (Orientation)value;
         }
 
         private void Flip(bool flip)

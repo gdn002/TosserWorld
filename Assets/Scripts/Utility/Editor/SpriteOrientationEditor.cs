@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditorInternal;
 
+using Utility.Enumerations;
+
 namespace Utility
 {
     [CustomEditor(typeof(SpriteOrientation))]
@@ -13,7 +15,6 @@ namespace Utility
 
         public override void OnInspectorGUI()
         {
-            Target.Orientation = (CameraController.CameraOrientation.Orientation)EditorGUILayout.EnumPopup("Facing direction: ", Target.Orientation);
             Target.OrientationMode = (SpriteOrientation.Mode)EditorGUILayout.EnumPopup("Orientation mode: ", Target.OrientationMode);
 
             switch (Target.OrientationMode)

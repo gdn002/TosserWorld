@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 
 namespace Entity.Component
 {
     [CustomEditor(typeof(PhysicsComponent))]
-    public class PhysicsComponentEditor : Editor
+    public class PhysicsComponentEditor : UnityEditor.Editor
     {
         private bool ShowEnable = true;
 

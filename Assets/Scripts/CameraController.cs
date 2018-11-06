@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Utility.Enumerations;
+
 /// <summary>
 /// Handles camera movement, rotation and tracking
 /// </summary>
@@ -15,39 +17,27 @@ public class CameraController : MonoBehaviour
     /// </summary>
     public class CameraOrientation
     {
-        public enum Orientation
-        {
-            N = 0,
-            NE,
-            E,
-            SE,
-            S,
-            SW,
-            W,
-            NW,
-        }
-
         public Orientation CurrentOrientation;
 
         public float RotationAngle()
         {
             switch (CurrentOrientation)
             {
-                case Orientation.N:
+                case Utility.Enumerations.Orientation.N:
                     return 0;
-                case Orientation.NE:
+                case Utility.Enumerations.Orientation.NE:
                     return -45;
-                case Orientation.E:
+                case Utility.Enumerations.Orientation.E:
                     return -90;
-                case Orientation.SE:
+                case Utility.Enumerations.Orientation.SE:
                     return -135;
-                case Orientation.S:
+                case Utility.Enumerations.Orientation.S:
                     return -180;
-                case Orientation.SW:
+                case Utility.Enumerations.Orientation.SW:
                     return -225;
-                case Orientation.W:
+                case Utility.Enumerations.Orientation.W:
                     return -270;
-                case Orientation.NW:
+                case Utility.Enumerations.Orientation.NW:
                     return -315;
             }
 
@@ -62,21 +52,21 @@ public class CameraController : MonoBehaviour
             // Extract the relative horizontal value
             switch(CurrentOrientation)
             {
-                case Orientation.N:
+                case Utility.Enumerations.Orientation.N:
                     return adjusted.x;
-                case Orientation.NE:
+                case Utility.Enumerations.Orientation.NE:
                     return vector.x;
-                case Orientation.E:
+                case Utility.Enumerations.Orientation.E:
                     return -adjusted.y;
-                case Orientation.SE:
+                case Utility.Enumerations.Orientation.SE:
                     return -vector.y;
-                case Orientation.S:
+                case Utility.Enumerations.Orientation.S:
                     return -adjusted.x;
-                case Orientation.SW:
+                case Utility.Enumerations.Orientation.SW:
                     return -vector.x;
-                case Orientation.W:
+                case Utility.Enumerations.Orientation.W:
                     return adjusted.y;
-                case Orientation.NW:
+                case Utility.Enumerations.Orientation.NW:
                     return vector.y;
             }
 
@@ -91,21 +81,21 @@ public class CameraController : MonoBehaviour
             // Extract the relative horizontal value
             switch (CurrentOrientation)
             {
-                case Orientation.N:
+                case Utility.Enumerations.Orientation.N:
                     return adjusted.y;
-                case Orientation.NE:
+                case Utility.Enumerations.Orientation.NE:
                     return vector.y;
-                case Orientation.E:
+                case Utility.Enumerations.Orientation.E:
                     return adjusted.x;
-                case Orientation.SE:
+                case Utility.Enumerations.Orientation.SE:
                     return vector.x;
-                case Orientation.S:
+                case Utility.Enumerations.Orientation.S:
                     return -adjusted.y;
-                case Orientation.SW:
+                case Utility.Enumerations.Orientation.SW:
                     return -vector.y;
-                case Orientation.W:
+                case Utility.Enumerations.Orientation.W:
                     return -adjusted.x;
-                case Orientation.NW:
+                case Utility.Enumerations.Orientation.NW:
                     return -vector.x;
             }
 
@@ -114,33 +104,18 @@ public class CameraController : MonoBehaviour
 
         public void Rotate(bool clockwise)
         {
-            switch (CurrentOrientation)
+            int rotation = (int)CurrentOrientation + (clockwise ? 1 : -1);
+
+            if (rotation > (int)Utility.Enumerations.Orientation.NW)
             {
-                case Orientation.N:
-                    CurrentOrientation = clockwise ? Orientation.NE : Orientation.NW;
-                    break;
-                case Orientation.NE:
-                    CurrentOrientation = clockwise ? Orientation.E : Orientation.N;
-                    break;
-                case Orientation.E:
-                    CurrentOrientation = clockwise ? Orientation.SE : Orientation.NE;
-                    break;
-                case Orientation.SE:
-                    CurrentOrientation = clockwise ? Orientation.S : Orientation.E;
-                    break;
-                case Orientation.S:
-                    CurrentOrientation = clockwise ? Orientation.SW : Orientation.SE;
-                    break;
-                case Orientation.SW:
-                    CurrentOrientation = clockwise ? Orientation.W : Orientation.S;
-                    break;
-                case Orientation.W:
-                    CurrentOrientation = clockwise ? Orientation.NW : Orientation.SW;
-                    break;
-                case Orientation.NW:
-                    CurrentOrientation = clockwise ? Orientation.N : Orientation.W;
-                    break;
+                rotation = (int)Utility.Enumerations.Orientation.N;
             }
+            else if (rotation < (int)Utility.Enumerations.Orientation.N)
+            {
+                rotation = (int)Utility.Enumerations.Orientation.NW;
+            }
+
+            CurrentOrientation = (Orientation)rotation;
         }
     }
 

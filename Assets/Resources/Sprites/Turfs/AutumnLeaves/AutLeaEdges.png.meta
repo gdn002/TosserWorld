@@ -1,30 +1,34 @@
 fileFormatVersion: 2
-guid: c41cb33977ff440e9bf0f55e43b6e181
+guid: 0fdd99e7c765c45708deeb60d51668ef
 TextureImporter:
   fileIDToRecycleName:
-    21300000: AutumnLeavesTurf_0
-    21300002: AutumnLeavesTurf_1
-    21300004: AutumnLeavesTurf_2
-    21300006: AutumnLeavesTurf_3
-    21300008: AutumnLeavesTurf_4
-    21300010: AutumnLeavesTurf_5
-    21300012: AutumnLeavesTurf_6
-    21300014: AutumnLeavesTurf_7
-    21300016: AutumnLeavesTurf_8
-    21300018: AutumnLeavesTurf_9
-    21300020: AutumnLeavesTurf_10
-    21300022: AutumnLeavesTurf_11
-    21300024: AutumnLeavesTurf_12
-    21300026: AutumnLeavesTurf_13
-    21300028: AutumnLeavesTurf_14
-    21300030: AutumnLeavesTurf_15
-    21300032: AutumnLeavesTurf_16
-    21300034: AutumnLeavesTurf_17
-    21300036: AutumnLeavesTurf_18
-    21300038: AutumnLeavesTurf_19
-    21300040: AutumnLeavesTurf_20
-    21300042: AutumnLeavesTurf_21
-    21300044: AutumnLeavesTurf_22
+    21300000: AutLeaEdges 1_0
+    21300002: AutLeaEdges 1_1
+    21300004: AutLeaEdges 1_2
+    21300006: AutLeaEdges 1_3
+    21300008: AutLeaEdges 1_4
+    21300010: AutLeaEdges 1_5
+    21300012: AutLeaEdges 1_6
+    21300014: AutLeaEdges 1_7
+    21300016: AutLeaEdges 1_8
+    21300018: AutLeaEdges 1_9
+    21300020: AutLeaEdges 1_10
+    21300022: AutLeaEdges 1_11
+    21300024: AutLeaEdges 1_12
+    21300026: AutLeaEdges_0
+    21300028: AutLeaEdges_1
+    21300030: AutLeaEdges_2
+    21300032: AutLeaEdges_3
+    21300034: AutLeaEdges_4
+    21300036: AutLeaEdges_5
+    21300038: AutLeaEdges_6
+    21300040: AutLeaEdges_7
+    21300042: AutLeaEdges_8
+    21300044: AutLeaEdges_9
+    21300046: AutLeaEdges_10
+    21300048: AutLeaEdges_11
+    21300050: AutLeaEdges_12
+    21300052: AutLeaEdges_13
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -57,9 +61,9 @@ TextureImporter:
     filterMode: 1
     aniso: -1
     mipBias: -100
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 2
+    wrapV: 2
+    wrapW: 2
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -151,11 +155,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: AutumnLeavesTurf_0
+      name: AutLeaEdges_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 1900
+        y: 1300
         width: 100
         height: 100
       alignment: 0
@@ -165,97 +169,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 88f0e71916e4d4016b7e42ead3d58284
+      spriteID: ece1bd9e0688540e48f417b1128c1e7f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_1
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 1900
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ba6c6c1c1193142068c16112f71ffa0a
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_2
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 1900
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: bb2b260a7ab9142fa81d8e12686e93e5
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_3
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 1900
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0413ce2146c434a46b8ce3d18fa5ac66
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_4
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 1900
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c61c73325bf3e4e039d50a43dbc08e06
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_5
+      name: AutLeaEdges_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 1800
+        y: 1200
         width: 100
         height: 100
       alignment: 0
@@ -265,77 +189,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d58864cf344c480e9c559a01ab0c177
+      spriteID: 117993a884f5447cfa0c997cf17883e6
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_6
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 1800
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 866281fe976b04b9dbb983668633a958
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_7
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 1800
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9127a23ae22b549e280a73fc24e74ee9
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_8
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 1800
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3f57f592b122c42e79cab8674fde7ea7
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_9
+      name: AutLeaEdges_2
       rect:
         serializedVersion: 2
         x: 0
-        y: 1700
+        y: 1100
         width: 100
         height: 100
       alignment: 0
@@ -345,97 +209,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 125757e3464d64804809f99049b8a359
+      spriteID: 65cd7a35b1a0d4e0a90c24233aa9382f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_10
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 1700
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 150d2a0d70a9840e583faa763aa66515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_11
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 1700
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a28772a00a234465ebc60c0ee41f928c
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_12
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 1700
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 85c1b6eb9c35847e781de4cb077a5aca
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_13
-      rect:
-        serializedVersion: 2
-        x: 400
-        y: 1700
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1599b891480734758a4ffc1b07373947
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_14
+      name: AutLeaEdges_3
       rect:
         serializedVersion: 2
         x: 0
-        y: 1600
+        y: 1000
         width: 100
         height: 100
       alignment: 0
@@ -445,77 +229,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 151716b4a4fca4785b1b6d9ead243cdc
+      spriteID: 7e7eb27a20f0d4dd38890185d79c6d42
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_15
-      rect:
-        serializedVersion: 2
-        x: 100
-        y: 1600
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8eb2f09c5d8c84fe8ad60feadf9b8e64
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_16
-      rect:
-        serializedVersion: 2
-        x: 200
-        y: 1600
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 01404f27771694648910e39e4525c84e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_17
-      rect:
-        serializedVersion: 2
-        x: 300
-        y: 1600
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 36d98c67cbc5a4042a75274989f86088
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: AutumnLeavesTurf_18
+      name: AutLeaEdges_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 1500
+        y: 900
         width: 100
         height: 100
       alignment: 0
@@ -525,17 +249,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 94221b705a83a4df58affa213eb86108
+      spriteID: b79a5ace30cb1418694a224aecb142df
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_19
+      name: AutLeaEdges_5
       rect:
         serializedVersion: 2
-        x: 100
-        y: 1500
+        x: 0
+        y: 800
         width: 100
         height: 100
       alignment: 0
@@ -545,17 +269,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e11403dc04fb14f2aa2d1f2c542852c6
+      spriteID: 4cd66e2d46c084b02942a590ae8b1292
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_20
+      name: AutLeaEdges_6
       rect:
         serializedVersion: 2
-        x: 200
-        y: 1500
+        x: 0
+        y: 700
         width: 100
         height: 100
       alignment: 0
@@ -565,17 +289,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aba431b3218364ddfb8b953943f1124d
+      spriteID: 56956b0793b974322830db60e7b63c51
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_21
+      name: AutLeaEdges_7
       rect:
         serializedVersion: 2
-        x: 300
-        y: 1500
+        x: 0
+        y: 600
         width: 100
         height: 100
       alignment: 0
@@ -585,17 +309,17 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 072af2f8a8a764fb2b26dc930dab7b15
+      spriteID: 4bc576a60496249ce9005bed1ed9820d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: AutumnLeavesTurf_22
+      name: AutLeaEdges_8
       rect:
         serializedVersion: 2
-        x: 400
-        y: 1500
+        x: 0
+        y: 500
         width: 100
         height: 100
       alignment: 0
@@ -605,7 +329,107 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8706e58f6cb934965a004e70ca50635a
+      spriteID: f9b666184795742898f876f387441c51
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutLeaEdges_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 400
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de113012c7c8d420f88868a2df7fc4d4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutLeaEdges_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 300
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 687181bb15a3e4b7794aacfc66172c87
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutLeaEdges_11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 200
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09057b6abab604276b413e0aef34c05b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutLeaEdges_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 100
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79d2ef4ece88c4a1e93a8f40f2a8359e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AutLeaEdges_13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b49a005be5b544cc869d9d492d7f380
       vertices: []
       indices: 
       edges: []
@@ -613,7 +437,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 616c0ae5dead847f7817d3a189ea56b4
+    spriteID: dccca1126dfc74c40adc9e72b908878e
     vertices: []
     indices: 
     edges: []

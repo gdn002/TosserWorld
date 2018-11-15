@@ -4,7 +4,7 @@
             "typeInfo": {
                 "fullName": "UnityEditor.ShaderGraph.TextureShaderProperty"
             },
-            "JSONnodeData": "{\n    \"m_Value\": {\n        \"m_SerializedTexture\": \"\",\n        \"m_Guid\": \"\"\n    },\n    \"m_Name\": \"Mask\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"61106738-b43b-4e02-8297-5a425aca86a5\"\n    },\n    \"m_OverrideReferenceName\": \"_MainTex\",\n    \"m_Modifiable\": true\n}"
+            "JSONnodeData": "{\n    \"m_Value\": {\n        \"m_SerializedTexture\": \"\",\n        \"m_Guid\": \"\"\n    },\n    \"m_Name\": \"Mask\",\n    \"m_GeneratePropertyBlock\": true,\n    \"m_Guid\": {\n        \"m_GuidSerialized\": \"61106738-b43b-4e02-8297-5a425aca86a5\"\n    },\n    \"m_OverrideReferenceName\": \"\",\n    \"m_Modifiable\": true\n}"
         },
         {
             "typeInfo": {

@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Entity.Type;
+
 namespace Entity
 {
     public class InventorySpace
     {
-        public EntityStack[] Inventory;
+        public BasicEntity[] Inventory;
 
         public int Length { get { return Inventory.Length; } }
 
         public InventorySpace(int size)
         {
-            Inventory = new EntityStack[size];
+            Inventory = new BasicEntity[size];
         }
 
-        public EntityStack this[int index]
+        public BasicEntity this[int index]
         {
             get
             {

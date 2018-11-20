@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Entity;
+using Entity.Type;
 
 public class UIInventorySlot : MonoBehaviour {
 
@@ -23,17 +24,21 @@ public class UIInventorySlot : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        EntityStack myStack = Storage[Slot];
+        BasicEntity item = Storage[Slot];
 
-        if (myStack == null)
+        if (item == null)
         {
             SlotImage.sprite = null;
             SlotAmount.text = null;
         }
         else
         {
-            SlotImage.sprite = myStack.Entity.InventorySprite;
-            SlotAmount.text = myStack.Amount.ToString();
+            SlotImage.sprite = item.InventorySprite;
+
+            if (item.Stack != null)
+            {
+                SlotAmount.text = item.Stack.Amount.ToString();
+            }
         }
 	}
 }

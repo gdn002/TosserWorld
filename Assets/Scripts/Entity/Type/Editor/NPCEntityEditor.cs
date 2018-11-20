@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+using Entity.Component;
+
 namespace Entity.Type
 {
     [CustomEditor(typeof(NPCEntity))]
-    public class NPCEntityEditor : BaseEntityEditor
+    public class NPCEntityEditor : BasicEntityEditor
     {
         private bool ShowNPCEntity = true;
 
@@ -19,8 +21,8 @@ namespace Entity.Type
             ShowNPCEntity = EditorGUILayout.Foldout(ShowNPCEntity, "NPC Entity");
             if (ShowNPCEntity)
             {
-                Target.Speed = EditorGUILayout.Slider("Speed: ", Target.Speed, 0, 10);
-                EditorGUILayout.SelectableLabel("Speed/Frame: " + Target.FrameSpeed.ToString());
+                Target.Brain = EditorGUILayout.ObjectField("Brain: ", Target.Brain, typeof(NPCBrain), false) as NPCBrain;
+                Target.Stats = EditorGUILayout.ObjectField("NPC Stats: ", Target.Stats, typeof(NPCStats), false) as NPCStats;
             }
         }
 

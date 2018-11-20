@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-using Entity;
+using Entity.Type;
 using Entity.Component;
 
 public class StorageTest : MonoBehaviour
 {
-    public GameObject Item;
-    public ContainerComponent Container;
+    public BasicEntity Item;
+    public BasicInventory Container;
 
     private bool stored = false;
 
@@ -20,13 +20,12 @@ public class StorageTest : MonoBehaviour
         {
             if (!stored)
             {
-                Item.AddComponent<EntityStack>();
-                Container.Add(Item.GetComponent<EntityStack>());
+                Container.Add(Item);
             }
             else
             {
-                EntityStack taken = Container.Take(0);
-                taken.Entity.OnRemovedFromContainer(Container);
+                BasicEntity taken = Container.Take(0);
+                taken.OnRemovedFromContainer(Container);
             }
 
             stored = !stored;

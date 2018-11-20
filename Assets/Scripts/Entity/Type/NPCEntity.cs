@@ -3,29 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Entity.Component;
-using Entity.Util;
-using Entity.Component.Brain;
+using Entity.Component.Brains;
 
 namespace Entity.Type
 {
     /// <summary>
     /// ENTITY CLASS FOR ALL NPCS
     /// Handles NPC movement and interactions
-    /// BaseEntity -> NPCEntity
+    /// BasicEntity -> NPCEntity
     /// </summary>
-    public class NPCEntity : BaseEntity
+    public class NPCEntity : BasicEntity
     {
-        //// ---- NPC STATS ----
-
-        public Stat Health = new Stat(100);
-        public Stat Stamina = new Stat(100);
-
-        public Stat Air = new Stat(100);
-
-        public float Speed = 1;
-
-        // Max distance walked per frame
-        public float FrameSpeed { get { return Speed * Time.fixedDeltaTime; } }
+        public NPCBrain Brain;
+        public NPCStats Stats;
 
         // NPC movement
         public class NPCMovement
@@ -45,24 +35,56 @@ namespace Entity.Type
         // NPC components
         public struct NPCEntityComponents
         {
-            // Custom components
-            public InventoryComponent Inventory;
-            public BrainComponent Brain;
-
             // Hierarchy
             public SpriteRenderer HandSprite;
         }
         public NPCEntityComponents NPCComponents;
 
         // Initialization
-        protected override void OnStart()
+        protected override void Start()
         {
             // Detect and fill Entity component references
-            NPCComponents.Inventory  = GetComponent<InventoryComponent>();
-            NPCComponents.Brain      = GetComponent<BrainComponent>();
-
             NPCComponents.HandSprite = transform.Find("Render").Find("Body").Find("Hand").GetComponentInChildren<SpriteRenderer>();
-            UpdateHand();
+
+            // Empty components get default values
+            Brain = BasicComponent.LoadTemplate(Brain);
+            Stats = BasicComponent.LoadTemplate(Stats);
+
+            Brain.Initialize(this);
+            Stats.Initialize(this);
+
+            base.Start();
+        }
+
+        protected override void Update()
+        {
+            VerifyFlip();
+
+            base.Update();
+        }
+
+        protected override void LateUpdate()
+        {
+            if (IsInitialized)
+            {
+                base.LateUpdate();
+
+                Animate();
+
+                if (!Physics.Active)
+                {
+                    // If the NPC is not under physics control, move by directly setting its velocity
+                    Components.RigidBody.velocity = Movement.WalkVector;
+                }
+                //else
+                //{
+                //    // Else, movement applies force instead
+                //    if (Vector2.Dot(RigidBodyComponent.velocity, NPCState.WalkVector) < 1)
+                //    {
+                //        RigidBodyComponent.AddForce(NPCState.WalkVector * RigidBodyComponent.mass, ForceMode2D.Impulse);
+                //    }
+                //}
+            }
         }
 
         //// ---- NPC CONTROL FUNCTIONS ----
@@ -94,7 +116,7 @@ namespace Entity.Type
         public void Walk(Vector2 walkVector)
         {
             // Use the walk speed
-            walkVector = walkVector.normalized * Speed;
+            walkVector = walkVector.normalized * Stats.Speed;
 
             // Call WalkRaw() using the speed-adjusted vector
             WalkRaw(walkVector);
@@ -108,7 +130,7 @@ namespace Entity.Type
         public void WalkClamped(Vector2 walkVector)
         {
             // Clamp to walk speed
-            walkVector = Vector2.ClampMagnitude(walkVector, Speed);
+            walkVector = Vector2.ClampMagnitude(walkVector, Stats.Speed);
 
             // Call WalkRaw() using the clamped vector
             WalkRaw(walkVector);
@@ -132,28 +154,9 @@ namespace Entity.Type
 
         //// ---- UPDATE FUNCTIONS ----
 
-        protected override void OnUpdate()
-        {
-            VerifyFlip();
-        }
-
-        public override void InContainerUpdate()
-        {
-            
-        }
-
         public void UpdateHand()
         {
-            Sprite hand = null;
-            if (NPCComponents.Inventory != null)
-            {
-                if (NPCComponents.Inventory.HandSlot != null)
-                {
-                    hand = NPCComponents.Inventory.HandSlot.Entity.InventorySprite;
-                }
-            }
-
-            NPCComponents.HandSprite.sprite = hand;
+            // TODO
         }
 
         /// <summary>
@@ -195,26 +198,6 @@ namespace Entity.Type
             StartCoroutine(Flip(0));
         }
 
-        //// ---- LATEUPDATE FUNCTIONS ----
-
-        void LateUpdate()
-        {
-            HandleAnimations();
-
-            if (!Components.Physics.State.Active)
-            {
-                // If the NPC is not under physics control, move by directly setting its velocity
-                Components.RigidBody.velocity = Movement.WalkVector;
-            }
-            //else
-            //{
-            //    // Else, movement applies force instead
-            //    if (Vector2.Dot(RigidBodyComponent.velocity, NPCState.WalkVector) < 1)
-            //    {
-            //        RigidBodyComponent.AddForce(NPCState.WalkVector * RigidBodyComponent.mass, ForceMode2D.Impulse);
-            //    }
-            //}
-        }
 
         private IEnumerator Flip(float duration)
         {
@@ -239,9 +222,9 @@ namespace Entity.Type
             Components.Render.transform.localScale = new Vector3(to, 1, 1);
         }
 
-        private void HandleAnimations()
+        private void Animate()
         {
-            if (Components.Physics.State.Active)
+            if (Physics.Active)
             {
                 // TODO: Special animation triggers for when in physics (ragdoll mode)
                 Components.Animator.SetBool("Hit", false);
@@ -256,24 +239,18 @@ namespace Entity.Type
 
 
 
-        public override void OnAddedToContainer(ContainerComponent container)
+        public override void OnAddedToContainer(BasicInventory inventory)
         {
-            if (NPCComponents.Brain != null)
-            {
-                NPCComponents.Brain.SetContained(true);
-            }
+            if (Brain != null) Brain.SetContained(true);
 
             Movement.WalkVector = Vector2.zero;
-            base.OnAddedToContainer(container);
+            base.OnAddedToContainer(inventory);
         }
 
-        public override void OnRemovedFromContainer(ContainerComponent container)
+        public override void OnRemovedFromContainer(BasicInventory inventory)
         {
-            if (NPCComponents.Brain != null)
-            {
-                NPCComponents.Brain.SetContained(false);
-            }
-            base.OnRemovedFromContainer(container);
+            if (Brain != null) Brain.SetContained(false);
+            base.OnRemovedFromContainer(inventory);
         }
     }
 }

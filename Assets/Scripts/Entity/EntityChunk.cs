@@ -7,21 +7,21 @@ namespace Entity
 {
     public class EntityChunk
     {
-        private Dictionary<EntityTags, LinkedList<BaseEntity>> TagDictionary = new Dictionary<EntityTags, LinkedList<BaseEntity>>();
+        private Dictionary<EntityTags, LinkedList<BasicEntity>> TagDictionary = new Dictionary<EntityTags, LinkedList<BasicEntity>>();
 
         public EntityChunk()
         {
-            TagDictionary.Add(EntityTags.Any, new LinkedList<BaseEntity>());
+            TagDictionary.Add(EntityTags.Any, new LinkedList<BasicEntity>());
         }
 
         /// <summary>
         /// Adds entity to the tag dictionary
         /// </summary>
         /// <param name="entity">Entity to add</param>
-        public void AddEntity(BaseEntity entity)
+        public void AddEntity(BasicEntity entity)
         {
             // Add the entity to all its tags in the dictionary
-            foreach (var tag in entity.Tags)
+            foreach (var tag in entity.Data.Tags)
             {
                 // "Any" tags are ignored and always included after
                 if (tag == EntityTags.Any)
@@ -30,7 +30,7 @@ namespace Entity
                 // Create dictionary entry if it doesn't exist
                 if (!TagDictionary.ContainsKey(tag))
                 {
-                    TagDictionary.Add(tag, new LinkedList<BaseEntity>());
+                    TagDictionary.Add(tag, new LinkedList<BasicEntity>());
                 }
 
                 // Add entity to dictionary entry
@@ -45,10 +45,10 @@ namespace Entity
         /// Removes entity from tag dictionary
         /// </summary>
         /// <param name="entity">Entity to remove</param>
-        public void RemoveEntity(BaseEntity entity)
+        public void RemoveEntity(BasicEntity entity)
         {
             // Remove the entity to all its tags in the dictionary
-            foreach (var tag in entity.Tags)
+            foreach (var tag in entity.Data.Tags)
             {
                 if (tag == EntityTags.Any)
                     continue;
@@ -66,14 +66,14 @@ namespace Entity
         /// </summary>
         /// <param name="tag">The tag to match</param>
         /// <returns>An array of matching entities, or null if none were found</returns>
-        public BaseEntity[] GetAllEntities(EntityTags tag = EntityTags.Any)
+        public BasicEntity[] GetAllEntities(EntityTags tag = EntityTags.Any)
         {
             if (TagDictionary.ContainsKey(tag))
             {
-                LinkedList<BaseEntity> matches = TagDictionary[tag];
+                LinkedList<BasicEntity> matches = TagDictionary[tag];
                 if (matches.Count > 0)
                 {
-                    BaseEntity[] returnArray = new BaseEntity[matches.Count];
+                    BasicEntity[] returnArray = new BasicEntity[matches.Count];
                     matches.CopyTo(returnArray, 0);
                     return returnArray;
                 }
@@ -88,14 +88,14 @@ namespace Entity
         /// <param name="range">The maximum range</param>
         /// <param name="tag">The tag to match</param>
         /// <returns>An array of matching entities, or null if none were found</returns>
-        public BaseEntity[] GetAllEntitiesInRange(BaseEntity entity, float range, EntityTags tag = EntityTags.Any)
+        public BasicEntity[] GetAllEntitiesInRange(BasicEntity entity, float range, EntityTags tag = EntityTags.Any)
         {
             if (TagDictionary.ContainsKey(tag))
             {
-                LinkedList<BaseEntity> matches = TagDictionary[tag];
+                LinkedList<BasicEntity> matches = TagDictionary[tag];
                 if (matches.Count > 0)
                 {
-                    LinkedList<BaseEntity> entitiesInRange = new LinkedList<BaseEntity>();
+                    LinkedList<BasicEntity> entitiesInRange = new LinkedList<BasicEntity>();
                     foreach (var match in matches)
                     {
                         if (match == entity)
@@ -110,7 +110,7 @@ namespace Entity
 
                     if (entitiesInRange.Count > 0)
                     {
-                        BaseEntity[] returnArray = new BaseEntity[entitiesInRange.Count];
+                        BasicEntity[] returnArray = new BasicEntity[entitiesInRange.Count];
                         entitiesInRange.CopyTo(returnArray, 0);
                         return returnArray;
                     }
@@ -125,7 +125,7 @@ namespace Entity
         /// <param name="entity">The entity to compare to</param>
         /// <param name="tag">The tag to match</param>
         /// <returns>Nearest matching entity, or null if none were found</returns>
-        public BaseEntity GetNearestEntity(BaseEntity entity, EntityTags tag = EntityTags.Any)
+        public BasicEntity GetNearestEntity(BasicEntity entity, EntityTags tag = EntityTags.Any)
         {
             return GetNearestEntityInRange(entity, float.PositiveInfinity, tag);
         }
@@ -137,13 +137,13 @@ namespace Entity
         /// <param name="range">The maximum range</param>
         /// <param name="tag">The tag to match</param>
         /// <returns>Nearest matching entity, or null if none were found</returns>
-        public BaseEntity GetNearestEntityInRange(BaseEntity entity, float range, EntityTags tag = EntityTags.Any)
+        public BasicEntity GetNearestEntityInRange(BasicEntity entity, float range, EntityTags tag = EntityTags.Any)
         {
-            BaseEntity nearestEntity = null;
+            BasicEntity nearestEntity = null;
 
             if (TagDictionary.ContainsKey(tag))
             {
-                LinkedList<BaseEntity> matches = TagDictionary[tag];
+                LinkedList<BasicEntity> matches = TagDictionary[tag];
                 float nearestDistance = range;
 
                 foreach (var match in matches)

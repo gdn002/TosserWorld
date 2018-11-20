@@ -6,7 +6,7 @@ using UnityEditor;
 
 using Utility.Enumerations;
 
-namespace Entity.Component.Editor
+namespace Entity.Auxiliary.Editor
 {
     [CustomEditor(typeof(OrientationComponent))]
     public class OrientationComponentEditor : UnityEditor.Editor

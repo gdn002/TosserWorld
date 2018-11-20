@@ -12,7 +12,7 @@ public class UIInventory : MonoBehaviour
     private static GameObject SlotPrefab;
 
 
-    private ContainerComponent Container;
+    private BasicInventory Inventory;
 
     void Awake()
     {
@@ -27,27 +27,27 @@ public class UIInventory : MonoBehaviour
     {
 	}
 	
-    public void CreateInventoryGrid(ContainerComponent container)
+    public void CreateInventoryGrid(BasicInventory inventory)
     {
-        Container = container;
+        Inventory = inventory;
 
-        int slotCount = Container.SlotCount;
+        int slotCount = Inventory.SlotCount;
 
         for (int i = 0; i < slotCount; ++i)
         {
-            int x = i % Container.Cols;
-            int y = i / Container.Cols;
+            int x = i % Inventory.Cols;
+            int y = i / Inventory.Cols;
 
             GameObject newSlot = Instantiate(SlotPrefab);
             newSlot.transform.SetParent(transform);
 
-            newSlot.GetComponent<UIInventorySlot>().Storage = Container.Storage;
+            newSlot.GetComponent<UIInventorySlot>().Storage = Inventory.Storage;
             newSlot.GetComponent<UIInventorySlot>().Slot = i;
 
             Vector2 pos = new Vector2(10 + (x * 60), -10 - (y * 60));
             newSlot.transform.localPosition = pos;
         }
-        Vector2 panelSize = new Vector2(10 + (Container.Cols * 60), 10 + (Container.Rows * 60));
+        Vector2 panelSize = new Vector2(10 + (Inventory.Cols * 60), 10 + (Inventory.Rows * 60));
         GetComponent<RectTransform>().sizeDelta = panelSize;
     }
 

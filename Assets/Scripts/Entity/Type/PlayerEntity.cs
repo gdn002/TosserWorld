@@ -7,31 +7,35 @@ namespace Entity.Type
     /// <summary>
     /// ENTITY CLASS FOR THE PLAYER
     /// Handles user input and applies it to the player NPC
-    /// BaseEntity -> NPCEntity -> PlayerEntity
+    /// BasicEntity -> NPCEntity -> PlayerEntity
     /// </summary>
     public class PlayerEntity : NPCEntity
     {
         public static PlayerEntity Player { get; private set; }
 
-        // Use this for initialization
-        protected override void OnStart()
+        void Awake()
         {
             Player = this;
-            base.OnStart();
+        }
+
+        // Use this for initialization
+        protected override void Start()
+        {
+            base.Start();
         }
 
         // Update is called once per frame
-        protected override void OnUpdate()
+        protected override void Update()
         {
             // TEST
             if (Input.GetKeyDown("x"))
             {
-                Components.Physics.ApplyForce(new Vector3(5, 7, 0));
+                Physics.ApplyForce(new Vector3(5, 7, 0));
             }
 
             HandleInput();
 
-            base.OnUpdate();
+            base.Update();
         }
 
         private void HandleInput()
@@ -56,7 +60,7 @@ namespace Entity.Type
                 if (walk.magnitude > 0)
                 {
                     // If there's movement input, signal the brain to walk
-                    NPCComponents.Brain.Triggers.Set("player_walk_keyboard", walk);
+                    Brain.Triggers.Set("player_walk_keyboard", walk);
                 }
             }
         }
@@ -76,7 +80,7 @@ namespace Entity.Type
                         if (worldPlane.Raycast(ray, out enter))
                         {
                             // If the world was clicked, signal the brain to go to the location
-                            NPCComponents.Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                            Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
                         }
                     }
                 }

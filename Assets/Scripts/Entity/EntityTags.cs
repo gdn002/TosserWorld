@@ -1,4 +1,4 @@
-﻿namespace Entity
+﻿namespace TosserWorld
 {
     public enum EntityTags
     {

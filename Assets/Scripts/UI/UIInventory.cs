@@ -1,18 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-using Entity;
-using Entity.Type;
-using Entity.Component;
+﻿using UnityEngine;
+using TosserWorld.Modules;
 
 public class UIInventory : MonoBehaviour
 {
     private static GameObject SlotPrefab;
 
 
-    private BasicInventory Inventory;
+    private Container Inventory;
 
     void Awake()
     {
@@ -27,7 +21,7 @@ public class UIInventory : MonoBehaviour
     {
 	}
 	
-    public void CreateInventoryGrid(BasicInventory inventory)
+    public void CreateInventoryGrid(Container inventory)
     {
         Inventory = inventory;
 

@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Entity.Type;
-
-namespace Entity
+﻿namespace TosserWorld
 {
     public class InventorySpace
     {
-        public BasicEntity[] Inventory;
+        public Entity[] Inventory;
 
         public int Length { get { return Inventory.Length; } }
 
         public InventorySpace(int size)
         {
-            Inventory = new BasicEntity[size];
+            Inventory = new Entity[size];
         }
 
-        public BasicEntity this[int index]
+        public Entity this[int index]
         {
             get
             {

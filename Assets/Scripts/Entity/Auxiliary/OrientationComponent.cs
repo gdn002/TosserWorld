@@ -7,7 +7,7 @@ using UnityEngine;
 using Utility.Enumerations;
 using Utility;
 
-namespace Entity.Auxiliary
+namespace TosserWorld.Auxiliary
 {
     public class OrientationComponent : MonoBehaviour
     {

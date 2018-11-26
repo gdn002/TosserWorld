@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-using Entity;
-using Entity.Type;
+using TosserWorld;
+using TosserWorld.Modules;
 
 public class UIInventorySlot : MonoBehaviour {
 
@@ -24,7 +24,7 @@ public class UIInventorySlot : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        BasicEntity item = Storage[Slot];
+        Entity item = Storage[Slot];
 
         if (item == null)
         {
@@ -35,9 +35,9 @@ public class UIInventorySlot : MonoBehaviour {
         {
             SlotImage.sprite = item.InventorySprite;
 
-            if (item.Stack != null)
+            if (item.GetModule<Stackable>() != null)
             {
-                SlotAmount.text = item.Stack.Amount.ToString();
+                SlotAmount.text = item.GetModule<Stackable>().Amount.ToString();
             }
         }
 	}

@@ -35,9 +35,9 @@ public class UIInventorySlot : MonoBehaviour {
         {
             SlotImage.sprite = item.InventorySprite;
 
-            if (item.GetModule<Stackable>() != null)
+            if (item.GetModule<Stacker>() != null)
             {
-                SlotAmount.text = item.GetModule<Stackable>().Amount.ToString();
+                SlotAmount.text = item.GetModule<Stacker>().Amount.ToString();
             }
         }
 	}

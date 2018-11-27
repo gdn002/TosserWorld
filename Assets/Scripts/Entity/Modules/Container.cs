@@ -69,7 +69,7 @@ namespace TosserWorld.Modules
                     if (Storage[i].MatchStacks(entity))
                     {
                         // Merge stacks
-                        entity = Storage[i].GetModule<Stackable>().CombineStack(entity);
+                        entity = Storage[i].GetModule<Stacker>().CombineStack(entity);
                         if (entity == null)
                         {
                             // Stack was completely merged
@@ -109,7 +109,7 @@ namespace TosserWorld.Modules
                 if (current.MatchStacks(entity))
                 {
                     // Merge stacks
-                    entity = Storage[slot].GetModule<Stackable>().CombineStack(entity);
+                    entity = Storage[slot].GetModule<Stacker>().CombineStack(entity);
 
                     // Return whatever is left over from the merge
                     return entity;

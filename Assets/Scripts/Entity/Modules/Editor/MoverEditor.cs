@@ -2,10 +2,10 @@
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(Moveable))]
-    public class MoveableEditor : Editor
+    [CustomEditor(typeof(Mover))]
+    public class MoverEditor : Editor
     {
-        private Moveable Target { get { return target as Moveable; } }
+        private Mover Target { get { return target as Mover; } }
 
         public override void OnInspectorGUI()
         {

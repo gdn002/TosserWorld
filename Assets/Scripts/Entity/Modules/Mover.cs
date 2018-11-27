@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Moveable", menuName = "Modules/Moveable")]
-    public class Moveable : Module
+    [CreateAssetMenu(fileName = "New Mover", menuName = "Modules/Mover")]
+    public class Mover : Module
     {
         public Vector2 Movement = Vector2.zero;
         public float SpeedLimit = 1;
@@ -15,7 +15,7 @@ namespace TosserWorld.Modules
 
         protected override Module Clone()
         {
-            Moveable clone = CreateInstance<Moveable>();
+            Mover clone = CreateInstance<Mover>();
 
             clone.Movement = Movement;
             clone.SpeedLimit = SpeedLimit;

@@ -13,6 +13,8 @@ namespace TosserWorld
         public static PlayerEntity Player { get; private set; }
 
 
+        private Brain Brain;
+
         void Awake()
         {
             Player = this;
@@ -22,6 +24,8 @@ namespace TosserWorld
         protected override void Start()
         {
             base.Start();
+
+            Brain = GetModule<Brain>();
         }
 
         // Update is called once per frame
@@ -59,7 +63,7 @@ namespace TosserWorld
                 if (walk.magnitude > 0)
                 {
                     // If there's movement input, signal the brain to walk
-                    GetModule<Brain>().Triggers.Set("player_walk_keyboard", walk);
+                    Brain.Triggers.Set("player_walk_keyboard", walk);
                 }
             }
         }
@@ -79,7 +83,7 @@ namespace TosserWorld
                         if (worldPlane.Raycast(ray, out enter))
                         {
                             // If the world was clicked, signal the brain to go to the location
-                            GetModule<Brain>().Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                            Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
                         }
                     }
                 }

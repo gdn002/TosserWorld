@@ -13,7 +13,7 @@ namespace TosserWorld.Modules.BrainScripts
         private Brain BrainComponent;
 
         protected Entity Me { get { return BrainComponent.Owner; } }
-        protected Moveable MyMovement { get { return Me.GetModule<Moveable>(); } }
+        protected Mover MyMovement { get { return Me.GetModule<Mover>(); } }
 
         protected Brain.BrainTriggers Triggers { get { return BrainComponent.Triggers; } }
         protected Brain.BrainAwareness Awareness { get { return BrainComponent.Awareness; } }

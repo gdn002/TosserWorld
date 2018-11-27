@@ -181,7 +181,7 @@ namespace TosserWorld
             }
 
             // And both entities must be stackable (contain stack components)
-            return (GetModule<Stackable>() != null && other.GetModule<Stackable>() != null);
+            return (GetModule<Stacker>() != null && other.GetModule<Stacker>() != null);
         }
 
     }

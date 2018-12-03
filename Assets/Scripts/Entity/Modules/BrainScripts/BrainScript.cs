@@ -57,7 +57,19 @@ namespace TosserWorld.Modules.BrainScripts
         }
 
 
+        public void TriggerAnimation(string trigger)
+        {
+            if (Me.Animator != null)
+                Me.Animator.SetTrigger(trigger);
+        }
+
         //// ---- MAIN ACTIONS ----
+
+        protected void Stop()
+        {
+            TriggerAnimation("Stop");
+            MyMovement.Stop();
+        }
 
         protected bool GoTo(Vector2 destination)
         {
@@ -72,12 +84,13 @@ namespace TosserWorld.Modules.BrainScripts
                 {
                     // If the distance remaining is greater than the NPC's walk delta, walk at full speed
                     MyMovement.MoveFull(walk);
+                    TriggerAnimation("Move");
                 }
                 else
                 {
                     // If else, close the gap and stop movement
                     Me.transform.position = destination;
-                    MyMovement.Stop();
+                    Stop();
                 }
 
                 return true;
@@ -96,12 +109,13 @@ namespace TosserWorld.Modules.BrainScripts
             if (walk.magnitude < near)
             {
                 // Within stop threshold
-                MyMovement.Stop();
+                Stop();
             }
             else if (MyMovement.Movement.magnitude != 0 || walk.magnitude > far)
             {
                 // Within go threshold
                 MyMovement.MoveFull(walk);
+                TriggerAnimation("Move");
             }
 
             return true;

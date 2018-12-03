@@ -17,7 +17,8 @@ namespace TosserWorld.Modules.BrainScripts
 
             if (Triggers.Contains("player_walk_keyboard"))                              // Verify keyboard input
             {
-                Destination = null;                                                         // Clear destination
+                Destination = null;                                                         // Override destination
+                TriggerAnimation("Move");                                                   // Play movement animation
                 MyMovement.MoveScreenFull(Triggers.Take<Vector2>("player_walk_keyboard"));  // Set player in motion according to input
             }
             else if (Destination != null)                                               // Verify destination
@@ -29,7 +30,7 @@ namespace TosserWorld.Modules.BrainScripts
             }
             else                                                                        // If there was no input or destination
             {
-                MyMovement.Stop();                                                      // Stop all movement
+                Stop();                                                                 // Stop all movement
             }
 
             yield return null;                                                          // End frame

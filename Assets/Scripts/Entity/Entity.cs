@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 using TosserWorld.Modules;
-using TosserWorld.Util;
+using Utility;
+using Utility.Enumerations;
 
 namespace TosserWorld
 {
@@ -25,6 +26,79 @@ namespace TosserWorld
         // Used internally to ensure all components have been initialized
         private bool IsInitialized = false;
 
+
+        // ---- ORIENTATION ----
+
+        protected class EntityOrientation
+        {
+            public Orientation LocalOrientation = Orientation.N;
+
+            private Orientation? LastCamera = null;
+            private Orientation? LastLocal = null;
+
+            private SpriteOrientation[] Sprites;
+
+            public void LoadSprites(Entity owner)
+            {
+                Sprites = owner.GetComponentsInChildren<SpriteOrientation>();
+            }
+
+            public void UpdateSprites()
+            {
+                if (LastCamera == null || LastCamera != CameraController.Controller.Orientation.CurrentOrientation || LastLocal != LocalOrientation)
+                {
+                    LastCamera = CameraController.Controller.Orientation.CurrentOrientation;
+                    LastLocal = LocalOrientation;
+
+                    foreach (var sprite in Sprites)
+                    {
+                        sprite.UpdateOrientation(LocalOrientation, LastCamera.Value);
+                    }
+                }
+            }
+
+            public int SpriteCount()
+            {
+                return Sprites.Length;
+            }
+        }
+
+        protected EntityOrientation OrientationController = new EntityOrientation();
+
+        public Orientation Orientation { get { return OrientationController.LocalOrientation; } set { OrientationController.LocalOrientation = value; } }
+ 
+
+        // ---- FLIPPING ----
+
+        public class EntityFlipping
+        {
+            private ScreenSpaceFlipper Flipper;
+            
+            public void LoadFlipper(Entity owner)
+            {
+                Flipper = owner.GetComponentInChildren<ScreenSpaceFlipper>();
+            }
+
+            public void FlipTo(Vector2 direction)
+            {
+                if (Flipper != null)
+                    Flipper.FlipTo(direction);
+            }
+
+            public void FlipToScreen(Vector2 direction)
+            {
+                if (Flipper != null)
+                    Flipper.FlipToScreen(direction);
+            }
+
+            public void FlipTo(bool direction)
+            {
+                if (Flipper != null)
+                    Flipper.FlipTo(direction);
+            }
+        }
+
+        public EntityFlipping FlipController = new EntityFlipping();
 
         // ---- STATS ----
 
@@ -57,12 +131,19 @@ namespace TosserWorld
                 // Load hierarchy references
                 Render = transform.Find("Render").gameObject;
 
-                // Load template components as their own object
+                // Load template modules as their own object
                 for (int i = 0; i < Modules.Count; i++)
                 {
                     Modules[i] = Module.LoadTemplate(Modules[i]);
                     Modules[i].Initialize(this);
                 }
+
+                // Load sprite orientations
+                OrientationController.LoadSprites(this);
+
+                // Load screen space flipper
+                FlipController.LoadFlipper(this);
+
 
                 GlobalChunk.AddEntity(this);
 
@@ -79,6 +160,8 @@ namespace TosserWorld
                 {
                     module.Update();
                 }
+
+                OrientationController.UpdateSprites();
             }
         }
 

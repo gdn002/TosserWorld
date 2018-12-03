@@ -13,6 +13,8 @@ namespace TosserWorld.Modules
 
             Target.SpeedLimit = EditorGUILayout.Slider("Speed limit: ", Target.SpeedLimit, 0, 10);
             EditorGUILayout.SelectableLabel("Speed limit/frame: " + Target.FrameLimit.ToString());
+
+            EditorUtility.SetDirty(target);
         }
     }
 }

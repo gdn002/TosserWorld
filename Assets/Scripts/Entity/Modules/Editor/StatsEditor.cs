@@ -12,6 +12,8 @@ namespace TosserWorld.Modules
         public override void OnInspectorGUI()
         {
             // TODO
+
+            EditorUtility.SetDirty(target);
         }
     }
 }

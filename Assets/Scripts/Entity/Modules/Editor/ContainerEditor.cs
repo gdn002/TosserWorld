@@ -16,6 +16,8 @@ namespace TosserWorld.Modules
             Target.Cols = EditorGUILayout.IntField("Cols: ", Target.Cols);
 
             EditorGUILayout.LabelField("Slot count: " + Target.SlotCount);
+
+            EditorUtility.SetDirty(target);
         }
     }
 }

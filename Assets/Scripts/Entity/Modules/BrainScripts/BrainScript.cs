@@ -71,6 +71,20 @@ namespace TosserWorld.Modules.BrainScripts
             MyMovement.Stop();
         }
 
+        protected void Move(Vector2 direction)
+        {
+            Me.FlipController.FlipTo(direction);
+            MyMovement.MoveFull(direction);
+            TriggerAnimation("Move");
+        }
+
+        protected void MoveScreen(Vector2 direction)
+        {
+            Me.FlipController.FlipToScreen(direction);
+            MyMovement.MoveScreenFull(direction);
+            TriggerAnimation("Move");
+        }
+
         protected bool GoTo(Vector2 destination)
         {
             Vector2 position = Me.transform.position;
@@ -78,13 +92,12 @@ namespace TosserWorld.Modules.BrainScripts
             if (position != destination)
             {
                 // Calculate the needed walk to reach the destination
-                Vector2 walk = destination - position;
+                Vector2 direction = destination - position;
 
-                if (walk.magnitude > MyMovement.FrameLimit)
+                if (direction.magnitude > MyMovement.FrameLimit)
                 {
                     // If the distance remaining is greater than the NPC's walk delta, walk at full speed
-                    MyMovement.MoveFull(walk);
-                    TriggerAnimation("Move");
+                    Move(direction);
                 }
                 else
                 {
@@ -105,17 +118,16 @@ namespace TosserWorld.Modules.BrainScripts
             Vector2 destination = target.transform.position;
 
             // Calculate the needed walk to reach the target
-            Vector2 walk = destination - position;
-            if (walk.magnitude < near)
+            Vector2 direction = destination - position;
+            if (direction.magnitude < near)
             {
                 // Within stop threshold
                 Stop();
             }
-            else if (MyMovement.Movement.magnitude != 0 || walk.magnitude > far)
+            else if (MyMovement.Movement.magnitude != 0 || direction.magnitude > far)
             {
                 // Within go threshold
-                MyMovement.MoveFull(walk);
-                TriggerAnimation("Move");
+                Move(direction);
             }
 
             return true;

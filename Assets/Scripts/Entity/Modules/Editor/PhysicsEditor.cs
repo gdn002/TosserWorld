@@ -26,6 +26,8 @@ namespace TosserWorld.Modules
             {
                 Target.EnableOnCollisions = EditorGUILayout.Toggle("Collisions", Target.EnableOnCollisions);
             }
+
+            EditorUtility.SetDirty(target);
         }
     }
 }

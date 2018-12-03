@@ -23,6 +23,8 @@ namespace TosserWorld.Modules
         {
             if (TagList != null && Target.Tags != null)
                 TagList.DoLayoutList();
+
+            EditorUtility.SetDirty(target);
         }
 
         //// ---- TAG LIST ----

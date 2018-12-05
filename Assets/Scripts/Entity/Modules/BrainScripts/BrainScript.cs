@@ -129,6 +129,10 @@ namespace TosserWorld.Modules.BrainScripts
                 // Within go threshold
                 Move(direction);
             }
+            else if (MyMovement.Movement.magnitude == 0)
+            {
+                TriggerAnimation("Stop");
+            }
 
             return true;
         }

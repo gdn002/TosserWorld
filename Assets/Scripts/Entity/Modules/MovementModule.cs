@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Mover", menuName = "Modules/Mover")]
-    public class Mover : Module
+    [CreateAssetMenu(fileName = "New Movement Module", menuName = "Modules/Movement")]
+    public class MovementModule : Module
     {
         public Vector2 Movement = Vector2.zero;
         public float SpeedLimit = 1;
@@ -15,7 +15,7 @@ namespace TosserWorld.Modules
 
         protected override Module Clone()
         {
-            Mover clone = CreateInstance<Mover>();
+            MovementModule clone = CreateInstance<MovementModule>();
 
             clone.Movement = Movement;
             clone.SpeedLimit = SpeedLimit;
@@ -28,7 +28,7 @@ namespace TosserWorld.Modules
             if (!OverridePhysics)
             {
                 // Movement should not override physics
-                var physics = Owner.GetModule<PhysicsObject>();
+                var physics = Owner.GetModule<PhysicsModule>();
                 if (physics != null && physics.Active)
                     return;
             }

@@ -6,16 +6,16 @@ using TosserWorld.Modules.BrainScripts;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Brain", menuName = "Modules/Brain")]
-    public class Brain : Module
+    [CreateAssetMenu(fileName = "New Brain Module", menuName = "Modules/Brain")]
+    public class BrainModule : Module
     {
         public class BrainAwareness
         {
             private List<Entity> Awareness = new List<Entity>();
             private AwarenessController Controller;
-            private Brain Owner;
+            private BrainModule Owner;
 
-            public BrainAwareness(Brain owner)
+            public BrainAwareness(BrainModule owner)
             {
                 Owner = owner;
 
@@ -67,15 +67,17 @@ namespace TosserWorld.Modules
             public Entity FindNearest(EntityTags tag = EntityTags.Any)
             {
                 Entity nearest = null;
-                float distance = float.MaxValue;
+                float nearestDistance = float.MaxValue;
 
                 foreach (var entity in Awareness)
                 {
                     if (entity.HasTag(tag))
                     {
-                        if (entity.DistanceTo(Owner.Owner) < distance)
+                        float distance = entity.DistanceTo(Owner.Owner);
+                        if (distance < nearestDistance)
                         {
                             nearest = entity;
+                            nearestDistance = distance;
                         }
                     }
                 }
@@ -170,7 +172,7 @@ namespace TosserWorld.Modules
         private int SpeechStack = 0;
 
 
-        public Brain()
+        public BrainModule()
         {
             AwarenessRadius = 5;
         }
@@ -180,7 +182,7 @@ namespace TosserWorld.Modules
             if (ActiveBrain == null)
                 Debug.LogError("No BrainScript attached to Brain module: " + name);
 
-            Brain clone = CreateInstance<Brain>();
+            BrainModule clone = CreateInstance<BrainModule>();
 
             clone.AwarenessRadius = AwarenessRadius;
             clone.ActiveBrain = BrainScript.Clone(ActiveBrain);

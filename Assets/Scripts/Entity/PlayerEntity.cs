@@ -13,7 +13,7 @@ namespace TosserWorld
         public static PlayerEntity Player { get; private set; }
 
 
-        private Brain Brain;
+        private BrainModule Brain;
 
         void Awake()
         {
@@ -25,7 +25,7 @@ namespace TosserWorld
         {
             base.Start();
 
-            Brain = GetModule<Brain>();
+            Brain = GetModule<BrainModule>();
         }
 
         // Update is called once per frame
@@ -40,7 +40,7 @@ namespace TosserWorld
         {
             if (Input.GetKeyDown(KeyCode.X))
             {
-                GetModule<PhysicsObject>().ApplyForce(new Vector3(10, 10, 10));
+                Brain.Triggers.Set("test_pickup", true);
             }
 
             // Ensure the player is able to receive inputs

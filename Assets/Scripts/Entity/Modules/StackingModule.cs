@@ -2,8 +2,8 @@
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Stack", menuName = "Modules/Stack")]
-    public class Stacker : Module
+    [CreateAssetMenu(fileName = "New Stacking Module", menuName = "Modules/Stacking")]
+    public class StackingModule : Module
     {
         public int Amount { get; private set; }
 
@@ -12,7 +12,7 @@ namespace TosserWorld.Modules
         public bool IsStackable;
 
 
-        public Stacker()
+        public StackingModule()
         {
             MaxAmount = 64;
             IsStackable = true;
@@ -20,7 +20,7 @@ namespace TosserWorld.Modules
 
         protected override Module Clone()
         {
-            Stacker clone = CreateInstance<Stacker>();
+            StackingModule clone = CreateInstance<StackingModule>();
 
             clone.MaxAmount = MaxAmount;
             clone.IsStackable = IsStackable;
@@ -35,7 +35,7 @@ namespace TosserWorld.Modules
         /// <returns>Leftover stack (may be null)</returns>
         public Entity CombineStack(Entity other)
         {
-            Stacker otherStack = other.GetModule<Stacker>();
+            StackingModule otherStack = other.GetModule<StackingModule>();
 
             // Combine the two stacks
             Amount += otherStack.Amount;

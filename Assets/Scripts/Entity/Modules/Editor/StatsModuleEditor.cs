@@ -4,10 +4,10 @@ using UnityEditorInternal;
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(Stats))]
-    public class StatsEditor : Editor
+    [CustomEditor(typeof(StatsModule))]
+    public class StatsModuleEditor : Editor
     {
-        private Stats Target { get { return target as Stats; } }
+        private StatsModule Target { get { return target as StatsModule; } }
 
         public override void OnInspectorGUI()
         {

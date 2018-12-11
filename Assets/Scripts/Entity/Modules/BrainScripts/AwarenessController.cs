@@ -11,7 +11,7 @@ namespace TosserWorld.Modules.BrainScripts
 
         public bool Active = false;
 
-        public void Initialize(Brain owner, AwarenessCallback onDetect, AwarenessCallback onLost)
+        public void Initialize(BrainModule owner, AwarenessCallback onDetect, AwarenessCallback onLost)
         {
             EntityDetected = onDetect;
             EntityLost = onLost;

@@ -4,12 +4,12 @@ using UnityEditorInternal;
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(TagList))]
-    public class DataEditor : Editor
+    [CustomEditor(typeof(TagListModule))]
+    public class TagListModuleEditor : Editor
     {
         private ReorderableList TagList;
 
-        private TagList Target { get { return target as TagList; } }
+        private TagListModule Target { get { return target as TagListModule; } }
 
         public void OnEnable()
         {

@@ -19,7 +19,7 @@ namespace TosserWorld
         /// <param name="entity">Entity to add</param>
         public void AddEntity(Entity entity)
         {
-            var tagList = entity.GetModule<TagList>();
+            var tagList = entity.GetModule<TagListModule>();
             if (tagList != null)
             {
                 // Add the entity to all its tags in the dictionary
@@ -45,7 +45,7 @@ namespace TosserWorld
         /// <param name="entity">Entity to remove</param>
         public void RemoveEntity(Entity entity)
         {
-            var tagList = entity.GetModule<TagList>();
+            var tagList = entity.GetModule<TagListModule>();
             if (tagList != null)
             {
                 // Remove the entity to all its tags in the dictionary

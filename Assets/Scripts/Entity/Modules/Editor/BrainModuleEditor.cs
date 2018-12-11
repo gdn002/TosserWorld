@@ -3,10 +3,10 @@ using TosserWorld.Modules.BrainScripts;
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(Brain))]
-    public class BrainEditor : Editor
+    [CustomEditor(typeof(BrainModule))]
+    public class BrainModuleEditor : Editor
     {
-        private Brain Target { get { return target as Brain; } }
+        private BrainModule Target { get { return target as BrainModule; } }
 
         public override void OnInspectorGUI()
         {

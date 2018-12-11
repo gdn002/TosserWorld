@@ -8,27 +8,27 @@ using Utility.Enumerations;
 
 namespace Utility
 {
-    [CustomEditor(typeof(SpriteOrientation))]
-    public class SpriteOrientationEditor : Editor
+    [CustomEditor(typeof(OrientationControlledSprite))]
+    public class OrientationControlledSpriteEditor : Editor
     {
-        private SpriteOrientation Target { get { return target as SpriteOrientation; } }
+        private OrientationControlledSprite Target { get { return target as OrientationControlledSprite; } }
 
         public override void OnInspectorGUI()
         {
-            Target.OrientationMode = (SpriteOrientation.Mode)EditorGUILayout.EnumPopup("Orientation mode: ", Target.OrientationMode);
+            Target.OrientationMode = (OrientationControlledSprite.Mode)EditorGUILayout.EnumPopup("Orientation mode: ", Target.OrientationMode);
 
             switch (Target.OrientationMode)
             {
-                case SpriteOrientation.Mode.None:
+                case OrientationControlledSprite.Mode.None:
                     OnNone();
                     break;
-                case SpriteOrientation.Mode.Quarter:
+                case OrientationControlledSprite.Mode.Quarter:
                     OnQuarter();
                     break;
-                case SpriteOrientation.Mode.Half:
+                case OrientationControlledSprite.Mode.Half:
                     OnHalf();
                     break;
-                case SpriteOrientation.Mode.Full:
+                case OrientationControlledSprite.Mode.Full:
                     OnFull();
                     break;
             }

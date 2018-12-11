@@ -10,18 +10,18 @@ namespace TosserWorld.Modules.BrainScripts
             return CreateInstance(brain.GetType()) as BrainScript;
         }
 
-        private Brain BrainComponent;
+        private BrainModule BrainComponent;
 
         protected Entity Me { get { return BrainComponent.Owner; } }
-        protected Mover MyMovement { get { return Me.GetModule<Mover>(); } }
+        protected MovementModule MyMovement { get { return Me.GetModule<MovementModule>(); } }
 
-        protected Brain.BrainTriggers Triggers { get { return BrainComponent.Triggers; } }
-        protected Brain.BrainAwareness Awareness { get { return BrainComponent.Awareness; } }
+        protected BrainModule.BrainTriggers Triggers { get { return BrainComponent.Triggers; } }
+        protected BrainModule.BrainAwareness Awareness { get { return BrainComponent.Awareness; } }
 
         private Coroutine ActiveLoop = null;
 
 
-        public void SetComponent(Brain component)
+        public void SetComponent(BrainModule component)
         {
             BrainComponent = component;
         }
@@ -73,14 +73,14 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected void Move(Vector2 direction)
         {
-            Me.FlipController.FlipTo(direction);
+            Me.FlipTo(direction);
             MyMovement.MoveFull(direction);
             TriggerAnimation("Move");
         }
 
         protected void MoveScreen(Vector2 direction)
         {
-            Me.FlipController.FlipToScreen(direction);
+            Me.FlipToScreen(direction);
             MyMovement.MoveScreenFull(direction);
             TriggerAnimation("Move");
         }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Utility
 {
-    public class ScreenSpaceFlipper : MonoBehaviour
+    public class FlippableSprite : MonoBehaviour
     {
         public float FlipDuration = 0.1f;
 

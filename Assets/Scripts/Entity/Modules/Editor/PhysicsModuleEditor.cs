@@ -5,12 +5,12 @@ using UnityEditor;
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(PhysicsObject))]
-    public class PhysicsEditor : Editor
+    [CustomEditor(typeof(PhysicsModule))]
+    public class PhysicsModuleEditor : Editor
     {
         private bool ShowEnable = true;
 
-        private PhysicsObject Target { get { return target as PhysicsObject; } }
+        private PhysicsModule Target { get { return target as PhysicsModule; } }
 
         public override void OnInspectorGUI()
         {

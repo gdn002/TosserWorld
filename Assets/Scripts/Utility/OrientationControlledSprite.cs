@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-
+﻿using UnityEngine;
 using Utility.Enumerations;
 
 namespace Utility
 {
-    public class SpriteOrientation : MonoBehaviour
+    public class OrientationControlledSprite : MonoBehaviour
     {
         public enum Mode
         {

@@ -6,7 +6,7 @@ public class UIInventory : MonoBehaviour
     private static GameObject SlotPrefab;
 
 
-    private Container Inventory;
+    private ContainerModule Inventory;
 
     void Awake()
     {
@@ -21,7 +21,7 @@ public class UIInventory : MonoBehaviour
     {
 	}
 	
-    public void CreateInventoryGrid(Container inventory)
+    public void CreateInventoryGrid(ContainerModule inventory)
     {
         Inventory = inventory;
 

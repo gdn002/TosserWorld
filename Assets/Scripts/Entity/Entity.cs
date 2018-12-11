@@ -20,6 +20,8 @@ namespace TosserWorld
         // The entity's name
         public string Name = "GENERIC_ENTITY";
 
+        public bool RootMode { get; protected set; }
+
         // Optional modules
         public List<Module> Modules = new List<Module>();
         
@@ -27,7 +29,36 @@ namespace TosserWorld
         private bool IsInitialized = false;
 
 
+
+        // Load all utilities here
+        private void LoadControllers()
+        {
+            OrientationController.Load(this);
+            EquipmentSlots.Load(this);
+
+            IsometricSprite = GetComponentInChildren<IsometricSprite>();
+            FlippableSprite = GetComponentInChildren<FlippableSprite>();
+
+        }
+
+
+        // ---- ISOMETRIC SPRITE ----
+        // Utility for ensuring sprites always face the camera and are sorted by world position accordingly
+
+        protected IsometricSprite IsometricSprite { get; private set; }
+
+        public void EnableIsometricSorting(bool enable = true)
+        {
+            if (IsometricSprite != null)
+            {
+                IsometricSprite.ResetRotation();
+                IsometricSprite.Enabled = enable;
+            }
+        }
+        
+
         // ---- ORIENTATION ----
+        // Controller for keeping orientation data and managing orientation-controlled sprites
 
         protected class EntityOrientation
         {
@@ -36,11 +67,11 @@ namespace TosserWorld
             private Orientation? LastCamera = null;
             private Orientation? LastLocal = null;
 
-            private SpriteOrientation[] Sprites;
+            private OrientationControlledSprite[] Sprites;
 
-            public void LoadSprites(Entity owner)
+            public void Load(Entity owner)
             {
-                Sprites = owner.GetComponentsInChildren<SpriteOrientation>();
+                Sprites = owner.GetComponentsInChildren<OrientationControlledSprite>();
             }
 
             public void UpdateSprites()
@@ -69,40 +100,51 @@ namespace TosserWorld
  
 
         // ---- FLIPPING ----
+        // Utility for flipping sprites around
 
-        public class EntityFlipping
+        protected FlippableSprite FlippableSprite;
+
+        public void FlipTo(Vector2 direction)
         {
-            private ScreenSpaceFlipper Flipper;
-            
-            public void LoadFlipper(Entity owner)
+            if (FlippableSprite != null)
+                FlippableSprite.FlipTo(direction);
+        }
+
+        public void FlipToScreen(Vector2 direction)
+        {
+            if (FlippableSprite != null)
+                FlippableSprite.FlipToScreen(direction);
+        }
+
+        public void FlipTo(bool direction)
+        {
+            if (FlippableSprite != null)
+                FlippableSprite.FlipTo(direction);
+        }
+
+        // ---- EQUIPMENT SLOTS ----
+        // Utility for "equipping" other entities
+
+        public class EquipSlotsController
+        {
+            private EquipmentSlot[] Slots;
+
+            public void Load(Entity owner)
             {
-                Flipper = owner.GetComponentInChildren<ScreenSpaceFlipper>();
+                Slots = owner.GetComponentsInChildren<EquipmentSlot>();
             }
 
-            public void FlipTo(Vector2 direction)
+            public EquipmentSlot this[int i]
             {
-                if (Flipper != null)
-                    Flipper.FlipTo(direction);
-            }
-
-            public void FlipToScreen(Vector2 direction)
-            {
-                if (Flipper != null)
-                    Flipper.FlipToScreen(direction);
-            }
-
-            public void FlipTo(bool direction)
-            {
-                if (Flipper != null)
-                    Flipper.FlipTo(direction);
+                get { return Slots[i]; }
             }
         }
 
-        public EntityFlipping FlipController = new EntityFlipping();
+        public EquipSlotsController EquipmentSlots = new EquipSlotsController();
 
         // ---- STATS ----
 
-        public Vector2 Position { get { return transform.position; } }
+        public Vector2 Position { get { return transform.position; } set { transform.position = value; } }
 
 
         // ---- REFERENCES ----
@@ -138,17 +180,12 @@ namespace TosserWorld
                     Modules[i].Initialize(this);
                 }
 
-                // Load sprite orientations
-                OrientationController.LoadSprites(this);
-
-                // Load screen space flipper
-                FlipController.LoadFlipper(this);
-
-
+                LoadControllers();
                 GlobalChunk.AddEntity(this);
 
                 // Object is ready for action
                 IsInitialized = true;
+                RootMode = true;
             }
         }
 
@@ -208,16 +245,16 @@ namespace TosserWorld
             }
         }
 
-        public virtual void OnAddedToContainer(Container inventory)
+        public virtual void OnAddedToContainer(ContainerModule inventory)
         {
-            SetEnable(false);
+            SetRootMode(false);
             transform.SetParent(inventory.Owner.transform, false);
             transform.localPosition = Vector3.zero;
         }
 
-        public virtual void OnRemovedFromContainer(Container inventory)
+        public virtual void OnRemovedFromContainer(ContainerModule inventory)
         {
-            SetEnable(true);
+            SetRootMode(true);
             transform.localPosition = Vector3.right;
             transform.SetParent(null);
         }
@@ -236,10 +273,18 @@ namespace TosserWorld
             return null;
         }
 
-        public void SetEnable(bool enable)
+        /// <summary>
+        /// Use this function to enable or disable root features for this entity.
+        /// </summary>
+        /// <param name="enable">True enables root features for the entity, while false disables them</param>
+        public void SetRootMode(bool enable = true)
         {
-            Render.SetActive(enable);
-            RigidBody.isKinematic = !enable;
+            RootMode = enable;
+            //Render.SetActive(enable);
+            if (RigidBody != null) RigidBody.isKinematic = !enable;
+            if (MainCollider != null) MainCollider.enabled = enable;
+
+            EnableIsometricSorting(enable);
         }
 
         public bool HasTag(EntityTags tag)
@@ -247,7 +292,7 @@ namespace TosserWorld
             if (tag == EntityTags.Any)
                 return true;
 
-            return GetModule<TagList>().Tags.Contains(tag);
+            return GetModule<TagListModule>().Tags.Contains(tag);
         }
 
         public float DistanceTo(Entity entity)
@@ -264,7 +309,7 @@ namespace TosserWorld
             }
 
             // And both entities must be stackable (contain stack components)
-            return (GetModule<Stacker>() != null && other.GetModule<Stacker>() != null);
+            return (GetModule<StackingModule>() != null && other.GetModule<StackingModule>() != null);
         }
 
     }

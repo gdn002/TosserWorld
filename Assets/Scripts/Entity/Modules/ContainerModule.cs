@@ -2,8 +2,8 @@
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Container", menuName = "Modules/Container")]
-    public class Container : Module
+    [CreateAssetMenu(fileName = "New Container Module", menuName = "Modules/Container")]
+    public class ContainerModule : Module
     {
         private static GameObject UIPrefab;
         private static Canvas UICanvas;
@@ -18,7 +18,7 @@ namespace TosserWorld.Modules
         private GameObject InventoryPanel;
 
 
-        public Container()
+        public ContainerModule()
         {
             Rows = 3;
             Cols = 3;
@@ -26,7 +26,7 @@ namespace TosserWorld.Modules
 
         protected override Module Clone()
         {
-            Container clone = CreateInstance<Container>();
+            ContainerModule clone = CreateInstance<ContainerModule>();
 
             clone.Rows = Rows;
             clone.Cols = Cols;
@@ -69,7 +69,7 @@ namespace TosserWorld.Modules
                     if (Storage[i].MatchStacks(entity))
                     {
                         // Merge stacks
-                        entity = Storage[i].GetModule<Stacker>().CombineStack(entity);
+                        entity = Storage[i].GetModule<StackingModule>().CombineStack(entity);
                         if (entity == null)
                         {
                             // Stack was completely merged
@@ -109,7 +109,7 @@ namespace TosserWorld.Modules
                 if (current.MatchStacks(entity))
                 {
                     // Merge stacks
-                    entity = Storage[slot].GetModule<Stacker>().CombineStack(entity);
+                    entity = Storage[slot].GetModule<StackingModule>().CombineStack(entity);
 
                     // Return whatever is left over from the merge
                     return entity;

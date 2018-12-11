@@ -5,10 +5,10 @@ using UnityEditor;
 
 namespace TosserWorld.Modules
 {
-    [CustomEditor(typeof(Container))]
-    public class ContainerEditor : Editor
+    [CustomEditor(typeof(ContainerModule))]
+    public class ContainerModuleEditor : Editor
     {
-        private Container Target { get { return target as Container; } }
+        private ContainerModule Target { get { return target as ContainerModule; } }
 
         public override void OnInspectorGUI()
         {

@@ -8,12 +8,15 @@ namespace TosserWorld.Modules.BrainScripts
     {
         protected override IEnumerator MainLoop()
         {
-            if (Me.DistanceTo(PlayerEntity.Player) < 3)
+            if (!Me.RootMode)
+                yield return null;
+
+            if (Me.DistanceTo(PlayerEntity.Player) < 4)
             {
                 Talk("Hi!");
-                while (Me.DistanceTo(PlayerEntity.Player) < 3)
+                while (Me.DistanceTo(PlayerEntity.Player) < 4)
                 {
-                    Leash(PlayerEntity.Player, 0.5f, 1.5f);
+                    Leash(PlayerEntity.Player, 1.5f, 3);
                     yield return null;
                 }
             }

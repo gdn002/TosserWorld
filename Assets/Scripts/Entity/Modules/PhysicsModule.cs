@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Physics Object", menuName = "Modules/Physics Object")]
-    public class PhysicsObject : Module
+    [CreateAssetMenu(fileName = "New Physics Module", menuName = "Modules/Physics")]
+    public class PhysicsModule : Module
     {
         // ---- Read-only properties ----
 
@@ -44,7 +44,7 @@ namespace TosserWorld.Modules
         private Collider2D MainCollider { get { return Owner.MainCollider; } }
 
 
-        public PhysicsObject()
+        public PhysicsModule()
         {
             AirDrag = 1;
             GravityScale = 1;
@@ -56,7 +56,7 @@ namespace TosserWorld.Modules
 
         protected override Module Clone()
         {
-            PhysicsObject clone = CreateInstance<PhysicsObject>();
+            PhysicsModule clone = CreateInstance<PhysicsModule>();
 
             clone.AirDrag = AirDrag;
             clone.GravityScale = GravityScale;

@@ -10,6 +10,12 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected override IEnumerator MainLoop()
         {
+            if (Triggers.Contains("test_pickup"))
+            {
+                Triggers.Take("test_pickup");
+                PickupTest();
+            }
+
             if (Triggers.Contains("player_walk_mouse"))                                 // Verify mouse input
             {
                 Destination = Triggers.Take<Vector2>("player_walk_mouse");              // Take the mouse destination
@@ -33,6 +39,12 @@ namespace TosserWorld.Modules.BrainScripts
             }
 
             yield return null;                                                          // End frame
+        }
+
+        void PickupTest()
+        {
+            Entity item = Awareness.FindNearest();
+            Me.EquipmentSlots[0].AddToSlot(item);
         }
     }
 }

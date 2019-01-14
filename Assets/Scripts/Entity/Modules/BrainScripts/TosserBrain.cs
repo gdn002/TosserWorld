@@ -7,16 +7,16 @@ namespace TosserWorld.Modules.BrainScripts
     public class TosserBrain : BrainScript
     {
         Vector2? Destination = null;
+        Entity Target;
 
         protected override IEnumerator MainLoop()
         {
-            if (Triggers.Contains("test_pickup"))
+            if (Triggers.Contains("interact"))
             {
-                Triggers.Take("test_pickup");
-                PickupTest();
+                Target = Triggers.Take("interact") as Entity;
+                Destination = Target.Position;
             }
-
-            if (Triggers.Contains("player_walk_mouse"))                                 // Verify mouse input
+            else if (Triggers.Contains("player_walk_mouse"))                            // Verify mouse input
             {
                 Destination = Triggers.Take<Vector2>("player_walk_mouse");              // Take the mouse destination
             }
@@ -31,6 +31,15 @@ namespace TosserWorld.Modules.BrainScripts
                 if (!GoTo(Destination.Value))                                           // Walk towards the destination
                 {
                     Destination = null;                                                 // If the player arrived, clear destination
+                }
+                if (Target != null)
+                {
+                    if (Target.GetModule<InteractionModule>().IsInPickupRange(Me))
+                    {
+                        Destination = null;
+                        Target.GetModule<InteractionModule>().RunInteraction(Me);
+                        Target = null;
+                    }
                 }
             }
             else                                                                        // If there was no input or destination

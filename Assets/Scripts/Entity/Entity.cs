@@ -20,7 +20,7 @@ namespace TosserWorld
         // The entity's name
         public string Name = "GENERIC_ENTITY";
 
-        public bool RootMode { get; protected set; }
+        public bool SubEntity { get; protected set; }
 
         // Optional modules
         public List<Module> Modules = new List<Module>();
@@ -138,6 +138,16 @@ namespace TosserWorld
             {
                 get { return Slots[i]; }
             }
+
+            public void DropAll()
+            {
+                foreach (var slot in Slots)
+                {
+                    slot.DropEquipped();
+                }
+            }
+
+            public int Length { get { return Slots.Length; } }
         }
 
         public EquipSlotsController EquipmentSlots = new EquipSlotsController();
@@ -185,7 +195,7 @@ namespace TosserWorld
 
                 // Object is ready for action
                 IsInitialized = true;
-                RootMode = true;
+                SubEntity = false;
             }
         }
 
@@ -239,22 +249,25 @@ namespace TosserWorld
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Right)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                // TODO
+                if (GetModule<InteractionModule>() != null)
+                {
+                    PlayerEntity.Player.QueueInteraction(this);
+                }
             }
         }
 
         public virtual void OnAddedToContainer(ContainerModule inventory)
         {
-            SetRootMode(false);
+            SetAsSubEntity(true);
             transform.SetParent(inventory.Owner.transform, false);
             transform.localPosition = Vector3.zero;
         }
 
         public virtual void OnRemovedFromContainer(ContainerModule inventory)
         {
-            SetRootMode(true);
+            SetAsSubEntity(false);
             transform.localPosition = Vector3.right;
             transform.SetParent(null);
         }
@@ -277,14 +290,14 @@ namespace TosserWorld
         /// Use this function to enable or disable root features for this entity.
         /// </summary>
         /// <param name="enable">True enables root features for the entity, while false disables them</param>
-        public void SetRootMode(bool enable = true)
+        public void SetAsSubEntity(bool enable = true)
         {
-            RootMode = enable;
+            SubEntity = enable;
             //Render.SetActive(enable);
-            if (RigidBody != null) RigidBody.isKinematic = !enable;
-            if (MainCollider != null) MainCollider.enabled = enable;
+            if (RigidBody != null) RigidBody.isKinematic = enable;
+            if (MainCollider != null) MainCollider.enabled = !enable;
 
-            EnableIsometricSorting(enable);
+            EnableIsometricSorting(!enable);
         }
 
         public bool HasTag(EntityTags tag)

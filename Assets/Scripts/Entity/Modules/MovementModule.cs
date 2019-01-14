@@ -6,18 +6,26 @@ namespace TosserWorld.Modules
     [CreateAssetMenu(fileName = "New Movement Module", menuName = "Modules/Movement")]
     public class MovementModule : Module
     {
-        public Vector2 Movement = Vector2.zero;
+        public Vector2 Movement { get; private set; }
+        public Vector2 Direction { get; private set; }
         public float SpeedLimit = 1;
 
         public float FrameLimit { get { return SpeedLimit * Time.fixedDeltaTime; } }
 
         public bool OverridePhysics = false;
 
+        protected override void OnInitialize()
+        {
+            Movement = Vector2.zero;
+            Direction = Vector2.up;
+        }
+
         protected override Module Clone()
         {
             MovementModule clone = CreateInstance<MovementModule>();
 
             clone.Movement = Movement;
+            clone.Direction = Direction;
             clone.SpeedLimit = SpeedLimit;
 
             return clone;
@@ -58,6 +66,11 @@ namespace TosserWorld.Modules
             }
 
             Movement = vector;
+
+            if (Movement.magnitude != 0)
+            {
+                Direction = Movement.normalized;
+            }
         }
 
         /// <summary>

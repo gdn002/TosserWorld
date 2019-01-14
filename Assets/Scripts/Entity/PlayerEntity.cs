@@ -20,6 +20,11 @@ namespace TosserWorld
             Player = this;
         }
 
+        public void QueueInteraction(Entity entity)
+        {
+            Brain.Triggers.Set("interact", entity);
+        }
+
         // Use this for initialization
         protected override void Start()
         {
@@ -38,11 +43,6 @@ namespace TosserWorld
 
         private void HandleInput()
         {
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                Brain.Triggers.Set("test_pickup", true);
-            }
-
             // Ensure the player is able to receive inputs
             if (IsInputAllowed())
             {
@@ -64,6 +64,14 @@ namespace TosserWorld
                 {
                     // If there's movement input, signal the brain to walk
                     Brain.Triggers.Set("player_walk_keyboard", walk);
+                }
+            }
+
+            // ACTIONS
+            {
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    EquipmentSlots.DropAll();
                 }
             }
         }

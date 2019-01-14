@@ -8,7 +8,7 @@ namespace TosserWorld.Modules.BrainScripts
     {
         protected override IEnumerator MainLoop()
         {
-            if (!Me.RootMode)
+            if (Me.SubEntity)
                 yield return null;
 
             if (Me.DistanceTo(PlayerEntity.Player) < 4)

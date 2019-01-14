@@ -14,7 +14,7 @@ namespace Utility
 
             if (entity != null)
             {
-                entity.SetRootMode(false);
+                entity.SetAsSubEntity(true);
                 entity.transform.SetParent(transform);
                 entity.transform.localPosition = Vector2.zero;
                 entity.transform.localScale = Vector3.one;
@@ -27,9 +27,9 @@ namespace Utility
         public void DropEquipped()
         {
             Equipped.transform.SetParent(null);
-            Equipped.Position = Equipped.Position + Vector2.right;
+            Equipped.Position = Equipped.Position + new Vector2(0.5f, 0);
             Equipped.transform.localScale = Vector3.one;
-            Equipped.SetRootMode(true);
+            Equipped.SetAsSubEntity(false);
             Equipped = null;
         }
     }

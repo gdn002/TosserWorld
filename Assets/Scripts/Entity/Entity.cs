@@ -12,7 +12,7 @@ namespace TosserWorld
     /// <summary>
     /// Base class for all entities
     /// </summary>
-    public class Entity : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class Entity : MonoBehaviour
     {
         // TODO: Move this somewhere better
         public static EntityChunk GlobalChunk = new EntityChunk();
@@ -36,7 +36,7 @@ namespace TosserWorld
             OrientationController.Load(this);
             EquipmentSlots.Load(this);
 
-            IsometricSprite = GetComponentInChildren<IsometricSprite>();
+            IsometricSprite = GetComponentInChildren<IsometricRenderer>();
             FlippableSprite = GetComponentInChildren<FlippableSprite>();
 
         }
@@ -45,7 +45,7 @@ namespace TosserWorld
         // ---- ISOMETRIC SPRITE ----
         // Utility for ensuring sprites always face the camera and are sorted by world position accordingly
 
-        protected IsometricSprite IsometricSprite { get; private set; }
+        protected IsometricRenderer IsometricSprite { get; private set; }
 
         public void EnableIsometricSorting(bool enable = true)
         {
@@ -233,19 +233,19 @@ namespace TosserWorld
 
         // ---- EVENT HANDLERS ----
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            foreach(SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
-            {
-                renderer.color = Color.yellow;
-            }
-        }
-
         public void OnPointerExit(PointerEventData eventData)
         {
             foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
             {
                 renderer.color = Color.white;
+            }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
+            {
+                renderer.color = Color.yellow;
             }
         }
 

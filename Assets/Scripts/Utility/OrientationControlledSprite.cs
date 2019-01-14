@@ -54,23 +54,23 @@ namespace Utility
         {
             switch (RelativeOrientation(local, camera))
             {
-                case Utility.Enumerations.Orientation.N:
-                case Utility.Enumerations.Orientation.S:
+                case Orientation.N:
+                case Orientation.S:
                     Renderer.sprite = Sprites[0];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.E:
-                case Utility.Enumerations.Orientation.W:
+                case Orientation.E:
+                case Orientation.W:
                     Renderer.sprite = Sprites[2];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.NE:
-                case Utility.Enumerations.Orientation.SW:
+                case Orientation.NE:
+                case Orientation.SW:
                     Renderer.sprite = Sprites[1];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.SE:
-                case Utility.Enumerations.Orientation.NW:
+                case Orientation.SE:
+                case Orientation.NW:
                     Renderer.sprite = Sprites[1];
                     Flip(true);
                     break;
@@ -81,35 +81,35 @@ namespace Utility
         {
             switch(RelativeOrientation(local, camera))
             {
-                case Utility.Enumerations.Orientation.N:
+                case Orientation.N:
                     Renderer.sprite = Sprites[0];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.S:
+                case Orientation.S:
                     Renderer.sprite = Sprites[4];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.E:
+                case Orientation.E:
                     Renderer.sprite = Sprites[2];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.W:
+                case Orientation.W:
                     Renderer.sprite = Sprites[2];
                     Flip(true);
                     break;
-                case Utility.Enumerations.Orientation.NE:
+                case Orientation.NE:
                     Renderer.sprite = Sprites[1];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.NW:
+                case Orientation.NW:
                     Renderer.sprite = Sprites[1];
                     Flip(true);
                     break;
-                case Utility.Enumerations.Orientation.SE:
+                case Orientation.SE:
                     Renderer.sprite = Sprites[3];
                     Flip(false);
                     break;
-                case Utility.Enumerations.Orientation.SW:
+                case Orientation.SW:
                     Renderer.sprite = Sprites[3];
                     Flip(true);
                     break;
@@ -125,9 +125,9 @@ namespace Utility
         private Orientation RelativeOrientation(Orientation local, Orientation camera)
         {
             int value = (int)local - (int)camera;
-            if (value < (int)Utility.Enumerations.Orientation.N)
+            if (value < (int)Orientation.N)
             {
-                value += (int)Utility.Enumerations.Orientation.NW + 1;
+                value += (int)Orientation.NW + 1;
             }
 
             return (Orientation)value;

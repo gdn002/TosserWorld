@@ -1,17 +1,23 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+
+using TosserWorld;
 
 namespace Utility
 {
     /// <summary>
     /// Handles several isometric functions for sprite objects
     /// </summary>
-    public class IsometricSprite : MonoBehaviour
+    public class IsometricRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public bool Enabled = true;
+        public bool Selectable = true;
 
         private SortingGroup SortGroup;
         private SpriteRenderer Renderer;
+
+        private Entity Owner;
 
         void Start()
         {
@@ -25,6 +31,11 @@ namespace Utility
             if (Renderer != null)
             {
                 Renderer.sortingOrder = 1;
+            }
+
+            if (transform.parent != null)
+            {
+                Owner = transform.parent.GetComponent<Entity>();
             }
         }
 
@@ -57,6 +68,28 @@ namespace Utility
         public void ResetRotation()
         {
             transform.localRotation = Quaternion.identity;
+        }
+
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            Owner.OnPointerExit(eventData);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (Selectable)
+            {
+                Owner.OnPointerEnter(eventData);
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (Selectable)
+            {
+                Owner.OnPointerClick(eventData);
+            }
         }
     }
 }

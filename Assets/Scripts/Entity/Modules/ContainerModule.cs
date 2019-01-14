@@ -86,7 +86,7 @@ namespace TosserWorld.Modules
                 {
                     // Put this entity in storage
                     Storage[i] = entity;
-                    entity.OnAddedToContainer(this);
+                    Pack(entity);
                     return true;
                 }
             }
@@ -118,7 +118,7 @@ namespace TosserWorld.Modules
 
             // Put entity in storage, replacing whatever was there
             Storage[slot] = entity;
-            entity.OnAddedToContainer(this);
+            Pack(entity);
 
             return current;
         }
@@ -145,6 +145,22 @@ namespace TosserWorld.Modules
             return current;
         }
 
+        public void DropAll()
+        {
+            Vector2 dropPosition = Vector2.right;
+
+            for (int i = 0; i < Storage.Length; ++i)
+            {
+                if (Storage[i] != null)
+                {
+                    Unpack(Storage[i], dropPosition);
+                    Storage[i] = null;
+
+                    dropPosition = Quaternion.Euler(0, 0, -15) * dropPosition;
+                }
+            }
+        }
+
         public void OpenCloseContainer()
         {
             if (InventoryPanel == null)
@@ -158,6 +174,23 @@ namespace TosserWorld.Modules
                 Destroy(InventoryPanel);
                 InventoryPanel = null;
             }
+        }
+
+
+        private void Pack(Entity entity)
+        {
+            entity.SetAsSubEntity();
+            entity.EnableRendering(false);
+            entity.transform.SetParent(Owner.transform, false);
+            entity.transform.localPosition = Vector3.zero;
+        }
+
+        private void Unpack(Entity entity, Vector2 dropAt)
+        {
+            entity.SetAsSubEntity(false);
+            entity.EnableRendering();
+            entity.transform.localPosition = dropAt;
+            entity.transform.SetParent(null);
         }
     }
 }

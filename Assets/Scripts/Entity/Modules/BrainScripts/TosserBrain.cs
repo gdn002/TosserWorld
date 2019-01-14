@@ -49,11 +49,5 @@ namespace TosserWorld.Modules.BrainScripts
 
             yield return null;                                                          // End frame
         }
-
-        void PickupTest()
-        {
-            Entity item = Awareness.FindNearest();
-            Me.EquipmentSlots[0].AddToSlot(item);
-        }
     }
 }

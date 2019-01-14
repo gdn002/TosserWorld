@@ -71,7 +71,11 @@ namespace TosserWorld
             {
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
-                    EquipmentSlots.DropAll();
+                    GetModule<ContainerModule>().DropAll();
+                }
+                if (Input.GetKeyDown(KeyCode.I))
+                {
+                    GetModule<ContainerModule>().OpenCloseContainer();
                 }
             }
         }

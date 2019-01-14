@@ -197,6 +197,8 @@ namespace TosserWorld
                 IsInitialized = true;
                 SubEntity = false;
             }
+
+            InventorySprite = GetComponentInChildren<SpriteRenderer>().sprite; // TODO: Temporary hack to auto generate inventory sprites
         }
 
         protected virtual void Update()
@@ -258,20 +260,6 @@ namespace TosserWorld
             }
         }
 
-        public virtual void OnAddedToContainer(ContainerModule inventory)
-        {
-            SetAsSubEntity(true);
-            transform.SetParent(inventory.Owner.transform, false);
-            transform.localPosition = Vector3.zero;
-        }
-
-        public virtual void OnRemovedFromContainer(ContainerModule inventory)
-        {
-            SetAsSubEntity(false);
-            transform.localPosition = Vector3.right;
-            transform.SetParent(null);
-        }
-
 
         // ---- UTILITY FUNCTIONS ----
 
@@ -287,17 +275,27 @@ namespace TosserWorld
         }
 
         /// <summary>
-        /// Use this function to enable or disable root features for this entity.
+        /// Enables or disable root features for this entity.
+        /// Root features should be disabled when an entity is made a child of another entity.
         /// </summary>
-        /// <param name="enable">True enables root features for the entity, while false disables them</param>
+        /// <param name="enable">Enables or disables root features for the entity</param>
         public void SetAsSubEntity(bool enable = true)
         {
             SubEntity = enable;
-            //Render.SetActive(enable);
             if (RigidBody != null) RigidBody.isKinematic = enable;
             if (MainCollider != null) MainCollider.enabled = !enable;
 
-            EnableIsometricSorting(!enable);
+            EnableIsometricSorting(!enable);    // Disable isometric sorting while the object is a sub entity
+            OnPointerExit(null);                // Reset "selected" state
+        }
+
+        /// <summary>
+        /// Disables rendering features, effectively "hiding" the entity.
+        /// </summary>
+        /// <param name="enable">Enables or disables rendering features for the entity</param>
+        public void EnableRendering(bool enable = true)
+        {
+            Render.SetActive(enable);
         }
 
         public bool HasTag(EntityTags tag)

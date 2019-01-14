@@ -10,6 +10,7 @@ namespace TosserWorld.Modules
             NoInteraction = 0,
             OpenContainer,
             PickUp,
+            Equip,
         }
 
         public Interactions Interaction = Interactions.NoInteraction;
@@ -56,6 +57,10 @@ namespace TosserWorld.Modules
                     case Interactions.PickUp:
                         PickUpInteraction(activator);
                         break;
+
+                    case Interactions.Equip:
+                        EquipInteraction(activator);
+                        break;
                 }
             }
         }
@@ -64,10 +69,23 @@ namespace TosserWorld.Modules
 
         private void OpenContainerInteraction()
         {
-
+            var container = Owner.GetModule<ContainerModule>();
+            if (container != null)
+            {
+                container.OpenCloseContainer();
+            }
         }
 
         private void PickUpInteraction(Entity activator)
+        {
+            var container = activator.GetModule<ContainerModule>();
+            if (container != null)
+            {
+                container.Add(Owner);
+            }
+        }
+
+        private void EquipInteraction(Entity activator)
         {
             if (activator.EquipmentSlots.Length != 0)
             {

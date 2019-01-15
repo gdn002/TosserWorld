@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 
+using TosserWorld.UI;
+
 namespace TosserWorld.Modules
 {
     [CreateAssetMenu(fileName = "New Container Module", menuName = "Modules/Container")]
     public class ContainerModule : Module
     {
         private static GameObject UIPrefab;
-        private static Canvas UICanvas;
 
         public InventorySpace Storage;
 
@@ -37,7 +38,6 @@ namespace TosserWorld.Modules
         protected override void OnInitialize()
         {
             UIPrefab = Resources.Load<GameObject>("Prefabs/UI/Inventory/InventoryPanel");
-            UICanvas = GameObject.FindObjectOfType<Canvas>();
 
             Storage = new InventorySpace(SlotCount);
         }
@@ -167,7 +167,7 @@ namespace TosserWorld.Modules
             {
                 InventoryPanel = Instantiate(UIPrefab);
                 InventoryPanel.GetComponent<UIInventory>().CreateInventoryGrid(this);
-                InventoryPanel.transform.SetParent(UICanvas.transform, false);
+                UIManager.Manager.AddPanel(InventoryPanel);
             }
             else
             {

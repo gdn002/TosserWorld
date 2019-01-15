@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TosserWorld.Modules;
+using UnityEngine.EventSystems;
 
 namespace TosserWorld
 {
@@ -86,16 +87,19 @@ namespace TosserWorld
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    if (!UnityEngine.Physics.Raycast(ray, 100))
+                    if (!EventSystem.current.IsPointerOverGameObject())
                     {
-                        Plane worldPlane = new Plane(Vector3.forward, 0);
-
-                        float enter = 0;
-                        if (worldPlane.Raycast(ray, out enter))
+                        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        if (!UnityEngine.Physics.Raycast(ray, 100))
                         {
-                            // If the world was clicked, signal the brain to go to the location
-                            Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                            Plane worldPlane = new Plane(Vector3.forward, 0);
+
+                            float enter = 0;
+                            if (worldPlane.Raycast(ray, out enter))
+                            {
+                                // If the world was clicked, signal the brain to go to the location
+                                Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                            }
                         }
                     }
                 }

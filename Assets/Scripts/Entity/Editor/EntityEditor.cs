@@ -24,6 +24,8 @@ namespace TosserWorld.Type
 
         public override void OnInspectorGUI()
         {
+            Target.Name = EditorGUILayout.TextField("Name: ", Target.Name);
+
             if (ModuleList != null && Target.Modules != null)
                 ModuleList.DoLayoutList();
         }

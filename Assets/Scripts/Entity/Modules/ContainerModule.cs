@@ -25,6 +25,18 @@ namespace TosserWorld.Modules
             Cols = 3;
         }
 
+        public override void Update()
+        {
+            if (InventoryPanel != null)
+            {
+                // If the container is open and the player moves far enough away from it, close it
+                if (Vector2.Distance(PlayerEntity.Player.Position, Owner.Position) > 3)
+                {
+                    OpenCloseContainer();
+                }
+            }
+        }
+
         protected override Module Clone()
         {
             ContainerModule clone = CreateInstance<ContainerModule>();
@@ -171,7 +183,7 @@ namespace TosserWorld.Modules
             }
             else
             {
-                Destroy(InventoryPanel);
+                UIManager.Manager.RemovePanel(InventoryPanel);
                 InventoryPanel = null;
             }
         }

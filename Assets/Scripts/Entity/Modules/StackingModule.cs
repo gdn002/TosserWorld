@@ -14,6 +14,7 @@ namespace TosserWorld.Modules
 
         public StackingModule()
         {
+            Amount = 1;
             MaxAmount = 64;
             IsStackable = true;
         }

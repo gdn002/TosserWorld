@@ -18,7 +18,7 @@ namespace TosserWorld
         public static EntityChunk GlobalChunk = new EntityChunk();
 
         // The entity's name
-        public string Name = "GENERIC_ENTITY";
+        public string Name = "Generic Object";
 
         public bool SubEntity { get; protected set; }
 

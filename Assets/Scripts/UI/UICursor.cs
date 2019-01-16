@@ -56,7 +56,7 @@ namespace TosserWorld.UI
             var image = FloatingIcon.AddComponent<Image>();
             image.sprite = AttachedEntity.InventorySprite;
             image.raycastTarget = false;
-
+            
             FloatingIcon.transform.SetParent(transform);
         }
 

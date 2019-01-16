@@ -4,9 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
+using TosserWorld.UI.Panels;
+
 namespace TosserWorld.UI
 {
-    public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class UIInventory : UIPanel
     {
         private static GameObject SlotPrefab;
 
@@ -62,20 +64,6 @@ namespace TosserWorld.UI
 
         // Update is called once per frame
         void Update()
-        {
-        }
-
-        public void OnBeginDrag(PointerEventData eventData)
-        {
-            UIManager.Manager.BringToFront(gameObject);
-        }
-
-        public void OnDrag(PointerEventData eventData)
-        {
-            transform.localPosition = transform.localPosition + (Vector3)eventData.delta;
-        }
-
-        public void OnEndDrag(PointerEventData eventData)
         {
         }
     }

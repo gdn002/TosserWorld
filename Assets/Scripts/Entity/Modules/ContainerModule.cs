@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 
 using TosserWorld.UI;
+using TosserWorld.UI.Panels;
 
 namespace TosserWorld.Modules
 {
     [CreateAssetMenu(fileName = "New Container Module", menuName = "Modules/Container")]
     public class ContainerModule : Module
     {
-        private static GameObject UIPrefab;
+        private static string DEFAULT_INVENTORY_PREFAB = "Prefabs/UI/Inventory/InventoryPanel";
 
+        public UIInventory InventoryPrefab;
         public InventorySpace Storage;
 
         public int Rows;
@@ -16,7 +18,7 @@ namespace TosserWorld.Modules
 
         public int SlotCount { get { return Rows * Cols; } }
 
-        private GameObject InventoryPanel;
+        private UIInventory InventoryPanel;
 
 
         public ContainerModule()
@@ -30,7 +32,7 @@ namespace TosserWorld.Modules
             if (InventoryPanel != null)
             {
                 // If the container is open and the player moves far enough away from it, close it
-                if (Vector2.Distance(PlayerEntity.Player.Position, Owner.Position) > 3)
+                if (Vector2.Distance(PlayerEntity.Player.Position, Owner.Position) > 1.5f)
                 {
                     OpenCloseContainer();
                 }
@@ -49,7 +51,8 @@ namespace TosserWorld.Modules
 
         protected override void OnInitialize()
         {
-            UIPrefab = Resources.Load<GameObject>("Prefabs/UI/Inventory/InventoryPanel");
+            if (InventoryPrefab == null)
+                InventoryPrefab = Resources.Load<GameObject>(DEFAULT_INVENTORY_PREFAB).GetComponent<UIInventory>();
 
             Storage = new InventorySpace(SlotCount);
         }
@@ -76,17 +79,14 @@ namespace TosserWorld.Modules
             // First attempt to combine with an existing stack
             for (int i = 0; i < Storage.Length; ++i)
             {
-                if (Storage[i] != null)
+                if (entity.MatchStacks(Storage[i]))
                 {
-                    if (Storage[i].MatchStacks(entity))
+                    // Merge stacks
+                    entity = Storage[i].GetModule<StackingModule>().CombineStack(entity);
+                    if (entity == null)
                     {
-                        // Merge stacks
-                        entity = Storage[i].GetModule<StackingModule>().CombineStack(entity);
-                        if (entity == null)
-                        {
-                            // Stack was completely merged
-                            return true;
-                        }
+                        // Stack was completely merged
+                        return true;
                     }
                 }
             }
@@ -116,16 +116,13 @@ namespace TosserWorld.Modules
         public Entity Place(Entity entity, int slot)
         {
             Entity current = Storage[slot];
-            if (current != null)
+            if (entity.MatchStacks(current))
             {
-                if (current.MatchStacks(entity))
-                {
-                    // Merge stacks
-                    entity = Storage[slot].GetModule<StackingModule>().CombineStack(entity);
+                // Merge stacks
+                entity = Storage[slot].GetModule<StackingModule>().CombineStack(entity);
 
-                    // Return whatever is left over from the merge
-                    return entity;
-                }
+                // Return whatever is left over from the merge
+                return entity;
             }
 
             // Put entity in storage, replacing whatever was there
@@ -157,6 +154,47 @@ namespace TosserWorld.Modules
             return current;
         }
 
+        /// <summary>
+        /// Takes a single entity from a stack in a container slot.
+        /// </summary>
+        /// <param name="slot">The slot to take from</param>
+        /// <returns>The entity taken (may be null)</returns>
+        public Entity TakeSingle(int slot)
+        {
+            Entity current = Storage[slot];
+            if (current != null)
+            {
+                var stack = current.GetModule<StackingModule>();
+                if (stack != null)
+                {
+                    if (stack.Amount > 1)
+                    {
+                        return stack.TakeFromStack(1);
+                    }
+                }
+            }
+
+            return Take(slot);
+        }
+
+        public Entity TakeHalf(int slot)
+        {
+            Entity current = Storage[slot];
+            if (current != null)
+            {
+                var stack = current.GetModule<StackingModule>();
+                if (stack != null)
+                {
+                    if (stack.Amount > 1)
+                    {
+                        return stack.TakeFromStack(stack.Amount / 2);
+                    }
+                }
+            }
+
+            return Take(slot);
+        }
+
         public void DropAll()
         {
             Vector2 dropPosition = Vector2.right;
@@ -177,8 +215,8 @@ namespace TosserWorld.Modules
         {
             if (InventoryPanel == null)
             {
-                InventoryPanel = Instantiate(UIPrefab);
-                InventoryPanel.GetComponent<UIInventory>().CreateInventoryGrid(this);
+                InventoryPanel = UIPanel.InstantiatePanel(InventoryPrefab) as UIInventory;
+                InventoryPanel.CreateInventoryGrid(this);
                 UIManager.Manager.AddPanel(InventoryPanel);
             }
             else

@@ -40,18 +40,42 @@ namespace TosserWorld.UI
                 {
                     SlotAmount.text = item.GetModule<StackingModule>().Amount.ToString();
                 }
+                else
+                {
+                    SlotAmount.text = null;
+                }
             }
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (UICursor.Cursor.AttachedEntity == null)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
-                UICursor.Cursor.SetAttachedEntity(Inventory.Take(Slot));
+                if (UICursor.Cursor.AttachedEntity == null)
+                {
+                    UICursor.Cursor.SetAttachedEntity(Inventory.Take(Slot));
+                }
+                else
+                {
+                    UICursor.Cursor.SetAttachedEntity(Inventory.Place(UICursor.Cursor.AttachedEntity, Slot));
+                }
             }
-            else
+            else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                UICursor.Cursor.SetAttachedEntity(Inventory.Place(UICursor.Cursor.AttachedEntity, Slot));
+                if (UICursor.Cursor.AttachedEntity == null)
+                {
+                    UICursor.Cursor.SetAttachedEntity(Inventory.TakeHalf(Slot));
+                }
+                else
+                {
+                    if (UICursor.Cursor.AttachedEntity.MatchStacks(Inventory.Peek(Slot)))
+                    {
+                        var cursorStack = UICursor.Cursor.AttachedEntity.GetModule<StackingModule>();
+
+                        if (!cursorStack.IsMaxed)
+                            cursorStack.CombineStack(Inventory.TakeSingle(Slot));
+                    }
+                }
             }
         }
     }

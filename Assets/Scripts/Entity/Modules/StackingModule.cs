@@ -12,6 +12,9 @@ namespace TosserWorld.Modules
         public bool IsStackable;
 
 
+        public bool IsMaxed { get { return Amount >= MaxAmount; } }
+
+
         public StackingModule()
         {
             Amount = 1;
@@ -55,6 +58,17 @@ namespace TosserWorld.Modules
             }
 
             return other;
+        }
+
+        public Entity TakeFromStack(int amount)
+        {
+            if (amount >= Amount)
+                return Owner;
+
+            Entity newStack = Owner.Clone();
+            Amount -= amount;
+            newStack.GetModule<StackingModule>().Amount = amount;
+            return newStack;
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+using TosserWorld.UI.Panels;
+
 namespace TosserWorld.UI
 {
     /// <summary>
@@ -10,7 +12,7 @@ namespace TosserWorld.UI
     {
         public static UIManager Manager { get; private set; }
 
-        private List<GameObject> ActivePanels = new List<GameObject>();
+        private List<UIPanel> ActivePanels = new List<UIPanel>();
 
 
         public Canvas UICanvas { get; private set; }
@@ -26,7 +28,7 @@ namespace TosserWorld.UI
         }
 
 
-        public void AddPanel(GameObject panel)
+        public void AddPanel(UIPanel panel)
         {
             panel.transform.SetParent(transform, false);
             PlaceOnNextAvailableArea(panel);
@@ -36,18 +38,18 @@ namespace TosserWorld.UI
             BringToFront(panel);
         }
 
-        public void RemovePanel(GameObject panel)
+        public void RemovePanel(UIPanel panel)
         {
             ActivePanels.Remove(panel);
-            Destroy(panel);
+            Destroy(panel.gameObject);
         }
 
-        public void BringToFront(GameObject panel)
+        public void BringToFront(UIPanel panel)
         {
             panel.transform.SetAsLastSibling();
         }
 
-        private void PlaceOnNextAvailableArea(GameObject nextPanel)
+        private void PlaceOnNextAvailableArea(UIPanel nextPanel)
         {
             var nextRect = nextPanel.GetComponent<RectTransform>();
             Vector2 position;

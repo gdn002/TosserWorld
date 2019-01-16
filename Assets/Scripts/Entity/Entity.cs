@@ -30,6 +30,13 @@ namespace TosserWorld
 
 
 
+        public Entity Clone()
+        {
+            Entity clone = Instantiate(gameObject).GetComponent<Entity>();
+            clone.CloneStart();
+            return clone;
+        }
+
         // Load all utilities here
         private void LoadControllers()
         {
@@ -176,7 +183,7 @@ namespace TosserWorld
             if (!IsInitialized)
             {
                 // Load Unity references
-                RigidBody       = GetComponent<Rigidbody2D>();
+                RigidBody = GetComponent<Rigidbody2D>();
                 Animator        = GetComponentInChildren<Animator>();
                 MainCollider    = GetComponent<Collider2D>();
 
@@ -198,7 +205,33 @@ namespace TosserWorld
                 SubEntity = false;
             }
 
-            InventorySprite = GetComponentInChildren<SpriteRenderer>().sprite; // TODO: Temporary hack to auto generate inventory sprites
+            if (InventorySprite == null)
+            {
+                InventorySprite = GetComponentInChildren<SpriteRenderer>().sprite; // TODO: Temporary hack to auto generate inventory sprites
+            }
+        }
+
+        private void CloneStart()
+        {
+            // Load Unity references
+            RigidBody       = GetComponent<Rigidbody2D>();
+            Animator        = GetComponentInChildren<Animator>();
+            MainCollider    = GetComponent<Collider2D>();
+
+            // Load hierarchy references
+            Render = transform.Find("Render").gameObject;
+
+            // Load template modules as their own object
+            for (int i = 0; i < Modules.Count; i++)
+            {
+                Modules[i] = Module.LoadTemplate(Modules[i]);
+                Modules[i].Initialize(this);
+            }
+
+            LoadControllers();
+            GlobalChunk.AddEntity(this);
+
+            IsInitialized = true;
         }
 
         protected virtual void Update()
@@ -313,11 +346,12 @@ namespace TosserWorld
 
         public bool MatchStacks(Entity other)
         {
+            if (other == null)
+                return false;
+
             // To match stacks, the names of the entities must match...
             if (Name != other.Name)
-            {
                 return false;
-            }
 
             // And both entities must be stackable (contain stack components)
             return (GetModule<StackingModule>() != null && other.GetModule<StackingModule>() != null);

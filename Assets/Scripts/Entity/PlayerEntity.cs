@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using TosserWorld.Modules;
 using UnityEngine.EventSystems;
+using TosserWorld.Modules.BrainScripts;
+using TosserWorld.UI;
 
 namespace TosserWorld
 {
@@ -23,7 +25,7 @@ namespace TosserWorld
 
         public void QueueInteraction(Entity entity)
         {
-            Brain.Triggers.Set("interact", entity);
+            Brain.Triggers.Set(TosserBrain.LocalTriggers.INTERACT, entity);
         }
 
         // Use this for initialization
@@ -64,7 +66,7 @@ namespace TosserWorld
                 if (walk.magnitude > 0)
                 {
                     // If there's movement input, signal the brain to walk
-                    Brain.Triggers.Set("player_walk_keyboard", walk);
+                    Brain.Triggers.Set(TosserBrain.LocalTriggers.WALK_KEYBOARD, walk);
                 }
             }
 
@@ -87,18 +89,31 @@ namespace TosserWorld
             {
                 if (Input.GetMouseButtonDown(0))
                 {
+                    // LMB clicked
                     if (!EventSystem.current.IsPointerOverGameObject())
                     {
+                        // Mouse is not already over a selectable element
                         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                        if (!UnityEngine.Physics.Raycast(ray, 100))
+                        if (!Physics.Raycast(ray, 100))
                         {
                             Plane worldPlane = new Plane(Vector3.forward, 0);
 
                             float enter = 0;
                             if (worldPlane.Raycast(ray, out enter))
                             {
-                                // If the world was clicked, signal the brain to go to the location
-                                Brain.Triggers.Set("player_walk_mouse", (Vector2)ray.GetPoint(enter));
+                                // A spot in the world was clicked
+                                Vector2 worldLocation = (Vector2)ray.GetPoint(enter);
+
+                                if (UICursor.Cursor.AttachedEntity == null)
+                                {
+                                    // Nothing in the cursor slot, signal the brain to go to the location
+                                    Brain.Triggers.Set(TosserBrain.LocalTriggers.WALK_MOUSE, worldLocation);
+                                }
+                                else
+                                {
+                                    // Signal the brain to drop whatever's in the cursor at the spot
+                                    Brain.Triggers.Set(TosserBrain.LocalTriggers.DROP_CURSOR, worldLocation);
+                                }
                             }
                         }
                     }

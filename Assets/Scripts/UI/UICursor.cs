@@ -37,6 +37,16 @@ namespace TosserWorld.UI
             }
         }
 
+        public void DropAttachedEntity(Vector2 worldPosition)
+        {
+            AttachedEntity.SetAsSubEntity(false);
+            AttachedEntity.EnableRendering();
+            AttachedEntity.transform.position = worldPosition;
+            AttachedEntity.transform.SetParent(null);
+
+            SetAttachedEntity(null);
+        }
+
         private void CreateIcon()
         {
             DestroyIcon();

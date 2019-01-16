@@ -106,10 +106,10 @@ namespace TosserWorld.Modules.BrainScripts
                     Stop();
                 }
 
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         protected bool Leash(Entity target, float near, float far)

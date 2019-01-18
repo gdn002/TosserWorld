@@ -3,46 +3,42 @@ using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 
 using TosserWorld;
+using System.Collections.Generic;
 
 namespace Utility
 {
     /// <summary>
     /// Handles several isometric functions for sprite objects
     /// </summary>
-    public class IsometricRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    public class EntityRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
-        public bool Enabled = true;
+        public bool EnableIsometry = true;
         public bool Selectable = true;
 
         private SortingGroup SortGroup;
-        private SpriteRenderer Renderer;
+        private List<SpriteRenderer> AttachedRenderers = new List<SpriteRenderer>();
 
         private Entity Owner;
 
         void Start()
         {
             SortGroup = GetComponent<SortingGroup>();
-            Renderer = GetComponent<SpriteRenderer>();
-
             if (SortGroup != null)
             {
                 SortGroup.sortingOrder = 1;
             }
-            if (Renderer != null)
-            {
-                Renderer.sortingOrder = 1;
-            }
-
+            
             if (transform.parent != null)
             {
                 Owner = transform.parent.GetComponent<Entity>();
+                AttachedRenderers = Owner.GetComponentsInEntity<SpriteRenderer>();
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Enabled)
+            if (EnableIsometry)
             {
                 transform.rotation = CameraController.Camera.transform.rotation;
                 //IsometricSorting();
@@ -59,9 +55,13 @@ namespace Utility
             {
                 SortGroup.sortingOrder = sort;
             }
-            if (Renderer != null)
+        }
+
+        public void EnableRendering(bool enable = true)
+        {
+            foreach (var renderer in AttachedRenderers)
             {
-                Renderer.sortingOrder = sort;
+                renderer.enabled = enable;
             }
         }
 

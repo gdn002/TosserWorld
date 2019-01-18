@@ -32,8 +32,9 @@ namespace TosserWorld
 
         public Entity Clone()
         {
-            Entity clone = Instantiate(gameObject).GetComponent<Entity>();
-            clone.CloneStart();
+            Entity clone = Instantiate(gameObject, transform.parent).GetComponent<Entity>();
+            clone.name = name;
+            clone.Start();
             return clone;
         }
 
@@ -43,24 +44,33 @@ namespace TosserWorld
             OrientationController.Load(this);
             EquipmentSlots.Load(this);
 
-            IsometricSprite = GetComponentInChildren<IsometricRenderer>();
+            Render = GetComponentInChildren<EntityRenderer>();
             FlippableSprite = GetComponentInChildren<FlippableSprite>();
 
         }
 
 
-        // ---- ISOMETRIC SPRITE ----
+        // ---- RENDERING ----
         // Utility for ensuring sprites always face the camera and are sorted by world position accordingly
 
-        protected IsometricRenderer IsometricSprite { get; private set; }
+        protected EntityRenderer Render { get; private set; }
 
-        public void EnableIsometricSorting(bool enable = true)
+        public void EnableIsometry(bool enable = true)
         {
-            if (IsometricSprite != null)
+            if (Render != null)
             {
-                IsometricSprite.ResetRotation();
-                IsometricSprite.Enabled = enable;
+                Render.ResetRotation();
+                Render.EnableIsometry = enable;
             }
+        }
+
+        /// <summary>
+        /// Enables or disables rendering features, effectively showing or hiding the entity.
+        /// </summary>
+        /// <param name="enable">Enables or disables rendering features for the entity</param>
+        public void EnableRendering(bool enable = true)
+        {
+            Render.EnableRendering(enable);
         }
         
 
@@ -171,9 +181,6 @@ namespace TosserWorld
         public Animator Animator;
         public Collider2D MainCollider;
 
-        // Hierarchy references
-        public GameObject Render;
-
         // Sprites
         public Sprite InventorySprite;
 
@@ -186,9 +193,6 @@ namespace TosserWorld
                 RigidBody = GetComponent<Rigidbody2D>();
                 Animator        = GetComponentInChildren<Animator>();
                 MainCollider    = GetComponent<Collider2D>();
-
-                // Load hierarchy references
-                Render = transform.Find("Render").gameObject;
 
                 // Load template modules as their own object
                 for (int i = 0; i < Modules.Count; i++)
@@ -209,29 +213,6 @@ namespace TosserWorld
             {
                 InventorySprite = GetComponentInChildren<SpriteRenderer>().sprite; // TODO: Temporary hack to auto generate inventory sprites
             }
-        }
-
-        private void CloneStart()
-        {
-            // Load Unity references
-            RigidBody       = GetComponent<Rigidbody2D>();
-            Animator        = GetComponentInChildren<Animator>();
-            MainCollider    = GetComponent<Collider2D>();
-
-            // Load hierarchy references
-            Render = transform.Find("Render").gameObject;
-
-            // Load template modules as their own object
-            for (int i = 0; i < Modules.Count; i++)
-            {
-                Modules[i] = Module.LoadTemplate(Modules[i]);
-                Modules[i].Initialize(this);
-            }
-
-            LoadControllers();
-            GlobalChunk.AddEntity(this);
-
-            IsInitialized = true;
         }
 
         protected virtual void Update()
@@ -296,6 +277,56 @@ namespace TosserWorld
 
         // ---- UTILITY FUNCTIONS ----
 
+        /// <summary>
+        /// Operates the same way as GetComponentsInChildren, except it accounts for sub-entities.
+        /// </summary>
+        /// <typeparam name="T">The component type to search</typeparam>
+        /// <returns>A list of all the components owned by this entity</returns>
+        public List<T> GetComponentsInEntity<T>() where T : Component
+        {
+            List<T> components = new List<T>();
+
+            // Add components in the entity itself
+            components.AddRange(GetComponents<T>());
+
+            // Iterate through the entity's child objects
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                var child = transform.GetChild(i).gameObject;
+
+                // Only add the child's components if it isn't its own entity
+                if (child.GetComponent<Entity>() == null)
+                {
+                    // Search recursively
+                    components.AddRange(InternalGetComponentsInEntity<T>(child));
+                }
+            }
+
+            return components;
+        }
+
+        private List<T> InternalGetComponentsInEntity<T>(GameObject obj) where T : Component
+        {
+            List<T> components = new List<T>();
+            components.AddRange(obj.GetComponents<T>());
+
+            for (int i = 0; i < obj.transform.childCount; i++)
+            {
+                var child = obj.transform.GetChild(i).gameObject;
+                if (child.GetComponent<Entity>() == null)
+                {
+                    components.AddRange(InternalGetComponentsInEntity<T>(child));
+                }
+            }
+
+            return components;
+        }
+
+        /// <summary>
+        /// Finds and return a module attached to this entity.
+        /// </summary>
+        /// <typeparam name="T">The module type to search</typeparam>
+        /// <returns>A reference to the module, or null if it couldn't be found in the entity</returns>
         public T GetModule<T>() where T : Module
         {
             foreach (var module in Modules)
@@ -318,19 +349,11 @@ namespace TosserWorld
             if (RigidBody != null) RigidBody.isKinematic = enable;
             if (MainCollider != null) MainCollider.enabled = !enable;
 
-            EnableIsometricSorting(!enable);    // Disable isometric sorting while the object is a sub entity
+            EnableIsometry(!enable);            // Disable isometric sorting while the object is a sub entity
             OnPointerExit(null);                // Reset "selected" state
         }
 
-        /// <summary>
-        /// Disables rendering features, effectively "hiding" the entity.
-        /// </summary>
-        /// <param name="enable">Enables or disables rendering features for the entity</param>
-        public void EnableRendering(bool enable = true)
-        {
-            Render.SetActive(enable);
-        }
-
+        
         public bool HasTag(EntityTags tag)
         {
             if (tag == EntityTags.Any)

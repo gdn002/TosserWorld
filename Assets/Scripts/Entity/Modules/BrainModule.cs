@@ -156,9 +156,10 @@ namespace TosserWorld.Modules
         }
 
 
-        public BrainScript ActiveBrain;
+        public int SelectedBrainScript = 0;
+        private BrainScript ActiveBrain;
 
-        public float AwarenessRadius;
+        public float AwarenessRadius = 5;
 
         public bool IsContained { get; private set; }
 
@@ -172,20 +173,12 @@ namespace TosserWorld.Modules
         private int SpeechStack = 0;
 
 
-        public BrainModule()
-        {
-            AwarenessRadius = 5;
-        }
-
         protected override Module Clone()
         {
-            if (ActiveBrain == null)
-                Debug.LogError("No BrainScript attached to Brain module: " + name);
-
             BrainModule clone = CreateInstance<BrainModule>();
 
             clone.AwarenessRadius = AwarenessRadius;
-            clone.ActiveBrain = BrainScript.Clone(ActiveBrain);
+            clone.SelectedBrainScript = SelectedBrainScript;
 
             return clone;
         }
@@ -207,8 +200,9 @@ namespace TosserWorld.Modules
             Awareness = new BrainAwareness(this);
             Triggers = new BrainTriggers();
 
-            if (ActiveBrain == null) ActiveBrain = new EmptyBrain();
+            ActiveBrain = BrainScriptSelector.InstantiateScript(SelectedBrainScript);
             ActiveBrain.SetComponent(this);
+
             CreateSpeechBubble();
 
             Run();
@@ -216,6 +210,8 @@ namespace TosserWorld.Modules
 
         private void CreateSpeechBubble()
         {
+            // TODO: Speech bubbles need a rework
+
             GameObject newObj = new GameObject();
             newObj.transform.SetParent(Owner.transform, false);
             var renderer = newObj.AddComponent<MeshRenderer>();
@@ -223,7 +219,7 @@ namespace TosserWorld.Modules
 
             newObj.name = "Speech Bubble";
             newObj.tag = "IsometricSprite";
-            newObj.transform.localPosition = new Vector3(0, 0, -1.5f);
+            newObj.transform.localPosition = new Vector3(0, 1.5f, 0);
             newObj.transform.localScale = new Vector3(0.1f, 0.1f, 1);
 
             renderer.sortingLayerName = "Top";

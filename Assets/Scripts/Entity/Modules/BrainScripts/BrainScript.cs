@@ -1,15 +1,50 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace TosserWorld.Modules.BrainScripts
 {
-    public abstract class BrainScript : ScriptableObject
+    public class BrainScriptSelector
     {
-        public static BrainScript Clone(BrainScript brain)
+        private static List<string> Names = new List<string>();
+        private static List<System.Type> Types = new List<System.Type>();
+
+        static BrainScriptSelector()
         {
-            return CreateInstance(brain.GetType()) as BrainScript;
+            // Empty Brain must ALWAYS be the first entry (zero index)
+            BrainScript("Empty Brain", typeof(EmptyBrain));
+
+            // All current BrainScript implementations must be included here
+            BrainScript("Tosser Brain", typeof(TosserBrain));
+            BrainScript("Test Brain", typeof(TestBrain));
         }
 
+        private static void BrainScript(string name, System.Type type)
+        {
+            Names.Add(name);
+            Types.Add(type);
+        }
+
+        public static string Name(int i)
+        {
+            return Names[i];
+        }
+
+        public static string[] AllNames()
+        {
+            string[] allNames = new string[Names.Count];
+            Names.CopyTo(allNames);
+            return allNames;
+        }
+
+        public static BrainScript InstantiateScript(int i)
+        {
+            return System.Activator.CreateInstance(Types[i]) as BrainScript;
+        }
+    }
+
+    public abstract class BrainScript
+    {
         private BrainModule BrainComponent;
 
         protected Entity Me { get { return BrainComponent.Owner; } }

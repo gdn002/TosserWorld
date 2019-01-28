@@ -12,7 +12,7 @@ namespace TosserWorld.Modules
         {
             EditorGUILayout.Space();
 
-            Target.ActiveBrain = EditorGUILayout.ObjectField("Active Brain: ", Target.ActiveBrain, typeof(BrainScript), false) as BrainScript;
+            Target.SelectedBrainScript = EditorGUILayout.Popup("Active Brain: ", Target.SelectedBrainScript, BrainScriptSelector.AllNames());
             Target.AwarenessRadius = EditorGUILayout.FloatField("Awareness Radius: ", Target.AwarenessRadius);
 
             EditorUtility.SetDirty(target);

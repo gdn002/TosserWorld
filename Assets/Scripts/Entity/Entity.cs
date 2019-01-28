@@ -194,6 +194,8 @@ namespace TosserWorld
                 Animator        = GetComponentInChildren<Animator>();
                 MainCollider    = GetComponent<Collider2D>();
 
+                LoadControllers();
+
                 // Load template modules as their own object
                 for (int i = 0; i < Modules.Count; i++)
                 {
@@ -201,7 +203,6 @@ namespace TosserWorld
                     Modules[i].Initialize(this);
                 }
 
-                LoadControllers();
                 GlobalChunk.AddEntity(this);
 
                 // Object is ready for action

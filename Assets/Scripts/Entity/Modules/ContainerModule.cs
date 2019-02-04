@@ -98,7 +98,7 @@ namespace TosserWorld.Modules
                 {
                     // Put this entity in storage
                     Storage[i] = entity;
-                    Pack(entity);
+                    Owner.Hierarchy.AddChild(entity);
                     return true;
                 }
             }
@@ -127,7 +127,7 @@ namespace TosserWorld.Modules
 
             // Put entity in storage, replacing whatever was there
             Storage[slot] = entity;
-            Pack(entity);
+            Owner.Hierarchy.AddChild(entity);
 
             return current;
         }
@@ -203,7 +203,7 @@ namespace TosserWorld.Modules
             {
                 if (Storage[i] != null)
                 {
-                    Unpack(Storage[i], dropPosition);
+                    Storage[i].Hierarchy.MakeIndependent(dropPosition);
                     Storage[i] = null;
 
                     dropPosition = Quaternion.Euler(0, 0, -15) * dropPosition;
@@ -224,23 +224,6 @@ namespace TosserWorld.Modules
                 UIManager.Manager.RemovePanel(InventoryPanel);
                 InventoryPanel = null;
             }
-        }
-
-
-        private void Pack(Entity entity)
-        {
-            entity.SetAsSubEntity();
-            entity.EnableRendering(false);
-            entity.transform.SetParent(Owner.transform, false);
-            entity.transform.localPosition = Vector3.zero;
-        }
-
-        private void Unpack(Entity entity, Vector2 dropAt)
-        {
-            entity.SetAsSubEntity(false);
-            entity.EnableRendering();
-            entity.transform.localPosition = dropAt;
-            entity.transform.SetParent(null);
         }
     }
 }

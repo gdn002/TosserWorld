@@ -7,6 +7,21 @@ namespace TosserWorld.Modules.BrainScripts
     {
         protected override IEnumerator MainLoop()
         {
+            if (Me.IsChild)
+                yield return null;
+
+            Entity gameController = Awareness.Find("Game Controller");
+
+            if (gameController != null)
+            {
+                Leash(gameController, 1.5f, 3);
+                yield return null;
+            }
+        }
+
+        /*
+        protected override IEnumerator MainLoop()
+        {
             if (Me.SubEntity)
                 yield return null;
 
@@ -25,5 +40,6 @@ namespace TosserWorld.Modules.BrainScripts
                 yield return null;
             }
         }
+        */
     }
 }

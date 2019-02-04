@@ -42,6 +42,22 @@ namespace TosserWorld.Modules
             }
 
             /// <summary>
+            /// Finds the first entity that matches a given name. Priority is defined by the order the items were detected by the brain.
+            /// </summary>
+            /// <param name="tag">Name to search.</param>
+            /// <returns>The first entity that matches the name, or null if none was found.</returns>
+            public Entity Find(string name)
+            {
+                foreach (var entity in Awareness)
+                {
+                    if (entity.Name == name)
+                        return entity;
+                }
+
+                return null;
+            }
+
+            /// <summary>
             /// Finds all entities that matches the tag.
             /// </summary>
             /// <param name="tag">Tag to filter.</param>

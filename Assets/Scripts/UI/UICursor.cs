@@ -33,18 +33,14 @@ namespace TosserWorld.UI
             }
             else
             {
-                AttachedEntity.transform.SetParent(PlayerEntity.Player.transform);
+                PlayerEntity.Player.Hierarchy.AddChild(AttachedEntity);
                 CreateIcon();
             }
         }
 
         public void DropAttachedEntity(Vector2 worldPosition)
         {
-            AttachedEntity.SetAsSubEntity(false);
-            AttachedEntity.EnableRendering();
-            AttachedEntity.transform.position = worldPosition;
-            AttachedEntity.transform.SetParent(null);
-
+            AttachedEntity.Hierarchy.MakeIndependent(worldPosition, true);
             SetAttachedEntity(null);
         }
 

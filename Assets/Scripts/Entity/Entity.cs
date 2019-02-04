@@ -20,7 +20,7 @@ namespace TosserWorld
         // The entity's name
         public string Name = "Generic Object";
 
-        public bool SubEntity { get; protected set; }
+        public bool IsChild { get; protected set; }
 
         // Optional modules
         public List<Module> Modules = new List<Module>();
@@ -47,6 +47,7 @@ namespace TosserWorld
             Render = GetComponentInChildren<EntityRenderer>();
             FlippableSprite = GetComponentInChildren<FlippableSprite>();
 
+            Hierarchy = new EntityHierarchy(this);
         }
 
 
@@ -169,6 +170,75 @@ namespace TosserWorld
 
         public EquipSlotsController EquipmentSlots = new EquipSlotsController();
 
+        // ---- HIERARCHY ----
+        // Utility for keeping track of entity hierarchy
+
+        public class EntityHierarchy : IEnumerable<Entity>
+        {
+            protected Entity Self;
+            protected Entity Parent;
+            protected List<Entity> Children = new List<Entity>();
+
+            public EntityHierarchy(Entity self)
+            {
+                Self = self;
+            }
+
+            public void AddChild(Entity entity, bool disableRendering = true)
+            {
+                if (entity.Hierarchy.Parent == Self)
+                    return; // Entity is already childed
+
+                entity.Hierarchy.MakeIndependent();
+                
+                entity.SetAsChild(true);
+                entity.EnableRendering(!disableRendering);
+
+                entity.transform.SetParent(Self.transform);
+                entity.transform.localPosition = Vector3.zero;
+
+                Children.Add(entity);
+                entity.Hierarchy.Parent = Self;
+            }
+
+            public IEnumerator<Entity> GetEnumerator()
+            {
+                foreach (var child in Children)
+                {
+                    yield return child;
+                }
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+
+            public void MakeIndependent()
+            {
+                MakeIndependent(Vector2.zero);
+            }
+
+            public void MakeIndependent(Vector2 dropPosition, bool setWorldPosition = false)
+            {
+                if (Parent != null)
+                {
+                    Self.SetAsChild(false);
+                    Self.EnableRendering();
+
+                    Parent.Hierarchy.Children.Remove(Self);
+                    Parent = null;
+
+                    if (setWorldPosition) Self.transform.position = dropPosition;
+                    else                  Self.transform.localPosition = dropPosition;
+
+                    Self.transform.SetParent(null, true);
+                }
+            }
+        }
+
+        public EntityHierarchy Hierarchy;
+
         // ---- STATS ----
 
         public Vector2 Position { get { return transform.position; } set { transform.position = value; } }
@@ -190,7 +260,7 @@ namespace TosserWorld
             if (!IsInitialized)
             {
                 // Load Unity references
-                RigidBody = GetComponent<Rigidbody2D>();
+                RigidBody       = GetComponent<Rigidbody2D>();
                 Animator        = GetComponentInChildren<Animator>();
                 MainCollider    = GetComponent<Collider2D>();
 
@@ -207,7 +277,7 @@ namespace TosserWorld
 
                 // Object is ready for action
                 IsInitialized = true;
-                SubEntity = false;
+                IsChild = false;
             }
 
             if (InventorySprite == null)
@@ -338,22 +408,6 @@ namespace TosserWorld
 
             return null;
         }
-
-        /// <summary>
-        /// Enables or disable root features for this entity.
-        /// Root features should be disabled when an entity is made a child of another entity.
-        /// </summary>
-        /// <param name="enable">Enables or disables root features for the entity</param>
-        public void SetAsSubEntity(bool enable = true)
-        {
-            SubEntity = enable;
-            if (RigidBody != null) RigidBody.isKinematic = enable;
-            if (MainCollider != null) MainCollider.enabled = !enable;
-
-            EnableIsometry(!enable);            // Disable isometric sorting while the object is a sub entity
-            OnPointerExit(null);                // Reset "selected" state
-        }
-
         
         public bool HasTag(EntityTags tag)
         {
@@ -366,6 +420,16 @@ namespace TosserWorld
         public float DistanceTo(Entity entity)
         {
             return Vector2.Distance(transform.position, entity.transform.position);
+        }
+
+        public void SetAsChild(bool child)
+        {
+            IsChild = child;
+            if (RigidBody != null) RigidBody.isKinematic = child;
+            if (MainCollider != null) MainCollider.enabled = !child;
+
+            EnableIsometry(!child);
+            OnPointerExit(null);
         }
 
         public bool MatchStacks(Entity other)

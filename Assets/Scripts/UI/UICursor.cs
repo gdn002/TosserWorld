@@ -33,6 +33,7 @@ namespace TosserWorld.UI
             }
             else
             {
+                AttachedEntity.transform.SetParent(PlayerEntity.Player.transform);
                 CreateIcon();
             }
         }

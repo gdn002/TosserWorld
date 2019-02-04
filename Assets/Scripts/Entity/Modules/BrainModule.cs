@@ -30,12 +30,22 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
             /// <returns>The first entity that matches the tag, or null if none was found.</returns>
-            public Entity Find(EntityTags tag = EntityTags.Any)
+            public Entity Find(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
             {
                 foreach (var entity in Awareness)
                 {
                     if (entity.HasTag(tag))
                         return entity;
+
+                    if (alsoSearchChildren)
+                    {
+                        // TODO: Perhaps make these recursive if hierarchies ever have to get more complicated
+                        foreach (var child in entity.Hierarchy)
+                        {
+                            if (child.HasTag(tag))
+                                return child;
+                        }
+                    }
                 }
 
                 return null;
@@ -46,12 +56,21 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Name to search.</param>
             /// <returns>The first entity that matches the name, or null if none was found.</returns>
-            public Entity Find(string name)
+            public Entity Find(string name, bool alsoSearchChildren = false)
             {
                 foreach (var entity in Awareness)
                 {
                     if (entity.Name == name)
                         return entity;
+
+                    if (alsoSearchChildren)
+                    {
+                        foreach (var child in entity.Hierarchy)
+                        {
+                            if (child.Name == name)
+                                return child;
+                        }
+                    }
                 }
 
                 return null;
@@ -62,7 +81,7 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
             /// <returns>A list of entities that match the tag, or an empty list if none were found.</returns>
-            public List<Entity> FindAll(EntityTags tag = EntityTags.Any)
+            public List<Entity> FindAll(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
             {
                 List<Entity> list = new List<Entity>();
 
@@ -70,6 +89,15 @@ namespace TosserWorld.Modules
                 {
                     if (entity.HasTag(tag))
                         list.Add(entity);
+
+                    if (alsoSearchChildren)
+                    {
+                        foreach (var child in entity.Hierarchy)
+                        {
+                            if (child.HasTag(tag))
+                                list.Add(child);
+                        }
+                    }
                 }
 
                 return list;
@@ -80,20 +108,32 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
             /// <returns>The first entity that matches the tag, or null if none was found.</returns>
-            public Entity FindNearest(EntityTags tag = EntityTags.Any)
+            public Entity FindNearest(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
             {
                 Entity nearest = null;
                 float nearestDistance = float.MaxValue;
 
                 foreach (var entity in Awareness)
                 {
-                    if (entity.HasTag(tag))
+                    float distance = entity.DistanceTo(Owner.Owner);
+
+                    if (distance < nearestDistance)
                     {
-                        float distance = entity.DistanceTo(Owner.Owner);
-                        if (distance < nearestDistance)
+                        if (entity.HasTag(tag))
                         {
                             nearest = entity;
                             nearestDistance = distance;
+                        }
+                        else if (alsoSearchChildren)
+                        {
+                            foreach (var child in entity.Hierarchy)
+                            {
+                                if (child.HasTag(tag))
+                                {
+                                    nearest = child;
+                                    nearestDistance = distance;
+                                }
+                            }
                         }
                     }
                 }

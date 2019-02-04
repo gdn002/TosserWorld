@@ -10,11 +10,11 @@ namespace TosserWorld.Modules.BrainScripts
             if (Me.IsChild)
                 yield return null;
 
-            Entity gameController = Awareness.Find("Game Controller");
+            Entity gameController = Awareness.Find("Game Controller", true);
 
             if (gameController != null)
             {
-                Leash(gameController, 1.5f, 3);
+                Leash(gameController, 1, 2);
                 yield return null;
             }
         }

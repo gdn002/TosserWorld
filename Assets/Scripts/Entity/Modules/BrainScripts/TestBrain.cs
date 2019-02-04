@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace TosserWorld.Modules.BrainScripts
 {
-    [CreateAssetMenu(fileName = "New Test Brain", menuName = "Modules/Brain Scripts/Test Brain")]
     public class TestBrain : BrainScript
     {
         protected override IEnumerator MainLoop()

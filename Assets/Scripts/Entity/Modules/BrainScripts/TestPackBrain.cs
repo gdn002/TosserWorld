@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace TosserWorld.Modules.BrainScripts
 {
-    [CreateAssetMenu(fileName = "New Test Pack Brain", menuName = "Modules/Brain Scripts/Test Pack Brain")]
     public class TestPackBrain : BrainScript
     {
         protected TestPackBrain Leader = null;

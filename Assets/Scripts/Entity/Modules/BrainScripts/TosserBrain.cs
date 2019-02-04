@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace TosserWorld.Modules.BrainScripts
 {
-    [CreateAssetMenu(fileName = "New Tosser Brain", menuName = "Modules/Brain Scripts/Tosser Brain")]
     public class TosserBrain : BrainScript
     {
         public class LocalTriggers

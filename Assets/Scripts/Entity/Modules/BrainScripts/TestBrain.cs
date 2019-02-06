@@ -14,8 +14,13 @@ namespace TosserWorld.Modules.BrainScripts
 
             if (gameController != null)
             {
-                Leash(gameController, 1, 2);
-                yield return null;
+                if (Me.DistanceTo(gameController) > 2)
+                    yield return PlayAnimation("PawnNotice");
+
+                while (Leash(gameController, 1, 2))
+                {
+                    yield return null;
+                }
             }
         }
 

@@ -55,7 +55,6 @@ namespace TosserWorld.Modules.BrainScripts
 
         private Coroutine ActiveLoop = null;
 
-
         public void SetComponent(BrainModule component)
         {
             BrainComponent = component;
@@ -92,17 +91,33 @@ namespace TosserWorld.Modules.BrainScripts
         }
 
 
-        public void TriggerAnimation(string trigger)
+        protected IEnumerator PlayAnimation(string state)
         {
             if (Me.Animator != null)
-                Me.Animator.SetTrigger(trigger);
+            {
+                Me.Animator.Play(state);
+                while (!Me.Animator.GetCurrentAnimatorStateInfo(0).IsName(state))
+                {
+                    yield return null;
+                }
+                while (Me.Animator.GetCurrentAnimatorStateInfo(0).IsName(state))
+                {
+                    yield return null;
+                }
+            }
+        }
+
+        protected void SetAnimation(string trigger, bool value)
+        {
+            if (Me.Animator != null)
+                Me.Animator.SetBool(trigger, value);
         }
 
         //// ---- MAIN ACTIONS ----
 
         protected void Stop()
         {
-            TriggerAnimation("Stop");
+            SetAnimation("Move", false);
             MyMovement.Stop();
         }
 
@@ -110,14 +125,14 @@ namespace TosserWorld.Modules.BrainScripts
         {
             Me.FlipTo(direction);
             MyMovement.MoveFull(direction);
-            TriggerAnimation("Move");
+            SetAnimation("Move", true);
         }
 
         protected void MoveScreen(Vector2 direction)
         {
             Me.FlipToScreen(direction);
             MyMovement.MoveScreenFull(direction);
-            TriggerAnimation("Move");
+            SetAnimation("Move", true);
         }
 
         protected bool GoTo(Vector2 destination)
@@ -158,6 +173,7 @@ namespace TosserWorld.Modules.BrainScripts
             {
                 // Within stop threshold
                 Stop();
+                return false;
             }
             else if (MyMovement.Movement.magnitude != 0 || direction.magnitude > far)
             {
@@ -166,7 +182,8 @@ namespace TosserWorld.Modules.BrainScripts
             }
             else if (MyMovement.Movement.magnitude == 0)
             {
-                TriggerAnimation("Stop");
+                SetAnimation("Move", false);
+                return false;
             }
 
             return true;

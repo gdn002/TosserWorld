@@ -5,23 +5,51 @@ namespace TosserWorld.Modules.BrainScripts
 {
     public class TestBrain : BrainScript
     {
-        protected override IEnumerator MainLoop()
+        private static readonly int AnimNoticeHash = Animator.StringToHash("PawnNotice");
+
+
+        bool IsAware = false;
+
+        Entity CurrentTarget = null;
+
+
+        public override void RunBehaviorTree()
         {
             if (Me.IsChild)
-                yield return null;
+                return;
 
-            Entity gameController = Awareness.Find("Game Controller", true);
-
-            if (gameController != null)
+            if (CurrentTarget != null)
             {
-                if (Me.DistanceTo(gameController) > 2)
-                    yield return PlayAnimation("PawnNotice");
-
-                while (Leash(gameController, 1, 2))
+                if (IsAware)
                 {
-                    yield return null;
+                    if (Me.DistanceTo(CurrentTarget) > 4 || WaitForAnimation(AnimNoticeHash))
+                    {
+                        if (Leash(CurrentTarget, 1, 2))
+                        {
+                            IsAware = false;
+                        }
+                    }
+
+                    return;
                 }
+
+                if (Me.DistanceTo(CurrentTarget) > 2)
+                {
+                    PlayAnimation(AnimNoticeHash);
+                    IsAware = true;
+                    return;
+                }
+
+                if (Me.DistanceTo(CurrentTarget) > BrainComponent.AwarenessRadius)
+                {
+                    CurrentTarget = null;
+                    return;
+                }
+
+                return;
             }
+
+            CurrentTarget = Awareness.Find("Game Controller", true);
         }
 
         /*

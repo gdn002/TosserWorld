@@ -28,7 +28,7 @@ namespace TosserWorld.Modules.BrainScripts
         }
 
 
-        protected override IEnumerator MainLoop()
+        public override void RunBehaviorTree()
         {
             if (Triggers.Contains(LocalTriggers.INTERACT))                              // If tosser was ordered to interact with something...
             {
@@ -84,8 +84,6 @@ namespace TosserWorld.Modules.BrainScripts
             {
                 Stop();                                                                 // ...stop all movement
             }
-
-            yield return null;                                                          // End frame
         }
     }
 }

@@ -45,7 +45,7 @@ namespace TosserWorld.Modules.BrainScripts
 
     public abstract class BrainScript
     {
-        private BrainModule BrainComponent;
+        protected BrainModule BrainComponent;
 
         protected Entity Me { get { return BrainComponent.Owner; } }
         protected MovementModule MyMovement { get { return Me.GetModule<MovementModule>(); } }
@@ -53,7 +53,6 @@ namespace TosserWorld.Modules.BrainScripts
         protected BrainModule.BrainTriggers Triggers { get { return BrainComponent.Triggers; } }
         protected BrainModule.BrainAwareness Awareness { get { return BrainComponent.Awareness; } }
 
-        private Coroutine ActiveLoop = null;
 
         public void SetComponent(BrainModule component)
         {
@@ -61,50 +60,23 @@ namespace TosserWorld.Modules.BrainScripts
         }
 
 
-        // ---- MAIN LOOPS ----
-
-        public void StopActiveLoop()
-        {
-            if (ActiveLoop != null)
-            {
-                Me.StopCoroutine(ActiveLoop);
-            }
-        }
-
-        public void RunMainLoop()
-        {
-            StopActiveLoop();
-            ActiveLoop = Me.StartCoroutine(InternalMainLoop());
-        }
-
-        public void RunContainerLoop()
-        {
-            StopActiveLoop();
-            ActiveLoop = Me.StartCoroutine(InternalContainerLoop());
-        }
+        public abstract void RunBehaviorTree();
 
 
-        protected abstract IEnumerator MainLoop();
-        protected virtual IEnumerator ContainerLoop()
-        {
-            yield return null;
-        }
+        // ---- ANIMATION
 
-
-        protected IEnumerator PlayAnimation(string state)
+        protected void PlayAnimation(int state)
         {
             if (Me.Animator != null)
-            {
                 Me.Animator.Play(state);
-                while (!Me.Animator.GetCurrentAnimatorStateInfo(0).IsName(state))
-                {
-                    yield return null;
-                }
-                while (Me.Animator.GetCurrentAnimatorStateInfo(0).IsName(state))
-                {
-                    yield return null;
-                }
-            }
+        }
+
+        protected bool WaitForAnimation(int state)
+        {
+            if (Me.Animator != null)
+                return (Me.Animator.GetCurrentAnimatorStateInfo(0).shortNameHash != state);
+
+            return true;
         }
 
         protected void SetAnimation(string trigger, bool value)
@@ -113,7 +85,8 @@ namespace TosserWorld.Modules.BrainScripts
                 Me.Animator.SetBool(trigger, value);
         }
 
-        //// ---- MAIN ACTIONS ----
+
+        // ---- MOVEMENT ACTIONS ----
 
         protected void Stop()
         {
@@ -173,7 +146,7 @@ namespace TosserWorld.Modules.BrainScripts
             {
                 // Within stop threshold
                 Stop();
-                return false;
+                return true;
             }
             else if (MyMovement.Movement.magnitude != 0 || direction.magnitude > far)
             {
@@ -183,14 +156,14 @@ namespace TosserWorld.Modules.BrainScripts
             else if (MyMovement.Movement.magnitude == 0)
             {
                 SetAnimation("Move", false);
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
 
-        //// ---- SECONDARY ACTIONS ----
+        //// ---- OTHER ACTIONS ----
 
         protected void Talk(string line)
         {
@@ -208,25 +181,6 @@ namespace TosserWorld.Modules.BrainScripts
         public virtual void OnLoseEntity(Entity entity)
         {
             //Debug.Log("Lost: " + entity.name);
-        }
-
-
-        //// ---- INTERNAL COROUTINES ----
-
-        private IEnumerator InternalMainLoop()
-        {
-            while (true)
-            {
-                yield return MainLoop();
-            }
-        }
-
-        private IEnumerator InternalContainerLoop()
-        {
-            while (true)
-            {
-                yield return ContainerLoop();
-            }
         }
     }
 }

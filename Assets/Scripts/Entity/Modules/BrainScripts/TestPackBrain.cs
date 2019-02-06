@@ -13,28 +13,28 @@ namespace TosserWorld.Modules.BrainScripts
 
         private Vector2 Destination;
 
-        protected override IEnumerator MainLoop()
+        public override void RunBehaviorTree()
         {
             if (IsLeader)
             {
                 // The leader brain commands the whole pack
-                yield return LeaderLoop();
+                LeaderLoop();
             }
             else
             {
                 // Pack member behaviours are mostly emergency ones
-                yield return PackLoop();
+                PackLoop();
             }
         }
 
-        private IEnumerator LeaderLoop()
+        private void LeaderLoop()
         {
             Destination = new Vector2(Random.Range(-5, 5), Random.Range(-5, 5));
 
             GoTo(Destination);
             float angle = Vector2.SignedAngle(Vector2.up, MyMovement.Movement);
 
-            while ((Vector2)Me.transform.position != Destination)
+            if ((Vector2)Me.transform.position != Destination)
             {
                 GoTo(Destination);
 
@@ -76,11 +76,11 @@ namespace TosserWorld.Modules.BrainScripts
                     }
                 }
 
-                yield return null;
+                return;
             }
         }
 
-        private IEnumerator PackLoop()
+        private void PackLoop()
         {
             if (Leader == null)
             {
@@ -90,7 +90,7 @@ namespace TosserWorld.Modules.BrainScripts
                 {
                     // No leaders around - this pack member becomes leader then
                     MakeLeader();
-                    yield return null;
+                    return;
                 }
             }
         }

@@ -247,11 +247,7 @@ namespace TosserWorld.Modules
 
         public float AwarenessRadius = 5;
 
-        public bool IsContained { get; private set; }
-
-
-        public BrainAwareness Awareness;
-
+        public BrainAwareness Awareness { get; private set; }
         public BrainTriggers Triggers { get; private set; }
 
 
@@ -269,18 +265,6 @@ namespace TosserWorld.Modules
             return clone;
         }
 
-        public void Run()
-        {
-            if (IsContained)
-            {
-                ActiveBrain.RunContainerLoop();
-            }
-            else
-            {
-                ActiveBrain.RunMainLoop();
-            }
-        }
-
         protected override void OnInitialize()
         {
             Awareness = new BrainAwareness(this);
@@ -290,8 +274,11 @@ namespace TosserWorld.Modules
             ActiveBrain.SetComponent(this);
 
             CreateSpeechBubble();
+        }
 
-            Run();
+        public override void Update()
+        {
+            ActiveBrain.RunBehaviorTree();
         }
 
         private void CreateSpeechBubble()
@@ -314,11 +301,6 @@ namespace TosserWorld.Modules
             SpeechBubble.anchor = TextAnchor.MiddleCenter;
             SpeechBubble.alignment = TextAlignment.Center;
             SpeechBubble.fontSize = 40;
-        }
-
-        public void SetContained(bool contained)
-        {
-            IsContained = contained;
         }
 
 

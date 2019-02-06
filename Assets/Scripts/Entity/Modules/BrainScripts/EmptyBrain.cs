@@ -6,13 +6,9 @@ namespace TosserWorld.Modules.BrainScripts
 {
     public class EmptyBrain : BrainScript
     {
-        protected override IEnumerator MainLoop()
+        public override void RunBehaviorTree()
         {
-            while (true)
-            {
-                // Basically does nothing
-                yield return null;
-            }
+            // Basically does nothing
         }
     }
 }

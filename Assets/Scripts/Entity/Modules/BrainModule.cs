@@ -29,23 +29,36 @@ namespace TosserWorld.Modules
             /// Finds the first entity that matches the tag. Priority is defined by the order the items were detected by the brain.
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
+            /// <param name="recursive">Whether to search recursively for childed entities.</param>
             /// <returns>The first entity that matches the tag, or null if none was found.</returns>
-            public Entity Find(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
+            public Entity Find(EntityTags tag = EntityTags.Any, bool recursive = false)
             {
                 foreach (var entity in Awareness)
                 {
                     if (entity.HasTag(tag))
                         return entity;
 
-                    if (alsoSearchChildren)
+                    if (recursive)
                     {
-                        // TODO: Perhaps make these recursive if hierarchies ever have to get more complicated
-                        foreach (var child in entity.Hierarchy)
-                        {
-                            if (child.HasTag(tag))
-                                return child;
-                        }
+                        Entity found = Find(entity, tag);
+                        if (found != null)
+                            return found;
                     }
+                }
+
+                return null;
+            }
+
+            private Entity Find(Entity root, EntityTags tag)
+            {
+                foreach (var child in root.Hierarchy)
+                {
+                    if (child.HasTag(tag))
+                        return child;
+
+                    Entity found = Find(child, tag);
+                    if (found != null)
+                        return found;
                 }
 
                 return null;
@@ -55,22 +68,36 @@ namespace TosserWorld.Modules
             /// Finds the first entity that matches a given name. Priority is defined by the order the items were detected by the brain.
             /// </summary>
             /// <param name="tag">Name to search.</param>
+            /// <param name="recursive">Whether to search recursively for childed entities.</param>
             /// <returns>The first entity that matches the name, or null if none was found.</returns>
-            public Entity Find(string name, bool alsoSearchChildren = false)
+            public Entity Find(string name, bool recursive = false)
             {
                 foreach (var entity in Awareness)
                 {
                     if (entity.Name == name)
                         return entity;
 
-                    if (alsoSearchChildren)
+                    if (recursive)
                     {
-                        foreach (var child in entity.Hierarchy)
-                        {
-                            if (child.Name == name)
-                                return child;
-                        }
+                        Entity found = Find(entity, name);
+                        if (found != null)
+                            return found;
                     }
+                }
+
+                return null;
+            }
+
+            private Entity Find(Entity root, string name)
+            {
+                foreach (var child in root.Hierarchy)
+                {
+                    if (child.Name == name)
+                        return child;
+
+                    Entity found = Find(child, name);
+                    if (found != null)
+                        return found;
                 }
 
                 return null;
@@ -81,7 +108,7 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
             /// <returns>A list of entities that match the tag, or an empty list if none were found.</returns>
-            public List<Entity> FindAll(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
+            public List<Entity> FindAll(EntityTags tag = EntityTags.Any, bool recursive = false)
             {
                 List<Entity> list = new List<Entity>();
 
@@ -90,17 +117,22 @@ namespace TosserWorld.Modules
                     if (entity.HasTag(tag))
                         list.Add(entity);
 
-                    if (alsoSearchChildren)
-                    {
-                        foreach (var child in entity.Hierarchy)
-                        {
-                            if (child.HasTag(tag))
-                                list.Add(child);
-                        }
-                    }
+                    if (recursive)
+                        FindAll(entity, list, tag);
                 }
 
                 return list;
+            }
+
+            private void FindAll(Entity root, List<Entity> list, EntityTags tag)
+            {
+                foreach (var child in root.Hierarchy)
+                {
+                    if (child.HasTag(tag))
+                        list.Add(child);
+
+                    FindAll(child, list, tag);
+                }
             }
 
             /// <summary>
@@ -108,7 +140,7 @@ namespace TosserWorld.Modules
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
             /// <returns>The first entity that matches the tag, or null if none was found.</returns>
-            public Entity FindNearest(EntityTags tag = EntityTags.Any, bool alsoSearchChildren = false)
+            public Entity FindNearest(EntityTags tag = EntityTags.Any, bool recursive = false)
             {
                 Entity nearest = null;
                 float nearestDistance = float.MaxValue;
@@ -124,15 +156,13 @@ namespace TosserWorld.Modules
                             nearest = entity;
                             nearestDistance = distance;
                         }
-                        else if (alsoSearchChildren)
+                        else if (recursive)
                         {
-                            foreach (var child in entity.Hierarchy)
+                            Entity found = Find(entity, tag);
+                            if (found != null)
                             {
-                                if (child.HasTag(tag))
-                                {
-                                    nearest = child;
-                                    nearestDistance = distance;
-                                }
+                                nearest = found;
+                                nearestDistance = distance;
                             }
                         }
                     }

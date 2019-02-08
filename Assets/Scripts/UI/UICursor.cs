@@ -18,6 +18,15 @@ namespace TosserWorld.UI
 
         void Update()
         {
+            if (AttachedEntity != null)
+            {
+                if (!AttachedEntity.Hierarchy.IsChildOf(PlayerEntity.Player))
+                {
+                    AttachedEntity = null;
+                    DestroyIcon();
+                }
+            }
+
             if (FloatingIcon != null)
             {
                 FloatingIcon.transform.position = Input.mousePosition;

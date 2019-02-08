@@ -37,6 +37,16 @@ namespace TosserWorld.Modules
                     OpenCloseContainer();
                 }
             }
+
+            // Verify for removed entities
+            for (int i = 0; i < Storage.Length; i++)
+            {
+                if (Storage[i] != null)
+                {
+                    if (!Storage[i].Hierarchy.IsChildOf(Owner))
+                        Storage[i] = null;
+                }
+            }
         }
 
         protected override Module Clone()
@@ -55,18 +65,6 @@ namespace TosserWorld.Modules
                 InventoryPrefab = Resources.Load<GameObject>(DEFAULT_INVENTORY_PREFAB).GetComponent<UIInventory>();
 
             Storage = new InventorySpace(SlotCount);
-        }
-
-        public void UpdateContents()
-        {
-            for (int i = 0; i < Storage.Length; ++i)
-            {
-                if (Storage[i] != null)
-                {
-                    // TODO
-                    //Storage[i].InContainerUpdate();
-                }
-            }
         }
 
         /// <summary>

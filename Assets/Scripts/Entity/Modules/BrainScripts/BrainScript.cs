@@ -15,6 +15,8 @@ namespace TosserWorld.Modules.BrainScripts
             BrainScript("Empty Brain", typeof(EmptyBrain));
 
             // All current BrainScript implementations must be included here
+            BrainScript("Basic Follow Tosser", typeof(BasicFollowTosser));
+
             BrainScript("Tosser Brain", typeof(TosserBrain));
             BrainScript("Test Brain", typeof(TestBrain));
         }

@@ -44,7 +44,7 @@ namespace TosserWorld.Modules
             return (Vector2.Distance(Owner.Position, activator.Position) < (InteractionRange + 0.5f));
         }
 
-        public void RunInteraction(Entity activator)
+        public bool RunInteraction(Entity activator)
         {
             if (IsInPickupRange(activator))
             {
@@ -62,7 +62,11 @@ namespace TosserWorld.Modules
                         EquipInteraction(activator);
                         break;
                 }
+
+                return true;
             }
+
+            return false;
         }
 
 

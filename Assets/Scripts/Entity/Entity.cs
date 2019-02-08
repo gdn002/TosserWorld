@@ -184,6 +184,11 @@ namespace TosserWorld
                 Self = self;
             }
 
+            public bool IsChildOf(Entity entity)
+            {
+                return Parent == entity;
+            }
+
             public void AddChild(Entity entity, bool disableRendering = true)
             {
                 if (entity.Hierarchy.Parent == Self)

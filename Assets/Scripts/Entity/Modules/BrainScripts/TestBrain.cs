@@ -24,9 +24,12 @@ namespace TosserWorld.Modules.BrainScripts
                 {
                     if (Me.DistanceTo(CurrentTarget) > 4 || WaitForAnimation(AnimNoticeHash))
                     {
-                        if (Leash(CurrentTarget, 1, 2))
+                        GoTo(CurrentTarget.Position);
+                        if (CurrentTarget.GetModule<InteractionModule>().RunInteraction(Me))
                         {
+                            Stop();
                             IsAware = false;
+                            CurrentTarget = null;
                         }
                     }
 
@@ -49,30 +52,7 @@ namespace TosserWorld.Modules.BrainScripts
                 return;
             }
 
-            CurrentTarget = Awareness.Find("Game Controller", true);
+            CurrentTarget = Awareness.Find("KFC", true);
         }
-
-        /*
-        protected override IEnumerator MainLoop()
-        {
-            if (Me.SubEntity)
-                yield return null;
-
-            if (Me.DistanceTo(PlayerEntity.Player) < 4)
-            {
-                Talk("Hi!");
-                while (Me.DistanceTo(PlayerEntity.Player) < 4)
-                {
-                    Leash(PlayerEntity.Player, 1.5f, 3);
-                    yield return null;
-                }
-            }
-            else
-            {
-                GoTo(Vector2.zero);
-                yield return null;
-            }
-        }
-        */
     }
 }

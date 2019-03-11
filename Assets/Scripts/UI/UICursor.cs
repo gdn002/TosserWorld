@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+using TosserWorld.Entities;
+using TosserWorld.Modules;
+
 namespace TosserWorld.UI
 {
     class UICursor : MonoBehaviour
@@ -33,7 +36,7 @@ namespace TosserWorld.UI
             }
         }
 
-        public void SetAttachedEntity(Entity entity)
+        public void SetAttachedEntity(Entity entity = null)
         {
             AttachedEntity = entity;
             if (AttachedEntity == null)
@@ -47,10 +50,18 @@ namespace TosserWorld.UI
             }
         }
 
+        public void SetAttachedEntity(Module module)
+        {
+            if (module == null)
+                SetAttachedEntity();
+            else
+                SetAttachedEntity(module.Owner);
+        }
+
         public void DropAttachedEntity(Vector2 worldPosition)
         {
             AttachedEntity.Hierarchy.MakeIndependent(worldPosition, true);
-            SetAttachedEntity(null);
+            SetAttachedEntity();
         }
 
         private void CreateIcon()

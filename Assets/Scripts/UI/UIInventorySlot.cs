@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 
 using TosserWorld.Modules;
+using TosserWorld.Entities;
 using UnityEngine.EventSystems;
 
 namespace TosserWorld.UI
@@ -25,7 +26,7 @@ namespace TosserWorld.UI
         // Update is called once per frame
         void Update()
         {
-            Entity item = Inventory.Peek(Slot);
+            StackingModule item = Inventory.Peek(Slot);
 
             if (item == null)
             {
@@ -34,11 +35,11 @@ namespace TosserWorld.UI
             }
             else
             {
-                SlotImage.sprite = item.InventorySprite;
+                SlotImage.sprite = item.Owner.InventorySprite;
 
-                if (item.GetModule<StackingModule>() != null)
+                if (item.IsStackable)
                 {
-                    SlotAmount.text = item.GetModule<StackingModule>().Amount.ToString();
+                    SlotAmount.text = item.Amount.ToString();
                 }
                 else
                 {
@@ -57,7 +58,9 @@ namespace TosserWorld.UI
                 }
                 else
                 {
-                    UICursor.Cursor.SetAttachedEntity(Inventory.Place(UICursor.Cursor.AttachedEntity, Slot));
+                    var stack = UICursor.Cursor.AttachedEntity.Stacking;
+                    if (stack != null)
+                        UICursor.Cursor.SetAttachedEntity(Inventory.Place(stack, Slot));
                 }
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
@@ -68,12 +71,13 @@ namespace TosserWorld.UI
                 }
                 else
                 {
-                    if (UICursor.Cursor.AttachedEntity.MatchStacks(Inventory.Peek(Slot)))
+                    var stack = UICursor.Cursor.AttachedEntity.Stacking;
+                    if (stack != null)
                     {
-                        var cursorStack = UICursor.Cursor.AttachedEntity.GetModule<StackingModule>();
-
-                        if (!cursorStack.IsMaxed)
-                            cursorStack.CombineStack(Inventory.TakeSingle(Slot));
+                        if (stack.StacksMatch(Inventory.Peek(Slot)) && !stack.IsMaxed)
+                        {
+                            stack.CombineStack(Inventory.TakeSingle(Slot));
+                        }
                     }
                 }
             }

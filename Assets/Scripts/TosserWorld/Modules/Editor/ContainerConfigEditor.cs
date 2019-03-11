@@ -1,0 +1,23 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+
+namespace TosserWorld.Modules
+{
+    [CustomEditor(typeof(ContainerConfig))]
+    public class ContainerConfigEditor : Editor
+    {
+        private ContainerConfig Target { get { return target as ContainerConfig; } }
+
+        public override void OnInspectorGUI()
+        {
+            Target.Rows = EditorGUILayout.IntField("Rows: ", Target.Rows);
+            Target.Cols = EditorGUILayout.IntField("Cols: ", Target.Cols);
+
+            EditorGUILayout.LabelField("Slot count: " + Target.SlotCount);
+
+            EditorUtility.SetDirty(target);
+        }
+    }
+}

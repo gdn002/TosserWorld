@@ -1,20 +1,8 @@
-﻿using UnityEngine;
-
-using TosserWorld.Entities;
+﻿using TosserWorld.Modules.Configurations;
 using TosserWorld.Utilities;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Stats Configuration", menuName = "Modules/Stats")]
-    public class StatsConfig : ModuleConfiguration
-    {
-        public bool HasHealth = false;
-        public bool HasStamina = false;
-
-        public int MaxHealth = 100;
-        public int MaxStamina = 100;
-    }
-
     public class StatsModule : Module
     {
         public Stat Health;

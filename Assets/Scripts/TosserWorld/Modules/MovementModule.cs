@@ -1,17 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Movement Configuration", menuName = "Modules/Movement")]
-    public class MovementConfig : ModuleConfiguration
-    {
-        public float SpeedLimit = 1;
-        public bool OverridePhysics = false;
-
-        public float FrameLimit { get { return SpeedLimit * Time.fixedDeltaTime; } }
-    }
-
     public class MovementModule : Module
     {
         public float SpeedLimit;

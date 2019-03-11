@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TosserWorld.Entities;
+using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
@@ -9,12 +10,6 @@ namespace TosserWorld.Modules
         OpenContainer,
         PickUp,
         Equip,
-    }
-
-    [CreateAssetMenu(fileName = "New Interaction Configuration", menuName = "Modules/Interaction")]
-    public class InteractionConfig : ModuleConfiguration
-    {
-        public Interactions Interaction = Interactions.NoInteraction;
     }
 
     public class InteractionModule : Module
@@ -74,7 +69,7 @@ namespace TosserWorld.Modules
 
         private void OpenContainerInteraction()
         {
-            var container = Owner.Container;
+            var container = Owner.Inventory;
             if (container != null)
             {
                 container.OpenCloseContainer();
@@ -83,7 +78,7 @@ namespace TosserWorld.Modules
 
         private void PickUpInteraction(Entity activator)
         {
-            var container = activator.Container;
+            var container = activator.Inventory;
             var stack = Owner.Stacking;
 
             if (container != null && stack != null)

@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
     [CustomEditor(typeof(StatsConfig))]
     public class StatsConfigEditor : Editor
@@ -10,6 +10,8 @@ namespace TosserWorld.Modules
 
         public override void OnInspectorGUI()
         {
+            EditorGUI.BeginChangeCheck();
+
             Target.HasHealth = EditorGUILayout.ToggleLeft("Health", Target.HasHealth);
             if (Target.HasHealth) Target.MaxHealth = EditorGUILayout.IntField(Target.MaxHealth);
 
@@ -18,6 +20,11 @@ namespace TosserWorld.Modules
 
             //Target.HasSTAT = EditorGUILayout.ToggleLeft("STAT", Target.HasSTAT);
             //if (Target.HasSTAT) Target.MaxSTAT = EditorGUILayout.IntField(Target.MaxSTAT);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(Target);
+            }
         }
     }
 }

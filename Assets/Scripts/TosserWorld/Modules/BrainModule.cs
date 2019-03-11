@@ -4,17 +4,11 @@ using UnityEngine;
 
 using TosserWorld.Modules.BrainScripts;
 using TosserWorld.Entities;
+using TosserWorld.Modules.Configurations;
+
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Brain Configuration", menuName = "Modules/Brain")]
-    public class BrainConfig : ModuleConfiguration
-    {
-        public int SelectedBrainScript = 0;
-        public float AwarenessRadius = 5;
-    }
-
-
     public class BrainModule : Module
     {
         public class BrainAwareness

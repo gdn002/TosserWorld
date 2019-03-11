@@ -13,7 +13,7 @@ namespace TosserWorld.UI
         private static GameObject SlotPrefab;
 
 
-        private ContainerModule Inventory;
+        private InventoryModule Inventory;
         private Text Title;
         private GameObject SlotArea;
 
@@ -31,7 +31,7 @@ namespace TosserWorld.UI
             
         }
 
-        public void CreateInventoryGrid(ContainerModule inventory)
+        public void CreateInventoryGrid(InventoryModule inventory)
         {
             Inventory = inventory;
 

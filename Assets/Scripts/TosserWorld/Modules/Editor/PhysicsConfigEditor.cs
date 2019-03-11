@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
     [CustomEditor(typeof(PhysicsConfig))]
     public class PhysicsConfigEditor : Editor

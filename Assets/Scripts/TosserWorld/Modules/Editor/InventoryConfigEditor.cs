@@ -1,14 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
-    [CustomEditor(typeof(ContainerConfig))]
-    public class ContainerConfigEditor : Editor
+    [CustomEditor(typeof(InventoryConfig))]
+    public class InventoryConfigEditor : Editor
     {
-        private ContainerConfig Target { get { return target as ContainerConfig; } }
+        private InventoryConfig Target { get { return target as InventoryConfig; } }
 
         public override void OnInspectorGUI()
         {

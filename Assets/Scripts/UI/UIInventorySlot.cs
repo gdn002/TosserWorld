@@ -10,7 +10,7 @@ namespace TosserWorld.UI
     public class UIInventorySlot : MonoBehaviour, IPointerClickHandler
     {
 
-        public ContainerModule Inventory { get; set; }
+        public InventoryModule Inventory { get; set; }
         public int Slot { get; set; }
 
         private Image SlotImage;

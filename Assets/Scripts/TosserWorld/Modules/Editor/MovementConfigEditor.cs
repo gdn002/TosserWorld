@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
     [CustomEditor(typeof(MovementConfig))]
     public class MovementConfigEditor : Editor

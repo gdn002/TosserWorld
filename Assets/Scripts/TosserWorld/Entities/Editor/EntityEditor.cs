@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 
-using TosserWorld.Modules;
+using TosserWorld.Modules.Configurations;
+using UnityEditor.SceneManagement;
 
 namespace TosserWorld.Entities
 {
@@ -24,11 +25,13 @@ namespace TosserWorld.Entities
 
         private void OnModulesGUI()
         {
+            EditorGUI.BeginChangeCheck();
+
             Target.EnableBrain = EditorGUILayout.ToggleLeft("Brain", Target.EnableBrain);
             if (Target.EnableBrain) Target.BrainConfig = EditorGUILayout.ObjectField(Target.BrainConfig, typeof(BrainConfig), false) as BrainConfig;
 
-            Target.EnableContainer = EditorGUILayout.ToggleLeft("Container", Target.EnableContainer);
-            if (Target.EnableContainer) Target.ContainerConfig = EditorGUILayout.ObjectField(Target.ContainerConfig, typeof(ContainerConfig), false) as ContainerConfig;
+            Target.EnableInventory = EditorGUILayout.ToggleLeft("Inventory", Target.EnableInventory);
+            if (Target.EnableInventory) Target.InventoryConfig = EditorGUILayout.ObjectField(Target.InventoryConfig, typeof(InventoryConfig), false) as InventoryConfig;
 
             Target.EnableInteraction = EditorGUILayout.ToggleLeft("Interaction", Target.EnableInteraction);
             if (Target.EnableInteraction) Target.InteractionConfig = EditorGUILayout.ObjectField(Target.InteractionConfig, typeof(InteractionConfig), false) as InteractionConfig;
@@ -50,6 +53,12 @@ namespace TosserWorld.Entities
 
             //Target.EnableMODULE = EditorGUILayout.ToggleLeft("MODULE", Target.EnableMODULE);
             //if (Target.EnableMODULE) Target.MODULEConfig = EditorGUILayout.ObjectField(Target.MODULEConfig, typeof(MODULEConfig), false) as MODULEConfig;
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(Target);
+                EditorSceneManager.MarkAllScenesDirty();
+            }
         }
 
 

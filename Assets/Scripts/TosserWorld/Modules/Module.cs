@@ -1,12 +1,9 @@
-﻿using UnityEngine;
-using TosserWorld.Entities;
+﻿using TosserWorld.Entities;
+using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
-    public abstract class ModuleConfiguration : ScriptableObject
-    {
-
-    }
+    
 
     public abstract class Module
     {

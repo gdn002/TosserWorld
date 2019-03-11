@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEditorInternal;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
     [CustomEditor(typeof(TagListConfig))]
     public class TagListConfigEditor : Editor

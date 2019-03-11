@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using TosserWorld.Modules.BrainScripts;
 
-namespace TosserWorld.Modules
+namespace TosserWorld.Modules.Configurations
 {
     [CustomEditor(typeof(BrainConfig))]
     public class BrainConfigEditor : Editor
@@ -12,10 +12,15 @@ namespace TosserWorld.Modules
         {
             EditorGUILayout.Space();
 
+            EditorGUI.BeginChangeCheck();
+
             Target.SelectedBrainScript = EditorGUILayout.Popup("Active Brain: ", Target.SelectedBrainScript, BrainScriptSelector.AllNames());
             Target.AwarenessRadius = EditorGUILayout.FloatField("Awareness Radius: ", Target.AwarenessRadius);
 
-            EditorUtility.SetDirty(target);
+            if (EditorGUI.EndChangeCheck())
+            {
+                EditorUtility.SetDirty(Target);
+            }
         }
     }
 }

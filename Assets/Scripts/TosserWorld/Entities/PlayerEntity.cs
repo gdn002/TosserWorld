@@ -63,11 +63,11 @@ namespace TosserWorld.Entities
             {
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
-                    Container.DropAll();
+                    Inventory.DropAll();
                 }
                 if (Input.GetKeyDown(KeyCode.I))
                 {
-                    Container.OpenCloseContainer();
+                    Inventory.OpenCloseContainer();
                 }
             }
         }

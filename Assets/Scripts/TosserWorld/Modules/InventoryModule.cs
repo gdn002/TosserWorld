@@ -3,6 +3,7 @@
 using TosserWorld.UI;
 using TosserWorld.UI.Panels;
 using TosserWorld.Entities;
+using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
@@ -30,16 +31,7 @@ namespace TosserWorld.Modules
         }
     }
 
-    [CreateAssetMenu(fileName = "New Container Configuration", menuName = "Modules/Container")]
-    public class ContainerConfig : ModuleConfiguration
-    {
-        public int Rows = 3;
-        public int Cols = 3;
-
-        public int SlotCount { get { return Rows * Cols; } }
-    }
-
-    public class ContainerModule : Module
+    public class InventoryModule : Module
     {
         private static string DEFAULT_INVENTORY_PREFAB = "Prefabs/UI/Inventory/InventoryPanel";
 
@@ -80,7 +72,7 @@ namespace TosserWorld.Modules
             if (InventoryPrefab == null)
                 InventoryPrefab = Resources.Load<GameObject>(DEFAULT_INVENTORY_PREFAB).GetComponent<UIInventory>();
 
-            ContainerConfig containerConfig = configuration as ContainerConfig;
+            InventoryConfig containerConfig = configuration as InventoryConfig;
             Rows = containerConfig.Rows;
             Cols = containerConfig.Cols;
 

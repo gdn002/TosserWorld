@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 using TosserWorld.Modules;
+using TosserWorld.Modules.Configurations;
 using TosserWorld.Utilities;
 using Utility.Enumerations;
 
@@ -12,6 +12,7 @@ namespace TosserWorld.Entities
     /// <summary>
     /// Base class for all entities
     /// </summary>
+    [System.Serializable]
     public class Entity : MonoBehaviour
     {
         // TODO: Move this somewhere better
@@ -44,7 +45,7 @@ namespace TosserWorld.Entities
 
         // Module Enablers
         public bool EnableBrain;
-        public bool EnableContainer;
+        public bool EnableInventory;
         public bool EnableInteraction;
         public bool EnableMovement;
         public bool EnablePhysics;
@@ -53,7 +54,7 @@ namespace TosserWorld.Entities
 
         // Module Configurations
         public BrainConfig          BrainConfig;
-        public ContainerConfig      ContainerConfig;
+        public InventoryConfig      InventoryConfig;
         public InteractionConfig    InteractionConfig;
         public MovementConfig       MovementConfig;
         public PhysicsConfig        PhysicsConfig;
@@ -63,7 +64,7 @@ namespace TosserWorld.Entities
 
         // Modules
         public BrainModule          Brain;
-        public ContainerModule      Container;
+        public InventoryModule      Inventory;
         public InteractionModule    Interaction;
         public MovementModule       Movement;
         public PhysicsModule        Physics;
@@ -77,7 +78,7 @@ namespace TosserWorld.Entities
         private void LoadModules()
         {
             Brain       = LoadModule<BrainModule        >(EnableBrain       , BrainConfig       );
-            Container   = LoadModule<ContainerModule    >(EnableContainer   , ContainerConfig   );
+            Inventory   = LoadModule<InventoryModule    >(EnableInventory   , InventoryConfig   );
             Interaction = LoadModule<InteractionModule  >(EnableInteraction , InteractionConfig );
             Movement    = LoadModule<MovementModule     >(EnableMovement    , MovementConfig    );
             Physics     = LoadModule<PhysicsModule      >(EnablePhysics     , PhysicsConfig     );

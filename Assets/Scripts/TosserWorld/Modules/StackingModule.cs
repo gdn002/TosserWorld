@@ -1,17 +1,8 @@
-﻿using UnityEngine;
-
+﻿using TosserWorld.Modules.Configurations;
 using TosserWorld.Entities;
 
 namespace TosserWorld.Modules
 {
-    [CreateAssetMenu(fileName = "New Stacking Configuration", menuName = "Modules/Stacking")]
-    public class StackingConfig : ModuleConfiguration
-    {
-        public int MaxAmount = 1;
-
-        public bool IsStackable { get { return MaxAmount > 1; } }
-    }
-
     public class StackingModule : Module
     {
         public int MaxAmount;

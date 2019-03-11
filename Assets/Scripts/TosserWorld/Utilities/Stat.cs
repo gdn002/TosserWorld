@@ -7,12 +7,12 @@ namespace TosserWorld.Utilities
 {
     public struct Stat
     {
-        public Stat(int max, bool locked = true)
+        public Stat(int max, bool enabled = true)
         {
             Current = max;
             Maximum = max;
             Modifier = 0;
-            Locked = locked;
+            Enabled = enabled;
         }
 
         public Stat(Stat other)
@@ -20,7 +20,7 @@ namespace TosserWorld.Utilities
             Current = other.Current;
             Maximum = other.Maximum;
             Modifier = other.Modifier;
-            Locked = other.Locked;
+            Enabled = other.Enabled;
         }
 
         public int Current { get; private set; }
@@ -29,11 +29,11 @@ namespace TosserWorld.Utilities
 
         public int EffectiveMaximum { get { return Maximum + Modifier; } }
 
-        public bool Locked { get; private set; }
+        public bool Enabled { get; private set; }
 
         public void Modify(int delta)
         {
-            if (Locked)
+            if (Enabled)
             {
                 Current += delta;
                 if (Current < 0)

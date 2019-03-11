@@ -49,6 +49,7 @@ namespace TosserWorld.Entities
         public bool EnableMovement;
         public bool EnablePhysics;
         public bool EnableStacking;
+        public bool EnableStats;
 
         // Module Configurations
         public BrainConfig          BrainConfig;
@@ -57,6 +58,7 @@ namespace TosserWorld.Entities
         public MovementConfig       MovementConfig;
         public PhysicsConfig        PhysicsConfig;
         public StackingConfig       StackingConfig;
+        public StatsConfig          StatsConfig;
         public TagListConfig        TagListConfig;
 
         // Modules
@@ -66,12 +68,13 @@ namespace TosserWorld.Entities
         public MovementModule       Movement;
         public PhysicsModule        Physics;
         public StackingModule       Stacking;
+        public StatsModule          Stats;
         public TagListModule        TagList;
 
         // Module List for iterating
         public List<Module> ModuleList = new List<Module>();
 
-        public void LoadModules()
+        private void LoadModules()
         {
             Brain       = LoadModule<BrainModule        >(EnableBrain       , BrainConfig       );
             Container   = LoadModule<ContainerModule    >(EnableContainer   , ContainerConfig   );
@@ -79,6 +82,7 @@ namespace TosserWorld.Entities
             Movement    = LoadModule<MovementModule     >(EnableMovement    , MovementConfig    );
             Physics     = LoadModule<PhysicsModule      >(EnablePhysics     , PhysicsConfig     );
             Stacking    = LoadModule<StackingModule     >(EnableStacking    , StackingConfig    );
+            Stats       = LoadModule<StatsModule        >(EnableStats       , StatsConfig       );
             TagList     = LoadModule<TagListModule      >(true              , TagListConfig     );
 
         }

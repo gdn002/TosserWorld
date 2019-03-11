@@ -42,10 +42,16 @@ namespace TosserWorld.Entities
             Target.EnableStacking = EditorGUILayout.ToggleLeft("Stacking", Target.EnableStacking);
             if (Target.EnableStacking) Target.StackingConfig = EditorGUILayout.ObjectField(Target.StackingConfig, typeof(StackingConfig), false) as StackingConfig;
 
+            Target.EnableStats = EditorGUILayout.ToggleLeft("Stats", Target.EnableStats);
+            if (Target.EnableStats) Target.StatsConfig = EditorGUILayout.ObjectField(Target.StatsConfig, typeof(StatsConfig), false) as StatsConfig;
+
             EditorGUILayout.ToggleLeft("TagList", true);
             Target.TagListConfig = EditorGUILayout.ObjectField(Target.TagListConfig, typeof(TagListConfig), false) as TagListConfig;
+
+            //Target.EnableMODULE = EditorGUILayout.ToggleLeft("MODULE", Target.EnableMODULE);
+            //if (Target.EnableMODULE) Target.MODULEConfig = EditorGUILayout.ObjectField(Target.MODULEConfig, typeof(MODULEConfig), false) as MODULEConfig;
         }
 
-        
+
     }
 }

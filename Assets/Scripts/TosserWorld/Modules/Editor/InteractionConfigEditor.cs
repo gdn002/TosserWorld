@@ -9,7 +9,9 @@ namespace TosserWorld.Modules.Configurations
 
         public override void OnInspectorGUI()
         {
-            Target.Interaction = (Interactions)EditorGUILayout.EnumPopup("Default Interaction: ", Target.Interaction);
+            Target.DefaultInteraction = (Interactions)EditorGUILayout.EnumPopup("Default Interaction: ", Target.DefaultInteraction);
+            Target.DefaultDeadInteraction = (Interactions)EditorGUILayout.EnumPopup("Default Dead Interaction: ", Target.DefaultDeadInteraction);
+
             EditorUtility.SetDirty(target);
         }
     }

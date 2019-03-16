@@ -17,7 +17,8 @@ namespace TosserWorld.Utilities
         private SortingGroup SortGroup;
         private List<SpriteRenderer> AttachedRenderers = new List<SpriteRenderer>();
 
-        private Entity Owner;
+        public Quaternion Rotation { get { return transform.rotation; } }
+        public Entity Owner;
 
         void Start()
         {
@@ -39,7 +40,7 @@ namespace TosserWorld.Utilities
         {
             if (EnableIsometry)
             {
-                transform.rotation = CameraController.Camera.transform.rotation;
+                transform.rotation = CameraController.CameraRotation;
                 //IsometricSorting();
             }
         }

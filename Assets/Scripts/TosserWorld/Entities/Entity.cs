@@ -23,6 +23,8 @@ namespace TosserWorld.Entities
         // Used internally to ensure all components have been initialized
         private bool IsInitialized = false;
 
+        public bool IsAlive { get; protected set; }
+
         public Entity Clone()
         {
             Entity clone = Instantiate(gameObject, transform.parent).GetComponent<Entity>();
@@ -204,6 +206,7 @@ namespace TosserWorld.Entities
 
                 // Object is ready for action
                 IsInitialized = true;
+                IsAlive = true;
                 IsChild = false;
             }
 
@@ -270,13 +273,45 @@ namespace TosserWorld.Entities
                     PlayerEntity.Player.QueueInteraction(this);
                 }
             }
+            else
+            {
+                if (Stats != null)
+                {
+                    Stats.Health.Modify(-25);
+                }
+            }
         }
 
 
         // ---- UTILITY FUNCTIONS ----
 
-        public void Destroy()
+        public void Kill()
         {
+            if (IsAlive)
+            {
+                IsAlive = false;
+
+                // If we have an animator, play the "Die" animation
+                // DeathAnimationBehaviour will ensure Destroy() gets called when the death animation ends
+                if (Animator != null)
+                {
+                    Animator.SetTrigger("Die");
+                }
+                // Otherwise just call Destroy()
+                else
+                {
+                    Remove(true);
+                }
+            }
+        }
+
+        public void Remove(bool usePoofEffect = false)
+        {
+            if (usePoofEffect)
+            {
+                Instantiate(Resources.Load<GameObject>("Prefabs/smokePuff"), Position, CameraController.CameraRotation);
+            }
+
             Destroy(gameObject);
         }
 

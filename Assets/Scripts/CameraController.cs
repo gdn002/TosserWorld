@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
 {
     public static CameraController Controller { get; private set; }
     public static Camera Camera { get; private set; }
+    public static Quaternion CameraRotation { get { return Camera.transform.rotation; } }
 
     /// <summary>
     /// Camera orientation data

@@ -22,7 +22,7 @@ namespace TosserWorld.Modules
 
             if (Health.Current <= 0)
             {
-                Owner.Destroy();
+                Owner.Kill();
             }
         }
     }

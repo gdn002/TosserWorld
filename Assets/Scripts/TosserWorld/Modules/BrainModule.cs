@@ -141,7 +141,7 @@ namespace TosserWorld.Modules
             /// Finds the nearest entity that matches the tag.
             /// </summary>
             /// <param name="tag">Tag to filter.</param>
-            /// <returns>The first entity that matches the tag, or null if none was found.</returns>
+            /// <returns>The nearest entity that matches the tag, or null if none was found.</returns>
             public Entity FindNearest(EntityTags tag = EntityTags.Any, bool recursive = false)
             {
                 Entity nearest = null;
@@ -173,6 +173,42 @@ namespace TosserWorld.Modules
                 return nearest;
             }
 
+            /// <summary>
+            /// Finds the nearest entity with a specific name.
+            /// </summary>
+            /// <param name="name">Name to search for.</param>
+            /// <returns>The nearest entity that has the name, or null if none was found.</returns>
+            public Entity FindNearest(string name, bool recursive = false)
+            {
+                Entity nearest = null;
+                float nearestDistance = float.MaxValue;
+
+                foreach (var entity in Awareness)
+                {
+                    float distance = entity.DistanceTo(Owner.Owner);
+
+                    if (distance < nearestDistance)
+                    {
+                        if (entity.Name == name)
+                        {
+                            nearest = entity;
+                            nearestDistance = distance;
+                        }
+                        else if (recursive)
+                        {
+                            Entity found = Find(entity, name);
+                            if (found != null)
+                            {
+                                nearest = found;
+                                nearestDistance = distance;
+                            }
+                        }
+                    }
+                }
+
+                return nearest;
+            }
+
             public IEnumerator<Entity> GetEnumerator()
             {
                 foreach (var entity in Awareness)
@@ -185,6 +221,7 @@ namespace TosserWorld.Modules
             {
                 Awareness.Add(entity);
                 Owner.ActiveBrain.OnDetectEntity(entity);
+                Debug.Log(Owner.Owner.Name + " detected " + entity.Name);
             }
 
             private void Remove(Entity entity)
@@ -257,12 +294,11 @@ namespace TosserWorld.Modules
 
         protected override void OnInitialize(ModuleConfiguration configuration)
         {
+            BrainConfig brainConfig = configuration as BrainConfig;
+            AwarenessRadius = brainConfig.AwarenessRadius;
+
             Awareness = new BrainAwareness(this);
             Triggers = new BrainTriggers();
-
-            BrainConfig brainConfig = configuration as BrainConfig;
-
-            AwarenessRadius = brainConfig.AwarenessRadius;
 
             ActiveBrain = BrainScriptSelector.InstantiateScript(brainConfig.SelectedBrainScript);
             ActiveBrain.SetComponent(this);
@@ -272,7 +308,10 @@ namespace TosserWorld.Modules
 
         public override void Update()
         {
-            ActiveBrain.RunBehaviorTree();
+            if (Owner.IsAlive)
+            {
+                ActiveBrain.RunBehaviorTree();
+            }
         }
 
         private void CreateSpeechBubble()

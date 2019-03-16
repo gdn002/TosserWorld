@@ -41,8 +41,8 @@ namespace TosserWorld.Modules
             }
             else
             {
-                // Destroy the other entity if the stack was completely merged
-                other.Owner.Destroy();
+                // Remove the other entity if the stack was completely merged
+                other.Owner.Remove();
                 other = null;
             }
 

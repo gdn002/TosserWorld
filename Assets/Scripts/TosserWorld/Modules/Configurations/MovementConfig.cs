@@ -2,7 +2,7 @@
 
 namespace TosserWorld.Modules.Configurations
 {
-    [CreateAssetMenu(fileName = "New Movement Configuration", menuName = "Modules/Movement")]
+    [CreateAssetMenu(fileName = "New Movement Configuration", menuName = "Module Configurations/Movement")]
     public class MovementConfig : ModuleConfiguration
     {
         public float SpeedLimit = 1;

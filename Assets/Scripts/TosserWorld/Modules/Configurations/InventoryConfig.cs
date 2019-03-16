@@ -2,7 +2,7 @@
 
 namespace TosserWorld.Modules.Configurations
 {
-    [CreateAssetMenu(fileName = "New Inventory Configuration", menuName = "Modules/Inventory")]
+    [CreateAssetMenu(fileName = "New Inventory Configuration", menuName = "Module Configurations/Inventory")]
     public class InventoryConfig : ModuleConfiguration
     {
         public int Rows = 3;

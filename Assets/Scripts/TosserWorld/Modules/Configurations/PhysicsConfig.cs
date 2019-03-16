@@ -2,7 +2,7 @@
 
 namespace TosserWorld.Modules.Configurations
 {
-    [CreateAssetMenu(fileName = "New Physics Configuration", menuName = "Modules/Physics")]
+    [CreateAssetMenu(fileName = "New Physics Configuration", menuName = "Module Configurations/Physics")]
     public class PhysicsConfig : ModuleConfiguration
     {
         // Drag value for vertical movement

@@ -2,7 +2,7 @@
 
 namespace TosserWorld.Modules.Configurations
 {
-    [CreateAssetMenu(fileName = "New Stacking Configuration", menuName = "Modules/Stacking")]
+    [CreateAssetMenu(fileName = "New Stacking Configuration", menuName = "Module Configurations/Stacking")]
     public class StackingConfig : ModuleConfiguration
     {
         public int MaxAmount = 1;

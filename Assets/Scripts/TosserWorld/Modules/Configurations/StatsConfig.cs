@@ -2,7 +2,7 @@
 
 namespace TosserWorld.Modules.Configurations
 {
-    [CreateAssetMenu(fileName = "New Stats Configuration", menuName = "Modules/Stats")]
+    [CreateAssetMenu(fileName = "New Stats Configuration", menuName = "Module Configurations/Stats")]
     public class StatsConfig : ModuleConfiguration
     {
         public bool HasHealth = false;

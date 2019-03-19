@@ -21,8 +21,6 @@ namespace TosserWorld.Utilities
             direction = Quaternion.Euler(0, 0, -45) * direction;
             direction = Quaternion.Euler(0, 0, -CameraController.Controller.Orientation.RotationAngle()) * direction;
 
-            Debug.Log("FlipTo " + direction);
-
             FlipToScreen(direction);
         }
 

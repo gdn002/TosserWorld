@@ -85,13 +85,6 @@ namespace TosserWorld.Modules
             Cols = containerConfig.Cols;
 
             Storage = new InventorySpace(SlotCount);
-
-            InitializeInventoryContents();
-        }
-
-        private void InitializeInventoryContents()
-        {
-            
         }
 
         /// <summary>

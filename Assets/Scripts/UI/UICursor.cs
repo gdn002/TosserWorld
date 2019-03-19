@@ -23,7 +23,7 @@ namespace TosserWorld.UI
         {
             if (AttachedEntity != null)
             {
-                if (!AttachedEntity.Hierarchy.IsChildOf(PlayerEntity.Player))
+                if (AttachedEntity.Parent != PlayerEntity.Player)
                 {
                     AttachedEntity = null;
                     DestroyIcon();
@@ -45,7 +45,8 @@ namespace TosserWorld.UI
             }
             else
             {
-                PlayerEntity.Player.Hierarchy.AddChild(AttachedEntity);
+                AttachedEntity.SetParent(PlayerEntity.Player);
+                AttachedEntity.Hide();
                 CreateIcon();
             }
         }
@@ -60,7 +61,10 @@ namespace TosserWorld.UI
 
         public void DropAttachedEntity(Vector2 worldPosition)
         {
-            AttachedEntity.Hierarchy.MakeIndependent(worldPosition, true);
+            AttachedEntity.SetParent(null);
+            AttachedEntity.Position = worldPosition;
+            AttachedEntity.Hide(false);
+
             SetAttachedEntity();
         }
 

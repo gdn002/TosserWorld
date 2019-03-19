@@ -48,6 +48,7 @@ namespace TosserWorld.Modules.BrainScripts
                 // If DG is not yet aware of the target, play the "notice" animation
                 else
                 {
+                    Me.FlipTo(CurrentTarget.Position);
                     PlayAnimation(AnimNoticeHash);
                     IsAware = true;
                 }

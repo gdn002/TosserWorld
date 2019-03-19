@@ -6,6 +6,7 @@ namespace TosserWorld.Utilities
 {
     public class EquipmentSlot : MonoBehaviour
     {
+        public Entity Owner { get; set; }
         public Entity Equipped { get; private set; }
 
         public void AddToSlot(Entity entity)
@@ -15,9 +16,8 @@ namespace TosserWorld.Utilities
 
             if (entity != null)
             {
-                entity.SetAsChild(true);
-                entity.transform.SetParent(transform);
-                entity.transform.localPosition = Vector2.zero;
+                entity.SetParent(Owner);
+
                 entity.transform.localScale = Vector3.one;
                 entity.transform.localRotation = Quaternion.identity;
 
@@ -27,10 +27,9 @@ namespace TosserWorld.Utilities
 
         public void DropEquipped()
         {
-            Equipped.transform.SetParent(null);
+            Equipped.SetParent(null);
             Equipped.Position = Equipped.Position + new Vector2(0.5f, 0);
             Equipped.transform.localScale = Vector3.one;
-            Equipped.SetAsChild(false);
             Equipped = null;
         }
     }

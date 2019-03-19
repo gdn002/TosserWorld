@@ -42,7 +42,7 @@ namespace TosserWorld.Modules
 
                     if (recursive)
                     {
-                        Entity found = Find(entity, tag);
+                        Entity found = FindInInventory(entity.Inventory, tag);
                         if (found != null)
                             return found;
                     }
@@ -51,14 +51,17 @@ namespace TosserWorld.Modules
                 return null;
             }
 
-            private Entity Find(Entity root, EntityTags tag)
+            private Entity FindInInventory(InventoryModule inventory, EntityTags tag)
             {
-                foreach (var child in root.Hierarchy)
-                {
-                    if (child.TagList.HasTag(tag))
-                        return child;
+                if (inventory == null)
+                    return null;
 
-                    Entity found = Find(child, tag);
+                foreach (var item in inventory.Storage.GetContents())
+                {
+                    if (item.Owner.TagList.HasTag(tag))
+                        return item.Owner;
+
+                    Entity found = FindInInventory(item.Owner.Inventory, tag);
                     if (found != null)
                         return found;
                 }
@@ -81,7 +84,7 @@ namespace TosserWorld.Modules
 
                     if (recursive)
                     {
-                        Entity found = Find(entity, name);
+                        Entity found = FindInInventory(entity.Inventory, name);
                         if (found != null)
                             return found;
                     }
@@ -90,14 +93,17 @@ namespace TosserWorld.Modules
                 return null;
             }
 
-            private Entity Find(Entity root, string name)
+            private Entity FindInInventory(InventoryModule inventory, string name)
             {
-                foreach (var child in root.Hierarchy)
-                {
-                    if (child.Name == name)
-                        return child;
+                if (inventory == null)
+                    return null;
 
-                    Entity found = Find(child, name);
+                foreach (var item in inventory.Storage.GetContents())
+                {
+                    if (item.Owner.Name == name)
+                        return item.Owner;
+
+                    Entity found = FindInInventory(item.Owner.Inventory, name);
                     if (found != null)
                         return found;
                 }
@@ -120,20 +126,23 @@ namespace TosserWorld.Modules
                         list.Add(entity);
 
                     if (recursive)
-                        FindAll(entity, list, tag);
+                        FindAllInInventory(entity.Inventory, list, tag);
                 }
 
                 return list;
             }
 
-            private void FindAll(Entity root, List<Entity> list, EntityTags tag)
+            private void FindAllInInventory(InventoryModule inventory, List<Entity> list, EntityTags tag)
             {
-                foreach (var child in root.Hierarchy)
-                {
-                    if (child.TagList.HasTag(tag))
-                        list.Add(child);
+                if (inventory == null)
+                    return;
 
-                    FindAll(child, list, tag);
+                foreach (var item in inventory.Storage.GetContents())
+                {
+                    if (item.Owner.TagList.HasTag(tag))
+                        list.Add(item.Owner);
+
+                    FindAllInInventory(item.Owner.Inventory, list, tag);
                 }
             }
 
@@ -160,7 +169,7 @@ namespace TosserWorld.Modules
                         }
                         else if (recursive)
                         {
-                            Entity found = Find(entity, tag);
+                            Entity found = FindInInventory(entity.Inventory, tag);
                             if (found != null)
                             {
                                 nearest = found;
@@ -196,7 +205,7 @@ namespace TosserWorld.Modules
                         }
                         else if (recursive)
                         {
-                            Entity found = Find(entity, name);
+                            Entity found = FindInInventory(entity.Inventory, name);
                             if (found != null)
                             {
                                 nearest = found;

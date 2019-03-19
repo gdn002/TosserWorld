@@ -11,6 +11,11 @@ namespace TosserWorld.Utilities
         public void Load(Entity owner)
         {
             Slots = owner.GetComponentsInChildren<EquipmentSlot>();
+
+            foreach (var slot in Slots)
+            {
+                slot.Owner = owner;
+            }
         }
 
         public EquipmentSlot this[int i]

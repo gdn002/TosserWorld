@@ -30,13 +30,17 @@ namespace TosserWorld.Modules
         /// <returns>Leftover stack (may be null)</returns>
         public StackingModule CombineStack(StackingModule other)
         {
+            // If either stack is maxed out there's nothing to be done
+            if (IsMaxed || other.IsMaxed)
+                return other;
+
             // Combine the two stacks
             Amount += other.Amount;
 
             if (Amount > MaxAmount)
             {
                 // Cap the amount to the value in MaxAmount and spill it over back to the original stack
-                other.Amount = MaxAmount - Amount;
+                other.Amount = Amount - MaxAmount;
                 Amount = MaxAmount;
             }
             else

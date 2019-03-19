@@ -4,6 +4,7 @@ using TosserWorld.UI;
 using TosserWorld.UI.Panels;
 using TosserWorld.Entities;
 using TosserWorld.Modules.Configurations;
+using System.Collections.Generic;
 
 namespace TosserWorld.Modules
 {
@@ -27,6 +28,23 @@ namespace TosserWorld.Modules
             set
             {
                 Inventory[index] = value;
+            }
+        }
+
+        public IEnumerator<StackingModule> GetEnumerator()
+        {
+            foreach(var item in Inventory)
+            {
+                yield return item;
+            }
+        }
+
+        public IEnumerable<StackingModule> GetContents()
+        {
+            foreach (var item in Inventory)
+            {
+                if (item != null)
+                    yield return item;
             }
         }
     }
@@ -55,16 +73,6 @@ namespace TosserWorld.Modules
                     OpenCloseContainer();
                 }
             }
-
-            // Verify for removed entities
-            for (int i = 0; i < Storage.Length; i++)
-            {
-                if (Storage[i] != null)
-                {
-                    if (!Storage[i].Owner.Hierarchy.IsChildOf(Owner))
-                        Storage[i] = null;
-                }
-            }
         }
 
         protected override void OnInitialize(ModuleConfiguration configuration)
@@ -77,6 +85,13 @@ namespace TosserWorld.Modules
             Cols = containerConfig.Cols;
 
             Storage = new InventorySpace(SlotCount);
+
+            InitializeInventoryContents();
+        }
+
+        private void InitializeInventoryContents()
+        {
+            
         }
 
         /// <summary>
@@ -108,7 +123,8 @@ namespace TosserWorld.Modules
                 {
                     // Put this entity in storage
                     Storage[i] = stack;
-                    Owner.Hierarchy.AddChild(stack);
+                    stack.Owner.SetParent(Owner);
+                    stack.Owner.Hide();
                     return true;
                 }
             }
@@ -118,7 +134,7 @@ namespace TosserWorld.Modules
         }
 
         /// <summary>
-        /// Places a stack in a container slot and returns the entity it replaced.
+        /// Places a stack in a container slot and returns the stack it replaced, if any.
         /// </summary>
         /// <param name="stack">The stack to place</param>
         /// <param name="slot">The slot to place in</param>
@@ -137,7 +153,8 @@ namespace TosserWorld.Modules
 
             // Put entity in storage, replacing whatever was there
             Storage[slot] = stack;
-            Owner.Hierarchy.AddChild(stack);
+            stack.Owner.SetParent(Owner);
+            stack.Owner.Hide();
 
             return current;
         }
@@ -183,6 +200,11 @@ namespace TosserWorld.Modules
             return Take(slot);
         }
 
+        /// <summary>
+        /// Takes half the units from a stack in a container slot.
+        /// </summary>
+        /// <param name="slot">The slot to take from</param>
+        /// <returns>The units taken (may be null)</returns>
         public StackingModule TakeHalf(int slot)
         {
             StackingModule current = Storage[slot];
@@ -197,18 +219,40 @@ namespace TosserWorld.Modules
             return Take(slot);
         }
 
+        /// <summary>
+        /// Searches for a stack and removes it from this inventory if found. 
+        /// Use this only when the stack is being moved out of the inventory externally to "clean up" its inventory slot.
+        /// </summary>
+        /// <param name="item">The stack to remove</param>
+        public void Remove(StackingModule item)
+        {
+            if (item == null)
+                return;
+
+            for (int i = 0; i < Storage.Length; ++i)
+            {
+                if(Storage[i] == item)
+                {
+                    Storage[i] = null;
+                    return;
+                }
+            }
+        }
+
         public void DropAll()
         {
-            Vector2 dropPosition = Vector2.right;
+            Vector2 drop = Vector2.right;
 
             for (int i = 0; i < Storage.Length; ++i)
             {
                 if (Storage[i] != null)
                 {
-                    Storage[i].Owner.Hierarchy.MakeIndependent(dropPosition);
+                    Storage[i].Owner.SetParent(null);
+                    Storage[i].Owner.Position = Storage[i].Owner.Position + drop;
+                    Storage[i].Owner.Hide(false);
                     Storage[i] = null;
 
-                    dropPosition = Quaternion.Euler(0, 0, -15) * dropPosition;
+                    drop = Quaternion.Euler(0, 0, -15) * drop;
                 }
             }
         }

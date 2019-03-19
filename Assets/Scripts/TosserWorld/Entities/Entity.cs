@@ -18,8 +18,6 @@ namespace TosserWorld.Entities
         // TODO: Move this somewhere better
         public static EntityChunk GlobalChunk = new EntityChunk();
 
-        public bool IsChild { get; protected set; }
-
         // Used internally to ensure all components have been initialized
         private bool IsInitialized = false;
 
@@ -115,8 +113,6 @@ namespace TosserWorld.Entities
 
             Render = GetComponentInChildren<EntityRenderer>();
             FlippableSprite = GetComponentInChildren<FlippableSprite>();
-
-            Hierarchy = new EntityHierarchy(this);
         }
 
 
@@ -134,12 +130,12 @@ namespace TosserWorld.Entities
         }
 
         /// <summary>
-        /// Enables or disables rendering features, effectively showing or hiding the entity.
+        /// Shows or hides the entity.
         /// </summary>
-        /// <param name="enable">Enables or disables rendering features for the entity</param>
-        public void EnableRendering(bool enable = true)
+        /// <param name="hide">True to disable entity rendering, false to enable it.</param>
+        public void Hide(bool hide = true)
         {
-            Render.EnableRendering(enable);
+            Render.EnableRendering(!hide);
         }
         
 
@@ -179,7 +175,9 @@ namespace TosserWorld.Entities
 
         // ---- HIERARCHY ----
 
-        public EntityHierarchy Hierarchy;
+        public Entity Parent { get; protected set; }
+        public bool IsChild { get { return Parent != null; } }
+
 
 
         // ---- REFERENCES ----
@@ -207,7 +205,6 @@ namespace TosserWorld.Entities
                 // Object is ready for action
                 IsInitialized = true;
                 IsAlive = true;
-                IsChild = false;
             }
 
             if (InventorySprite == null)
@@ -290,6 +287,8 @@ namespace TosserWorld.Entities
             if (IsAlive)
             {
                 IsAlive = false;
+                if (Movement != null)
+                    Movement.Stop();
 
                 // If we have an animator, play the "Die" animation
                 // DeathAnimationBehaviour will ensure Destroy() gets called when the death animation ends
@@ -369,17 +368,51 @@ namespace TosserWorld.Entities
             return Vector2.Distance(transform.position, entity.transform.position);
         }
 
-        public void SetAsChild(bool child)
+        public void SetParent(Entity parent)
         {
-            IsChild = child;
-            if (RigidBody != null) RigidBody.isKinematic = child;
-            if (MainCollider != null) MainCollider.enabled = !child;
+            if (Parent == parent)
+                return; // Entity already has this parent
 
-            EnableIsometry(!child);
-            OnPointerExit(null);
+            Parent = parent;
+            if (IsChild)
+            {
+                // The entity was given a new parent
+                transform.SetParent(Parent.transform);
+                transform.localPosition = Vector3.zero;
+
+                if (RigidBody != null) RigidBody.isKinematic = true;
+                if (MainCollider != null) MainCollider.enabled = false;
+
+                EnableIsometry(false);
+                Render.EnableSelection(false);
+            }
+            else
+            {
+                // The entity was made independent
+
+                transform.localPosition = Vector2.zero;
+                transform.SetParent(null, true);
+
+                if (RigidBody != null) RigidBody.isKinematic = false;
+                if (MainCollider != null) MainCollider.enabled = true;
+
+                EnableIsometry(true);
+                Render.EnableSelection(true);
+            }
         }
 
-        
-
+        /// <summary>
+        /// Forces this entity to remove itself from its inventory slot, if it is currently in one. This function does not cause the container to drop the entity by itself!
+        /// </summary>
+        public void RemoveSelfFromInventory()
+        {
+            if (IsChild)
+            {
+                if (Parent.Inventory != null)
+                {
+                    Parent.Inventory.Remove(Stacking);
+                }
+            }
+        }
     }
 }

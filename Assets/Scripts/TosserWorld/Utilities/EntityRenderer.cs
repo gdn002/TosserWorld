@@ -12,10 +12,10 @@ namespace TosserWorld.Utilities
     public class EntityRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         public bool EnableIsometry = true;
-        public bool Selectable = true;
 
         private SortingGroup SortGroup;
         private List<SpriteRenderer> AttachedRenderers = new List<SpriteRenderer>();
+        private Collider MouseCollider;
 
         public Quaternion Rotation { get { return transform.rotation; } }
         public Entity Owner;
@@ -33,6 +33,8 @@ namespace TosserWorld.Utilities
                 Owner = transform.parent.GetComponent<Entity>();
                 AttachedRenderers = Owner.GetComponentsInEntity<SpriteRenderer>();
             }
+
+            MouseCollider = GetComponent<Collider>();
         }
 
         // Update is called once per frame
@@ -70,6 +72,19 @@ namespace TosserWorld.Utilities
             transform.localRotation = Quaternion.identity;
         }
 
+        public void EnableSelection(bool enable = true)
+        {
+            if (MouseCollider != null)
+            {
+                MouseCollider.enabled = enable;
+
+                if (!enable)
+                {
+                    // If selection was disabled, call OnPointerExit to clear the object's selected status
+                    OnPointerExit(null);
+                }
+            }
+        }
 
         public void OnPointerExit(PointerEventData eventData)
         {
@@ -78,18 +93,12 @@ namespace TosserWorld.Utilities
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (Selectable)
-            {
-                Owner.OnPointerEnter(eventData);
-            }
+            Owner.OnPointerEnter(eventData);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (Selectable)
-            {
-                Owner.OnPointerClick(eventData);
-            }
+            Owner.OnPointerClick(eventData);
         }
     }
 }

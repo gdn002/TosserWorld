@@ -230,7 +230,6 @@ namespace TosserWorld.Modules
             {
                 Awareness.Add(entity);
                 Owner.ActiveBrain.OnDetectEntity(entity);
-                Debug.Log(Owner.Owner.Name + " detected " + entity.Name);
             }
 
             private void Remove(Entity entity)

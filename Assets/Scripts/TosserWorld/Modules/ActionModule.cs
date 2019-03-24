@@ -1,17 +1,25 @@
 ﻿using UnityEngine;
 using TosserWorld.Modules.Configurations;
 using TosserWorld.Entities;
+using TosserWorld.Modules.ActionScripts;
 
 namespace TosserWorld.Modules
 {
+    public enum ActionType
+    {
+        RunScript = 0,
+        SpawnPrefab,
+    }
+
     public class ActionModule : Module
     {
-        public GameObject ActionPrefab;
+        public int RateOfFire { get; private set; }
+        public bool AutoFire { get; private set; }
+        public bool RunAndGun { get; private set; }
 
-        public int RateOfFire = 60;
-
-        public bool AutoFire = false;
-        public bool RunAndGun = false;
+        public ActionType ActionType { get; private set; }
+        public ActionScript ActionScript { get; private set; }
+        public GameObject SpawnPrefab { get; private set; }
 
         private float TimeBetweenShots { get { return (60f / RateOfFire); } }
         private float Timer = 0;
@@ -19,10 +27,15 @@ namespace TosserWorld.Modules
         protected override void OnInitialize(ModuleConfiguration configuration)
         {
             ActionConfig actionConfig = configuration as ActionConfig;
-            ActionPrefab = actionConfig.ActionPrefab;
             RateOfFire = actionConfig.RateOfFire;
             AutoFire = actionConfig.AutoFire;
             RunAndGun = actionConfig.RunAndGun;
+
+            ActionType = actionConfig.ActionType;
+            SpawnPrefab = actionConfig.SpawnPrefab;
+
+            ActionScript = ActionScriptSelector.InstantiateScript(actionConfig.SelectedScript);
+            ActionScript.Initialize(Owner);
         }
 
         public void Activate(Entity actor, bool hold)
@@ -36,8 +49,22 @@ namespace TosserWorld.Modules
                         Owner.Movement.Stop();
                 }
 
-                Timer = 0;
-                GameObject action = Object.Instantiate(ActionPrefab, actor.Position, actor.transform.rotation);
+                DoAction(actor);
+            }
+        }
+
+        public void DoAction(Entity actor)
+        {
+            Timer = 0;
+
+            switch (ActionType)
+            {
+                case ActionType.RunScript:
+                    ActionScript.Run(actor);
+                    break;
+                case ActionType.SpawnPrefab:
+                    Object.Instantiate(SpawnPrefab, actor.Position, actor.transform.rotation);
+                    break;
             }
         }
 

@@ -27,6 +27,9 @@ namespace TosserWorld.Entities
         {
             EditorGUI.BeginChangeCheck();
 
+            Target.EnableAction = EditorGUILayout.ToggleLeft("Action", Target.EnableAction);
+            if (Target.EnableAction) Target.ActionConfig = EditorGUILayout.ObjectField(Target.ActionConfig, typeof(ActionConfig), false) as ActionConfig;
+
             Target.EnableBrain = EditorGUILayout.ToggleLeft("Brain", Target.EnableBrain);
             if (Target.EnableBrain) Target.BrainConfig = EditorGUILayout.ObjectField(Target.BrainConfig, typeof(BrainConfig), false) as BrainConfig;
 

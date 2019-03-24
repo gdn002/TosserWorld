@@ -44,6 +44,7 @@ namespace TosserWorld.Entities
         // ---- MODULES ----
 
         // Module Enablers
+        public bool EnableAction;
         public bool EnableBrain;
         public bool EnableInventory;
         public bool EnableInteraction;
@@ -53,6 +54,7 @@ namespace TosserWorld.Entities
         public bool EnableStats;
 
         // Module Configurations
+        public ActionConfig         ActionConfig;
         public BrainConfig          BrainConfig;
         public InventoryConfig      InventoryConfig;
         public InteractionConfig    InteractionConfig;
@@ -63,6 +65,7 @@ namespace TosserWorld.Entities
         public TagListConfig        TagListConfig;
 
         // Modules
+        public ActionModule         Action;
         public BrainModule          Brain;
         public InventoryModule      Inventory;
         public InteractionModule    Interaction;
@@ -77,6 +80,7 @@ namespace TosserWorld.Entities
 
         private void LoadModules()
         {
+            Action      = LoadModule<ActionModule       >(EnableAction      , ActionConfig      );
             Brain       = LoadModule<BrainModule        >(EnableBrain       , BrainConfig       );
             Inventory   = LoadModule<InventoryModule    >(EnableInventory   , InventoryConfig   );
             Interaction = LoadModule<InteractionModule  >(EnableInteraction , InteractionConfig );
@@ -281,6 +285,29 @@ namespace TosserWorld.Entities
 
 
         // ---- UTILITY FUNCTIONS ----
+
+        public void ActivateEquipment(bool hold = false, int equipmentSlot = 0)
+        {
+            if (EquipmentSlots.Length > equipmentSlot)
+            {
+                var equipped = EquipmentSlots[equipmentSlot].Equipped;
+                if (equipped != null && equipped.Action != null)
+                {
+                    equipped.Action.Activate(this, hold);
+                    return;
+                }
+            }
+
+            ActivateDefaultAction(hold);
+        }
+
+        public void ActivateDefaultAction(bool hold = false)
+        {
+            if (Action != null)
+            {
+                Action.Activate(this, hold);
+            }
+        }
 
         public void Kill()
         {

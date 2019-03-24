@@ -28,22 +28,22 @@ namespace TosserWorld.Entities
         // Update is called once per frame
         protected override void Update()
         {
-            HandleInput();
+            Inputs();
 
             base.Update();
         }
 
-        private void HandleInput()
+        private void Inputs()
         {
             // Ensure the player is able to receive inputs
             if (IsInputAllowed())
             {
-                HandleKeyboard();
-                HandleMouse();
+                Mouse();
+                Keyboard();
             }
         }
 
-        private void HandleKeyboard()
+        private void Keyboard()
         {
             // MOVEMENT
             {
@@ -54,13 +54,25 @@ namespace TosserWorld.Entities
                 Vector2 walk = new Vector2(hor, ver);
                 if (walk.magnitude > 0)
                 {
-                    // If there's movement input, signal the brain to walk
-                    Brain.Triggers.Set(TosserBrain.LocalTriggers.WALK_KEYBOARD, walk);
+                    // If there's movement input, reset queued actions and walk
+                    Brain.Triggers.Set(TosserBrain.LocalTriggers.RESET, null);
+                    Movement.MoveScreenFull(walk);
                 }
             }
 
             // ACTIONS
             {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    // First shot
+                    ActivateEquipment();
+                }
+                else if (Input.GetKey(KeyCode.Space))
+                {
+                    // Auto fire
+                    ActivateEquipment(true);
+                }
+
                 if (Input.GetKeyDown(KeyCode.Z))
                 {
                     Inventory.DropAll();
@@ -72,7 +84,7 @@ namespace TosserWorld.Entities
             }
         }
 
-        private void HandleMouse()
+        private void Mouse()
         {
             // MOVEMENT
             {

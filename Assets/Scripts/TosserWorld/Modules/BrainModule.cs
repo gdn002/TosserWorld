@@ -345,7 +345,6 @@ namespace TosserWorld.Modules
             SpeechBubble.fontSize = 40;
         }
 
-
         //// ---- INTERNAL COROUTINES ----
 
         public IEnumerator Talk(string line)

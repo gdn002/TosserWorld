@@ -30,6 +30,10 @@ namespace TosserWorld.Utilities
         /// <param name="direction">The direction in screen space</param>
         public void FlipToScreen(Vector2 direction)
         {
+            // Ignore insignificant values
+            if (Mathf.Abs(direction.x) < 0.0001f)
+                return;
+
             if (direction.x > 0)
             {
                 FlipTo(true);

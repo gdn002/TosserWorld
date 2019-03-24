@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TosserWorld.Entities;
+using TosserWorld.Modules;
 
 namespace TosserWorld.Utilities
 {
@@ -7,6 +8,7 @@ namespace TosserWorld.Utilities
     public class EntityEquipment
     {
         private EquipmentSlot[] Slots;
+        private ActionModule DefaultAction;
 
         public void Load(Entity owner)
         {

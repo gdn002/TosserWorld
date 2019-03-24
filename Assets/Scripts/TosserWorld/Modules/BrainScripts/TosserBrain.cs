@@ -10,11 +10,13 @@ namespace TosserWorld.Modules.BrainScripts
     {
         public class LocalTriggers
         {
+            public static string RESET          = "player_reset";
+
             public static string DROP_CURSOR    = "player_drop_cursor";
             public static string INTERACT       = "player_interact";
+            public static string ACTION         = "player_action";
 
             public static string WALK_MOUSE     = "player_walk_mouse";
-            public static string WALK_KEYBOARD  = "player_walk_keyboard";
 
         }
 
@@ -27,11 +29,19 @@ namespace TosserWorld.Modules.BrainScripts
         public void ClearAllTasks()
         {
             DropCursor = false;
+            Destination = null;
         }
 
 
         public override void RunBehaviorTree()
         {
+            if (Triggers.Contains(LocalTriggers.RESET))
+            {
+                ClearAllTasks();
+                Triggers.ClearAll();
+                return;
+            }
+
             if (Triggers.Contains(LocalTriggers.INTERACT))                              // If tosser was ordered to interact with something...
             {
                 ClearAllTasks();                                                        // ...clear all tasks...
@@ -49,13 +59,7 @@ namespace TosserWorld.Modules.BrainScripts
                 Destination = Triggers.Take<Vector2>(LocalTriggers.WALK_MOUSE);         // ...set their destination to the clicked spot in the world.
             }
 
-            if (Triggers.Contains(LocalTriggers.WALK_KEYBOARD))                         // If tosser was ordered to walk via keyboard...
-            {
-                ClearAllTasks();                                                        // ...clear all tasks...
-                Destination = null;                                                     // ...override their current destination...
-                MoveScreen(Triggers.Take<Vector2>(LocalTriggers.WALK_KEYBOARD));        // ...and move accordingly.
-            }
-            else if (Destination != null)                                               // If tosser has a set destination instead...
+            if (Destination != null)                                                    // If tosser has a set destination...
             {
                 bool arrived = GoTo(Destination.Value);                                 // ...walk towards the destination.
 

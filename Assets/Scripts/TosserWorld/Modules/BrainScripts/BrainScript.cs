@@ -95,22 +95,17 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected void Stop()
         {
-            SetAnimation("Move", false);
             Me.Movement.Stop();
         }
 
         protected void Move(Vector2 direction)
         {
-            Me.FlipTo(direction);
             Me.Movement.MoveFull(direction);
-            SetAnimation("Move", true);
         }
 
         protected void MoveScreen(Vector2 direction)
         {
-            Me.FlipToScreen(direction);
             Me.Movement.MoveScreenFull(direction);
-            SetAnimation("Move", true);
         }
 
         protected bool GoTo(Vector2 destination)
@@ -160,7 +155,6 @@ namespace TosserWorld.Modules.BrainScripts
             }
             else if (Me.Movement.Movement.magnitude == 0)
             {
-                SetAnimation("Move", false);
                 return true;
             }
 

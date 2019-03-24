@@ -41,6 +41,7 @@ namespace TosserWorld.Modules
         /// </summary>
         public void Stop()
         {
+            SetAnimation("Move", false);
             Movement = Vector2.zero;
         }
 
@@ -51,6 +52,9 @@ namespace TosserWorld.Modules
         /// <param name="limit">True if the movement should obey the speed limit (default)</param>
         public void Move(Vector2 vector, bool limit = true)
         {
+            Owner.FlipTo(vector);
+            SetAnimation("Move", true);
+
             if (limit)
             {
                 // Clamp to walk speed
@@ -102,6 +106,13 @@ namespace TosserWorld.Modules
 
             // Call Walk() using the rotated vector
             MoveFull(vector);
+        }
+
+
+        private void SetAnimation(string trigger, bool value)
+        {
+            if (Owner.Animator != null)
+                Owner.Animator.SetBool(trigger, value);
         }
     }
 }

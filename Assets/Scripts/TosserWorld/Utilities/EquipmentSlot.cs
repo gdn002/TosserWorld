@@ -17,7 +17,9 @@ namespace TosserWorld.Utilities
             if (entity != null)
             {
                 entity.SetParent(Owner);
+                entity.transform.SetParent(transform);
 
+                entity.transform.localPosition = Vector3.zero;
                 entity.transform.localScale = Vector3.one;
                 entity.transform.localRotation = Quaternion.identity;
 

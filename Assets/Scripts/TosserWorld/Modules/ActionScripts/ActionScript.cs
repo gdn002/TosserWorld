@@ -12,6 +12,8 @@ namespace TosserWorld.Modules.ActionScripts
         {
             // All current ActionScript implementations must be included here
             ActionScript("Poke", typeof(PokeAction));
+            ActionScript("Damage", typeof(DamageAction));
+
         }
 
         private static void ActionScript(string name, System.Type type)

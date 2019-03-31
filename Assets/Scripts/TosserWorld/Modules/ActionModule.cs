@@ -2,6 +2,7 @@
 using TosserWorld.Modules.Configurations;
 using TosserWorld.Entities;
 using TosserWorld.Modules.ActionScripts;
+using System.Collections;
 
 namespace TosserWorld.Modules
 {
@@ -11,18 +12,29 @@ namespace TosserWorld.Modules
         SpawnPrefab,
     }
 
+    public enum ActionAnimation
+    {
+        NoAnimation = 0,
+        Swing,
+    }
+
     public class ActionModule : Module
     {
         public int RateOfFire { get; private set; }
         public bool AutoFire { get; private set; }
         public bool RunAndGun { get; private set; }
 
+        public ActionAnimation ActionAnimation { get; private set; }
         public ActionType ActionType { get; private set; }
         public ActionScript ActionScript { get; private set; }
         public GameObject SpawnPrefab { get; private set; }
 
+        private int ActivationFrame = 0;
+        private float ActivationDelay { get { return 0.017f * ActivationFrame; } }
+
         private float TimeBetweenShots { get { return (60f / RateOfFire); } }
         private float Timer = 0;
+
 
         protected override void OnInitialize(ModuleConfiguration configuration)
         {
@@ -31,8 +43,11 @@ namespace TosserWorld.Modules
             AutoFire = actionConfig.AutoFire;
             RunAndGun = actionConfig.RunAndGun;
 
+            ActionAnimation = actionConfig.ActionAnimation;
             ActionType = actionConfig.ActionType;
             SpawnPrefab = actionConfig.SpawnPrefab;
+
+            ActivationFrame = actionConfig.ActivationFrame();
 
             ActionScript = ActionScriptSelector.InstantiateScript(actionConfig.SelectedScript);
             ActionScript.Initialize(Owner);
@@ -49,21 +64,34 @@ namespace TosserWorld.Modules
                         Owner.Movement.Stop();
                 }
 
+                AnimateAction(actor);
                 DoAction(actor);
             }
         }
 
-        public void DoAction(Entity actor)
+        private void AnimateAction(Entity actor)
+        {
+            switch(ActionAnimation)
+            {
+                case ActionAnimation.NoAnimation:
+                    return;
+                case ActionAnimation.Swing:
+                    actor.Animator.SetTrigger("Swing");
+                    return;
+            }
+        }
+
+        private void DoAction(Entity actor)
         {
             Timer = 0;
 
             switch (ActionType)
             {
                 case ActionType.RunScript:
-                    ActionScript.Run(actor);
+                    Owner.StartCoroutine(RunActionScript(actor));
                     break;
                 case ActionType.SpawnPrefab:
-                    Object.Instantiate(SpawnPrefab, actor.Position, actor.transform.rotation);
+                    Owner.StartCoroutine(RunSpawnPrefab(actor));
                     break;
             }
         }
@@ -95,6 +123,18 @@ namespace TosserWorld.Modules
         public override void Update()
         {
             Timer += Time.deltaTime;
+        }
+
+        private IEnumerator RunActionScript(Entity actor)
+        {
+            yield return new WaitForSeconds(ActivationDelay);
+            ActionScript.Run(actor);
+        }
+
+        private IEnumerator RunSpawnPrefab(Entity actor)
+        {
+            yield return new WaitForSeconds(ActivationDelay);
+            Object.Instantiate(SpawnPrefab, actor.Position, actor.transform.rotation);
         }
     }
 }

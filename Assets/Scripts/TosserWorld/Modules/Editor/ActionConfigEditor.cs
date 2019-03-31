@@ -22,6 +22,9 @@ namespace TosserWorld.Modules.Configurations
             Target.AutoFire = EditorGUILayout.Toggle("Auto Fire ", Target.AutoFire);
             Target.RunAndGun = EditorGUILayout.Toggle("Run and Gun ", Target.RunAndGun);
 
+            Target.ActionAnimation = (ActionAnimation)EditorGUILayout.EnumPopup("Animation Type: ", Target.ActionAnimation);
+            EditorGUILayout.LabelField("Activation frame: " + (Target.ActivationFrame()));
+
             EditorGUILayout.Space();
 
             Target.ActionType = (ActionType)EditorGUILayout.EnumPopup("Action Type: ", Target.ActionType);

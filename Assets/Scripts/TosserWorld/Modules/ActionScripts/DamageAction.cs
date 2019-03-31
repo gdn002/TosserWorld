@@ -14,7 +14,7 @@ namespace TosserWorld.Modules.ActionScripts
                 {
                     if (entity.Stats != null)
                     {
-                        entity.Stats.Health.Modify(-15);
+                        entity.Stats.Health.Modify(-25);
                     }
                 }
             }

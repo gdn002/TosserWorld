@@ -23,6 +23,7 @@ namespace TosserWorld.Modules
         public int RateOfFire { get; private set; }
         public bool AutoFire { get; private set; }
         public bool RunAndGun { get; private set; }
+        public bool ConsumesItem { get; private set; }
 
         public ActionAnimation ActionAnimation { get; private set; }
         public ActionType ActionType { get; private set; }
@@ -44,6 +45,7 @@ namespace TosserWorld.Modules
             RateOfFire = actionConfig.RateOfFire;
             AutoFire = actionConfig.AutoFire;
             RunAndGun = actionConfig.RunAndGun;
+            ConsumesItem = actionConfig.ConsumesItem;
 
             ActionAnimation = actionConfig.ActionAnimation;
             ActionType = actionConfig.ActionType;
@@ -99,6 +101,17 @@ namespace TosserWorld.Modules
             }
         }
 
+        private void AfterAction(Entity actor)
+        {
+            if (ConsumesItem)
+            {
+                if (Owner.Stacking != null)
+                {
+                    Owner.Stacking.ChangeAmount(-1);
+                }
+            }
+        }
+
         private bool CanFire(bool hold)
         {
             if (!Ready)
@@ -135,6 +148,7 @@ namespace TosserWorld.Modules
         {
             yield return new WaitForSeconds(ActivationDelay);
             ActionScript.Run(actor);
+            AfterAction(actor);
             Ready = true;
         }
 
@@ -142,6 +156,7 @@ namespace TosserWorld.Modules
         {
             yield return new WaitForSeconds(ActivationDelay);
             Object.Instantiate(SpawnPrefab, actor.Position, actor.transform.rotation);
+            AfterAction(actor);
             Ready = true;
         }
     }

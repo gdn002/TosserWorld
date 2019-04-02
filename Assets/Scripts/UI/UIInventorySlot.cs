@@ -54,7 +54,18 @@ namespace TosserWorld.UI
             {
                 if (UICursor.Cursor.AttachedEntity == null)
                 {
-                    UICursor.Cursor.SetAttachedEntity(Inventory.Take(Slot));
+                    if (Input.GetKey(KeyCode.LeftControl))
+                    {
+                        var item = Inventory.Peek(Slot);
+                        if (item != null)
+                        {
+                            item.Owner.ActivateAction(Inventory.Owner);
+                        }
+                    }
+                    else
+                    {
+                        UICursor.Cursor.SetAttachedEntity(Inventory.Take(Slot));
+                    }
                 }
                 else
                 {

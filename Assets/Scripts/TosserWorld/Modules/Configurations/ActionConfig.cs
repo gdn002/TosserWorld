@@ -8,6 +8,7 @@ namespace TosserWorld.Modules.Configurations
         public int RateOfFire = 60;
         public bool AutoFire = false;
         public bool RunAndGun = false;
+        public bool ConsumesItem = false;
 
         public ActionAnimation ActionAnimation = ActionAnimation.NoAnimation;
         public ActionType ActionType = ActionType.RunScript;

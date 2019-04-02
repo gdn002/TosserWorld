@@ -51,21 +51,34 @@ namespace TosserWorld.Modules.BrainScripts
 
     public abstract class BrainScript
     {
-        protected BrainModule BrainComponent;
+        protected BrainModule BrainModule;
 
-        protected Entity Me { get { return BrainComponent.Owner; } }
+        protected Entity Me { get { return BrainModule.Owner; } }
 
-        protected BrainModule.BrainTriggers Triggers { get { return BrainComponent.Triggers; } }
-        protected BrainModule.BrainAwareness Awareness { get { return BrainComponent.Awareness; } }
+        protected BrainModule.BrainTriggers Triggers { get { return BrainModule.Triggers; } }
+        protected BrainModule.BrainAwareness Awareness { get { return BrainModule.Awareness; } }
 
 
         public void SetComponent(BrainModule component)
         {
-            BrainComponent = component;
+            BrainModule = component;
         }
 
 
         public abstract void RunBehaviorTree();
+
+
+        // ---- TIMER
+
+        protected void ResetTimer()
+        {
+            BrainModule.Timer = 0;
+        }
+
+        protected bool WaitForTimer(float time)
+        {
+            return BrainModule.Timer >= time;
+        }
 
 
         // ---- ANIMATION
@@ -166,7 +179,7 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected void Talk(string line)
         {
-            Me.StartCoroutine(BrainComponent.Talk(line));
+            Me.StartCoroutine(BrainModule.Talk(line));
         }
 
 

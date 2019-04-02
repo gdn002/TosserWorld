@@ -45,7 +45,7 @@ namespace TosserWorld.Modules.BrainScripts
                     return;
                 }
 
-                if (Me.DistanceTo(CurrentTarget) > BrainComponent.AwarenessRadius)
+                if (Me.DistanceTo(CurrentTarget) > BrainModule.AwarenessRadius)
                 {
                     CurrentTarget = null;
                     return;

@@ -163,6 +163,25 @@ namespace TosserWorld.Modules
         }
 
         /// <summary>
+        /// Searches this inventory for an entity that matches a given name.
+        /// </summary>
+        /// <param name="name">The name to search</param>
+        /// <returns>The first stored stack that matches the name (may be null)</returns>
+        public StackingModule Search(string name)
+        {
+            foreach (var item in Storage)
+            {
+                if (item != null)
+                {
+                    if (item.Owner.Name == name)
+                        return item;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Takes a stack from a container slot.
         /// </summary>
         /// <param name="slot">The slot to take from</param>

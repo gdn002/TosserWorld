@@ -244,6 +244,11 @@ namespace TosserWorld.Entities
         void OnDestroy()
         {
             GlobalChunk.RemoveEntity(this);
+
+            if (Parent != null)
+            {
+                Parent.Inventory.Remove(Stacking);
+            }
         }
 
 
@@ -306,6 +311,14 @@ namespace TosserWorld.Entities
             if (Action != null)
             {
                 Action.Activate(this, hold);
+            }
+        }
+
+        public void ActivateAction(Entity actor, bool hold = false)
+        {
+            if (Action != null)
+            {
+                Action.Activate(actor, hold);
             }
         }
 

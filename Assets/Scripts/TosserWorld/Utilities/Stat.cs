@@ -28,6 +28,7 @@ namespace TosserWorld.Utilities
         public int Modifier { get; private set; }
 
         public int EffectiveMaximum { get { return Maximum + Modifier; } }
+        public bool IsMaxed { get { return Current >= Maximum; } }
 
         public bool Enabled { get; private set; }
 

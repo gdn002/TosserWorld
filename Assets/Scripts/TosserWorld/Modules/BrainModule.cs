@@ -299,6 +299,7 @@ namespace TosserWorld.Modules
         private TextMesh SpeechBubble;
         private int SpeechStack = 0;
 
+        public float Timer = 0;
 
         protected override void OnInitialize(ModuleConfiguration configuration)
         {
@@ -319,6 +320,7 @@ namespace TosserWorld.Modules
             if (Owner.IsAlive)
             {
                 ActiveBrain.RunBehaviorTree();
+                Timer += Time.deltaTime;
             }
         }
 

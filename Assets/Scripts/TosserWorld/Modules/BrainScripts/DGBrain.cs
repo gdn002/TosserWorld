@@ -16,21 +16,31 @@ namespace TosserWorld.Modules.BrainScripts
             if (Me.IsChild)
                 return;
 
+            // If DG is hurt, check for healing items
+            if (Me.Stats.Health.Maximum - Me.Stats.Health.Current >= 25)
+            {
+                var item = Me.Inventory.Search("Chicken Wing");
+                if (item != null)
+                {
+                    // If found, use the item
+                    item.Owner.ActivateAction(Me);
+                }
+            }
+
             // If DG has a target, execute this block
             if (CurrentTarget != null)
             {
+                // Give up if the target was picked up by something else
+                if (CurrentTarget.IsChild)
+                {
+                    CurrentTarget = null;
+                    IsAware = false;
+                    return;
+                }
+
                 // If DG is aware of a target, execute the "go to" block
                 if (IsAware)
                 {
-                    // Give up if the target was picked up by something else
-                    if (CurrentTarget.IsChild)
-                    {
-                        Stop();
-                        CurrentTarget = null;
-                        IsAware = false;
-                        return;
-                    }
-
                     // Wait until the "notice" animation has finished before going to the target
                     if (WaitForAnimation(AnimNoticeHash))
                     {
@@ -39,9 +49,9 @@ namespace TosserWorld.Modules.BrainScripts
                         // If in range, pick the target up
                         if (CurrentTarget.Interaction.RunInteraction(Me, Interactions.PickUp))
                         {
-                            Stop();
                             IsAware = false;
                             CurrentTarget = null;
+                            ResetTimer();
                         }
                     }
                 }
@@ -56,7 +66,12 @@ namespace TosserWorld.Modules.BrainScripts
             // Otherwise look for a target
             else
             {
-                CurrentTarget = Awareness.FindNearest("Chicken Wing", false);
+                Stop();
+
+                if (WaitForTimer(0.5f))
+                {
+                    CurrentTarget = Awareness.FindNearest("Chicken Wing", false);
+                }
             }
         }
     }

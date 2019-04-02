@@ -65,6 +65,15 @@ namespace TosserWorld.Modules
             return stack;
         }
 
+        public void ChangeAmount(int delta)
+        {
+            Amount += delta;
+            if (Amount <= 0)
+            {
+                Owner.Remove();
+            }
+        }
+
         public bool StacksMatch(StackingModule other)
         {
             if (other == null)

@@ -29,6 +29,8 @@ namespace TosserWorld.Modules
         public ActionScript ActionScript { get; private set; }
         public GameObject SpawnPrefab { get; private set; }
 
+        private bool Ready = true;
+
         private int ActivationFrame = 0;
         private float ActivationDelay { get { return 0.017f * ActivationFrame; } }
 
@@ -84,6 +86,7 @@ namespace TosserWorld.Modules
         private void DoAction(Entity actor)
         {
             Timer = 0;
+            Ready = false;
 
             switch (ActionType)
             {
@@ -98,6 +101,9 @@ namespace TosserWorld.Modules
 
         private bool CanFire(bool hold)
         {
+            if (!Ready)
+                return false;
+
             if (AutoFire)
             {
                 // If the action allows auto fire, first shots are uncapped
@@ -129,12 +135,14 @@ namespace TosserWorld.Modules
         {
             yield return new WaitForSeconds(ActivationDelay);
             ActionScript.Run(actor);
+            Ready = true;
         }
 
         private IEnumerator RunSpawnPrefab(Entity actor)
         {
             yield return new WaitForSeconds(ActivationDelay);
             Object.Instantiate(SpawnPrefab, actor.Position, actor.transform.rotation);
+            Ready = true;
         }
     }
 }

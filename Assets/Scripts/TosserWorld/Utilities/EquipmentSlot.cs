@@ -27,12 +27,17 @@ namespace TosserWorld.Utilities
             }
         }
 
+        public void Remove()
+        {
+            Equipped = null;
+        }
+
         public void DropEquipped()
         {
-            Equipped.SetParent(null);
-            Equipped.Position = Equipped.Position + new Vector2(0.5f, 0);
-            Equipped.transform.localScale = Vector3.one;
-            Equipped = null;
+            Entity drop = Equipped;
+            drop.SetParent(null);
+            drop.Position = drop.Position + new Vector2(0.5f, 0);
+            drop.transform.localScale = Vector3.one;
         }
     }
 }

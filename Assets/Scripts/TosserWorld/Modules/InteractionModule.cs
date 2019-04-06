@@ -158,7 +158,6 @@ namespace TosserWorld.Modules
         {
             if (CanPickUp(activator))
             {
-                Owner.RemoveSelfFromInventory();
                 activator.Inventory.Add(Owner.Stacking);
             }
         }
@@ -173,7 +172,6 @@ namespace TosserWorld.Modules
         {
             if (CanEquip(activator))
             {
-                Owner.RemoveSelfFromInventory();
                 activator.EquipmentSlots[0].AddToSlot(Owner);
             }
         }

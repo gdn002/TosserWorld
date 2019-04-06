@@ -408,11 +408,23 @@ namespace TosserWorld.Entities
             return Vector2.Distance(transform.position, entity.transform.position);
         }
 
+        /// <summary>
+        /// Sets a new parent entity for this entity. The entity will be effectively "attached" to its parent until it is made independent again.
+        /// Setting a new parent for this entity will remove it from the inventory or equipment slot it is currently in (if it applies).
+        /// </summary>
+        /// <param name="parent">The new parent entity. Can be null in order to make this entity independent.</param>
         public void SetParent(Entity parent)
         {
             if (Parent == parent)
                 return; // Entity already has this parent
 
+            if (IsChild)
+            {
+                // If the entity had a different parent, clean it up from its parent's equipment/inventory
+                RemoveFromParent();
+            }
+
+            // Set the new parent
             Parent = parent;
             if (IsChild)
             {
@@ -441,13 +453,13 @@ namespace TosserWorld.Entities
             }
         }
 
-        /// <summary>
-        /// Forces this entity to remove itself from its inventory slot, if it is currently in one. This function does not cause the container to drop the entity by itself!
-        /// </summary>
-        public void RemoveSelfFromInventory()
+        private void RemoveFromParent()
         {
             if (IsChild)
             {
+                if (Parent.EquipmentSlots.Remove(this))
+                    return;
+
                 if (Parent.Inventory != null)
                 {
                     Parent.Inventory.Remove(Stacking);

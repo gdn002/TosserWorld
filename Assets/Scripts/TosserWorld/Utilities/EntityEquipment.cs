@@ -33,6 +33,23 @@ namespace TosserWorld.Utilities
             }
         }
 
+        public bool Remove(Entity entity)
+        {
+            if (entity == null)
+                return true;
+
+            foreach (var slot in Slots)
+            {
+                if (slot.Equipped == entity)
+                {
+                    slot.Remove();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public int Length { get { return Slots.Length; } }
     }
 }

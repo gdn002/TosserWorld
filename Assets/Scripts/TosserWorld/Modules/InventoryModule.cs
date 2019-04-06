@@ -236,19 +236,22 @@ namespace TosserWorld.Modules
         /// Use this only when the stack is being moved out of the inventory externally to "clean up" its inventory slot.
         /// </summary>
         /// <param name="item">The stack to remove</param>
-        public void Remove(StackingModule item)
+        /// <returns>True if the stack was found in the storage and removed (or if it was null), false otherwise.</returns>
+        public bool Remove(StackingModule item)
         {
             if (item == null)
-                return;
+                return true;
 
             for (int i = 0; i < Storage.Length; ++i)
             {
                 if(Storage[i] == item)
                 {
                     Storage[i] = null;
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         public void DropAll()
@@ -257,12 +260,13 @@ namespace TosserWorld.Modules
 
             for (int i = 0; i < Storage.Length; ++i)
             {
-                if (Storage[i] != null)
+                StackingModule item = Storage[i];
+
+                if (item != null)
                 {
-                    Storage[i].Owner.SetParent(null);
-                    Storage[i].Owner.Position = Storage[i].Owner.Position + drop;
-                    Storage[i].Owner.Hide(false);
-                    Storage[i] = null;
+                    item.Owner.SetParent(null);
+                    item.Owner.Position = Storage[i].Owner.Position + drop;
+                    item.Owner.Hide(false);
 
                     drop = Quaternion.Euler(0, 0, -15) * drop;
                 }

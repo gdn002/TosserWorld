@@ -1,10 +1,19 @@
 ﻿using TosserWorld.Modules.Configurations;
+using TosserWorld.UI;
 using TosserWorld.Utilities;
+using UnityEngine;
 
 namespace TosserWorld.Modules
 {
     public class StatsModule : Module
     {
+        private static GameObject StatBarPrefab;
+
+        static StatsModule()
+        {
+            StatBarPrefab = Resources.Load<GameObject>("Prefabs/UI/World/StatBar");
+        }
+
         public Stat Health;
         public Stat Stamina;
 
@@ -14,6 +23,11 @@ namespace TosserWorld.Modules
 
             Health = new Stat(statsConfig.MaxHealth, statsConfig.HasHealth);
             Stamina = new Stat(statsConfig.MaxStamina, statsConfig.HasStamina);
+
+            GameObject healthBar = Object.Instantiate(StatBarPrefab);
+            healthBar.GetComponent<UIStatBar>().TrackedStat = Health;
+            healthBar.transform.SetParent(Owner.transform);
+            healthBar.transform.localPosition = new Vector3(0, 0, -1);
         }
 
         public override void Update()

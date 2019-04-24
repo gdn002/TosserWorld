@@ -256,7 +256,7 @@ namespace TosserWorld.Entities
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
+            foreach (SpriteRenderer renderer in Render.GetComponentsInChildren<SpriteRenderer>())
             {
                 renderer.color = Color.white;
             }
@@ -264,7 +264,7 @@ namespace TosserWorld.Entities
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
+            foreach (SpriteRenderer renderer in Render.GetComponentsInChildren<SpriteRenderer>())
             {
                 renderer.color = Color.yellow;
             }

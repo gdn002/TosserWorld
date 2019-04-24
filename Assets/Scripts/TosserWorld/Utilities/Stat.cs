@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TosserWorld.Utilities
 {
-    public struct Stat
+    public class Stat
     {
         public Stat(int max, bool enabled = true)
         {
@@ -26,6 +26,8 @@ namespace TosserWorld.Utilities
         public int Current { get; private set; }
         public int Maximum { get; private set; }
         public int Modifier { get; private set; }
+
+        public float PercentAt { get { return (float)Current / EffectiveMaximum; } }
 
         public int EffectiveMaximum { get { return Maximum + Modifier; } }
         public bool IsMaxed { get { return Current >= Maximum; } }

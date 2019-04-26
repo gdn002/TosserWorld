@@ -3,6 +3,13 @@ using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
+    /// <summary>
+    /// Module for handling physics-based movement such as pushing, bouncing and sliding.
+    /// Requirements:
+    /// - A rigidbody2D component in the owning entity
+    /// - A collider2D component in the owning entity that is not composite or edge 
+    /// - A child object tagged "PhysicsBody" which will be the target of vertical movement
+    /// </summary>
     public class PhysicsModule : Module
     {
         public float AirDrag;
@@ -47,9 +54,7 @@ namespace TosserWorld.Modules
 
             EnableOnCollisions = physicsConfig.EnableOnCollisions;
 
-
-            // TODO: This is just a temporary hack
-            PhysicsBody = Owner.transform.Find("Render").Find("Body");
+            PhysicsBody = FindPhysicsBody();
 
             InitializeEntitySpace();
         }
@@ -320,6 +325,37 @@ namespace TosserWorld.Modules
                     RigidBody.velocity = RigidBody.velocity - frictionVector;
                 }
             }
+        }
+
+
+        private Transform FindPhysicsBody()
+        {
+            foreach (Transform child in Owner.transform)
+            {
+                if (child.gameObject.CompareTag("PhysicsBody"))
+                    return child;
+
+                Transform found = FindPhysicsBody(child);
+                if (found != null)
+                    return found;
+            }
+
+            return null;
+        }
+
+        private Transform FindPhysicsBody(Transform parent)
+        {
+            foreach (Transform child in parent)
+            {
+                if (child.gameObject.CompareTag("PhysicsBody"))
+                    return child;
+
+                Transform found = FindPhysicsBody(child);
+                if (found != null)
+                    return found;
+            }
+
+            return null;
         }
     }
 }

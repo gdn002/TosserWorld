@@ -18,6 +18,10 @@ namespace TosserWorld.Modules
         Swing,
     }
 
+    /// <summary>
+    /// Module for defining actions that can be activated either by the entity itself, or by another entity using it.
+    /// Actions can either run a custom ActionScript, or spawn a prefab in the world (such as a projectile)
+    /// </summary>
     public class ActionModule : Module
     {
         public int RateOfFire { get; private set; }

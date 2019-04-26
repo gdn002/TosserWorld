@@ -72,7 +72,6 @@ namespace TosserWorld.UI
         {
             DestroyIcon();
 
-            // TODO: Maybe have a prefab for this
             FloatingIcon = new GameObject();
             var image = FloatingIcon.AddComponent<Image>();
             image.sprite = AttachedEntity.InventorySprite;

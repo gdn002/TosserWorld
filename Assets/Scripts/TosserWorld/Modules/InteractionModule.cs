@@ -12,6 +12,9 @@ namespace TosserWorld.Modules
         Equip,
     }
 
+    /// <summary>
+    /// Module for handling how this entity should be interacted with.
+    /// </summary>
     public class InteractionModule : Module
     {
         public Interactions DefaultInteraction;

@@ -15,9 +15,6 @@ namespace TosserWorld.Entities
     [System.Serializable]
     public class Entity : MonoBehaviour
     {
-        // TODO: Move this somewhere better
-        public static EntityChunk GlobalChunk = new EntityChunk();
-
         // Used internally to ensure all components have been initialized
         private bool IsInitialized = false;
 
@@ -204,7 +201,7 @@ namespace TosserWorld.Entities
                 LoadControllers();
                 LoadModules();
 
-                GlobalChunk.AddEntity(this);
+                EntityChunk.GlobalChunk.AddEntity(this);
 
                 // Object is ready for action
                 IsInitialized = true;
@@ -243,7 +240,7 @@ namespace TosserWorld.Entities
 
         void OnDestroy()
         {
-            GlobalChunk.RemoveEntity(this);
+            EntityChunk.GlobalChunk.RemoveEntity(this);
 
             if (Parent != null)
             {

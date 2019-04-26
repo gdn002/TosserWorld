@@ -15,6 +15,9 @@ namespace TosserWorld.Modules
     }
 
 
+    /// <summary>
+    /// Module that contains an entity's tags. All entities have a tag list module, if a custom tag list is not provided a default tag list will be generated for the entity.
+    /// </summary>
     public class TagListModule : Module
     {
         public List<EntityTags> Tags = new List<EntityTags>();

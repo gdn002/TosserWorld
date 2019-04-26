@@ -3,6 +3,11 @@ using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
+    /// <summary>
+    /// Module for allowing an entity to move itself (or be moved). All non-static entities should have this module.
+    /// Requirements:
+    /// - A rigidbody2D component in the owning entity
+    /// </summary>
     public class MovementModule : Module
     {
         public float SpeedLimit;

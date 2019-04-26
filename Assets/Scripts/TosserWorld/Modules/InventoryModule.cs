@@ -49,6 +49,9 @@ namespace TosserWorld.Modules
         }
     }
 
+    /// <summary>
+    /// Module for giving the entity an inventory space.
+    /// </summary>
     public class InventoryModule : Module
     {
         private static string DEFAULT_INVENTORY_PREFAB = "Prefabs/UI/Inventory/InventoryPanel";

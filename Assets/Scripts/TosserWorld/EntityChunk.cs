@@ -7,6 +7,8 @@ namespace TosserWorld
 {
     public class EntityChunk
     {
+        public static EntityChunk GlobalChunk = new EntityChunk();
+
         private Dictionary<EntityTags, LinkedList<Entity>> TagDictionary = new Dictionary<EntityTags, LinkedList<Entity>>();
 
         public EntityChunk()

@@ -3,6 +3,9 @@ using TosserWorld.Entities;
 
 namespace TosserWorld.Modules
 {
+    /// <summary>
+    /// Module for allowing entities to be stacked, picked up and placed in inventories.
+    /// </summary>
     public class StackingModule : Module
     {
         public int MaxAmount;

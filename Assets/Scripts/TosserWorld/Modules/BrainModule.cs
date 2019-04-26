@@ -9,6 +9,10 @@ using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
+    /// <summary>
+    /// Module for defining entity behaviors (AI). Can run a custom BrainScript, receive triggers and provide awareness of other entities within a set range.
+    /// Requirements may vary depending on the BrainScript selected.
+    /// </summary>
     public class BrainModule : Module
     {
         public class BrainAwareness
@@ -334,7 +338,6 @@ namespace TosserWorld.Modules
             SpeechBubble = newObj.AddComponent<TextMesh>();
 
             newObj.name = "Speech Bubble";
-            newObj.tag = "IsometricSprite";
             newObj.transform.localPosition = new Vector3(0, 1.5f, 0);
             newObj.transform.localScale = new Vector3(0.1f, 0.1f, 1);
 

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace TosserWorld.Modules
 {
+    /// <summary>
+    /// Module for handling entity stats. This module also allows the entity to receive status effects.
+    /// </summary>
     public class StatsModule : Module
     {
         private static GameObject StatBarPrefab;

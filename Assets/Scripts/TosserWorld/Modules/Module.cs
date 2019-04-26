@@ -3,8 +3,9 @@ using TosserWorld.Modules.Configurations;
 
 namespace TosserWorld.Modules
 {
-    
-
+    /// <summary>
+    /// Base module class. A module is a custom component that adds functionality to an entity.
+    /// </summary>
     public abstract class Module
     {
         public Entity Owner;

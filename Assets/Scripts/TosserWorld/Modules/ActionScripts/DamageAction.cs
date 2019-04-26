@@ -14,7 +14,12 @@ namespace TosserWorld.Modules.ActionScripts
                 {
                     if (entity.Stats != null)
                     {
-                        entity.Stats.Health.Modify(-25);
+                        entity.Stats.Health.Modify(-15);
+
+                        if (entity.Brain != null)
+                        {
+                            entity.Brain.Triggers.Set("Agressor", actor);
+                        }
                     }
                 }
             }

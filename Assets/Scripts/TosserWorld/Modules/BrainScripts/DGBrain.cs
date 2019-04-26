@@ -10,11 +10,39 @@ namespace TosserWorld.Modules.BrainScripts
 
         bool IsAware = false;
         Entity CurrentTarget = null;
+        Entity CurrentAgressor = null;
 
         public override void RunBehaviorTree()
         {
             if (Me.IsChild)
                 return;
+
+            // Check if DG has been attacked
+            if (Triggers.Contains("Agressor"))
+            {
+                // Forget current target and remember the agressor
+                CurrentAgressor = Triggers.Take<Entity>("Agressor");
+                CurrentTarget = null;
+                IsAware = false;
+                ResetTimer();
+            }
+
+            // If DG has an agressor
+            if (CurrentAgressor != null)
+            {
+                if (WaitForTimer(5))
+                {
+                    // If enough time has passed since the last attack, stop and forget
+                    CurrentAgressor = null;
+                    Stop();
+                }
+                else
+                {
+                    // Otherwise, flee
+                    RunAwayFrom(CurrentAgressor.Position);
+                    return;
+                }
+            }
 
             // If DG is hurt, check for healing items
             if (Me.Stats.Health.Maximum - Me.Stats.Health.Current >= 25)

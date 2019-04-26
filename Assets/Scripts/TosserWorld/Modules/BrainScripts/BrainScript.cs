@@ -123,7 +123,7 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected bool GoTo(Vector2 destination)
         {
-            Vector2 position = Me.transform.position;
+            Vector2 position = Me.Position;
 
             if (position != destination)
             {
@@ -138,7 +138,7 @@ namespace TosserWorld.Modules.BrainScripts
                 else
                 {
                     // If else, close the gap and stop movement
-                    Me.transform.position = destination;
+                    Me.Position = destination;
                     Stop();
                 }
 
@@ -150,8 +150,8 @@ namespace TosserWorld.Modules.BrainScripts
 
         protected bool Leash(Entity target, float near, float far)
         {
-            Vector2 position = Me.transform.position;
-            Vector2 destination = target.transform.position;
+            Vector2 position = Me.Position;
+            Vector2 destination = target.Position;
 
             // Calculate the needed walk to reach the target
             Vector2 direction = destination - position;
@@ -172,6 +172,13 @@ namespace TosserWorld.Modules.BrainScripts
             }
 
             return false;
+        }
+
+        protected bool RunAwayFrom(Vector2 point)
+        {
+            Vector2 direction = Me.Position - point;
+            Move(direction);
+            return true;
         }
 
 

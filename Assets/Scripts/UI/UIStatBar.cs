@@ -17,6 +17,8 @@ namespace TosserWorld.UI
         {
             BarTransform = transform.Find("Bar");
             BarTransform.gameObject.GetComponent<SpriteRenderer>().color = BarColor;
+
+            transform.rotation = CameraController.CameraRotation;
         }
 
         // Update is called once per frame

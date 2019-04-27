@@ -1,4 +1,5 @@
-﻿using TosserWorld.Modules.Configurations;
+﻿using TosserWorld.Entities;
+using TosserWorld.Modules.Configurations;
 using TosserWorld.UI;
 using TosserWorld.Utilities;
 using UnityEngine;
@@ -17,8 +18,11 @@ namespace TosserWorld.Modules
             StatBarPrefab = Resources.Load<GameObject>("Prefabs/UI/World/StatBar");
         }
 
+
         public Stat Health;
         public Stat Stamina;
+
+        private GameObject HealthBar;
 
         protected override void OnInitialize(ModuleConfiguration configuration)
         {
@@ -27,10 +31,7 @@ namespace TosserWorld.Modules
             Health = new Stat(statsConfig.MaxHealth, statsConfig.HasHealth);
             Stamina = new Stat(statsConfig.MaxStamina, statsConfig.HasStamina);
 
-            GameObject healthBar = Object.Instantiate(StatBarPrefab);
-            healthBar.GetComponent<UIStatBar>().TrackedStat = Health;
-            healthBar.transform.SetParent(Owner.transform);
-            healthBar.transform.localPosition = new Vector3(0, 0, -1);
+            
         }
 
         public override void Update()
@@ -40,6 +41,25 @@ namespace TosserWorld.Modules
             if (Health.Current <= 0)
             {
                 Owner.Kill();
+            }
+
+
+            // UI updates
+
+            if (PlayerEntity.Player.DistanceTo(Owner) < 5)
+            {
+                if (HealthBar == null)
+                {
+                    HealthBar = Object.Instantiate(StatBarPrefab);
+                    HealthBar.GetComponent<UIStatBar>().TrackedStat = Health;
+                    HealthBar.transform.SetParent(Owner.transform);
+                    HealthBar.transform.localPosition = new Vector3(0, 0, -1);
+                }
+            }
+            else if (HealthBar != null)
+            {
+                Object.Destroy(HealthBar);
+                HealthBar = null;
             }
         }
     }

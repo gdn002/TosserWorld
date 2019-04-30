@@ -12,6 +12,13 @@ namespace TosserWorld.Modules
 
         // Material
         Sponge = 101,
+
+        // Items
+        Item = 201,
+        Weapon,
+        Food,
+        Healing,
+        Tool,
     }
 
 

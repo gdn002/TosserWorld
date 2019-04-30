@@ -124,7 +124,7 @@ namespace TosserWorld.Entities
 
         private bool IsInputAllowed()
         {
-            return true;
+            return IsAlive;
         }
     }
 }

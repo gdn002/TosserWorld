@@ -9,8 +9,9 @@ namespace TosserWorld.Modules.BrainScripts
         private static readonly int AnimNoticeHash = Animator.StringToHash("PawnNotice");
 
         bool IsAware = false;
-        Entity CurrentTarget = null;
-        Entity CurrentAgressor = null;
+        Entity Focus = null;
+        Entity Aggressor = null;
+
 
         public override void RunBehaviorTree()
         {
@@ -20,85 +21,178 @@ namespace TosserWorld.Modules.BrainScripts
             // Check if DG has been attacked
             if (Triggers.Contains("Agressor"))
             {
-                // Forget current target and remember the agressor
-                CurrentAgressor = Triggers.Take<Entity>("Agressor");
-                CurrentTarget = null;
-                IsAware = false;
+                // Forget current focus and remember the agressor
+                ClearStatus();
+
+                Aggressor = Triggers.Take<Entity>("Agressor");
                 ResetTimer();
             }
 
-            // If DG has an agressor
-            if (CurrentAgressor != null)
+            // If DG has an aggressor
+            if (Aggressor != null)
             {
-                if (WaitForTimer(5))
+                // Execute combat routine
+                CombatRoutine();
+                return;
+            }
+
+            // If DG is hurt
+            if (Me.Stats.Health.PercentAt < 0.7f)
+            {
+                // Execute healing routine
+                HealingRoutine();
+                return;
+            }
+
+            // If there's nothing else to do, execute looking for food routine
+            LookForFoodRoutine();
+        }
+
+
+        private void ClearStatus()
+        {
+            Aggressor = null;
+            Focus = null;
+            IsAware = false;
+        }
+
+
+        private void CombatRoutine()
+        {
+            // If enough time has passed since the last attack
+            // Or the aggressor is dead
+            if (WaitForTimer(5) || !Aggressor.IsAlive)
+            {
+                // Stop and forget
+                ClearStatus();
+                Stop();
+                return;
+            }
+
+            // If already has a weapon
+            if (Me.EquipmentSlots[0].Equipped != null && Me.EquipmentSlots[0].Equipped.TagList.HasTag(EntityTags.Weapon))
+            {
+                // Move towards the aggressor
+                GoTo(Aggressor.Position);
+
+                // If close enough
+                if (Me.DistanceTo(Aggressor) < 1.5f)
                 {
-                    // If enough time has passed since the last attack, stop and forget
-                    CurrentAgressor = null;
-                    Stop();
+                    // Use the weapon
+                    Me.ActivateEquipment();
                 }
+
+                return;
+            }
+
+            // If a weapon was found
+            if (Focus != null)
+            {
+                // Give up if the weapon was picked up by something else
+                if (Focus.IsChild)
+                {
+                    Focus = null;
+                    return;
+                }
+
+                // Move towards the weapon
+                GoTo(Focus.Position);
+
+                // If in range, equip the weapon
+                if (Focus.Interaction.RunInteraction(Me, Interactions.Equip))
+                {
+                    Focus = null;
+                }
+
+                return;
+            }
+            // If no weapon was found yet
+            else
+            {
+                // Look for a nearby weapon
+                Focus = Awareness.FindNearest(EntityTags.Weapon);
+            }
+
+            // If no weapon can be found, flee
+            RunAwayFrom(Aggressor.Position);
+        }
+
+        private void HealingRoutine()
+        {
+            // Check if already has a healing item
+            var item = Me.Inventory.Search(EntityTags.Healing);
+            if (item != null)
+            {
+                // Use the item
+                item.Owner.ActivateAction(Me);
+            }
+            else
+            {
+                // If has found a healing item already
+                if (Focus != null && Focus.TagList.HasTag(EntityTags.Healing))
+                {
+                    GoTo(Focus.Position);
+
+                    // If in range, pick the item up
+                    if (Focus.Interaction.RunInteraction(Me, Interactions.PickUp))
+                    {
+                        ClearStatus();
+                    }
+                }
+                // If hasn't found a healing item yet
                 else
                 {
-                    // Otherwise, flee
-                    RunAwayFrom(CurrentAgressor.Position);
-                    return;
+                    Focus = Awareness.FindNearest(EntityTags.Healing);
                 }
             }
+        }
 
-            // If DG is hurt, check for healing items
-            if (Me.Stats.Health.Maximum - Me.Stats.Health.Current >= 25)
-            {
-                var item = Me.Inventory.Search("Chicken Wing");
-                if (item != null)
-                {
-                    // If found, use the item
-                    item.Owner.ActivateAction(Me);
-                }
-            }
-
-            // If DG has a target, execute this block
-            if (CurrentTarget != null)
+        private void LookForFoodRoutine()
+        {
+            // If already found food
+            if (Focus != null)
             {
                 // Give up if the target was picked up by something else
-                if (CurrentTarget.IsChild)
+                if (Focus.IsChild)
                 {
-                    CurrentTarget = null;
-                    IsAware = false;
+                    ClearStatus();
                     return;
                 }
 
-                // If DG is aware of a target, execute the "go to" block
+                // If aware of the food
                 if (IsAware)
                 {
-                    // Wait until the "notice" animation has finished before going to the target
+                    // Wait until the "notice" animation has finished before chasing the food
                     if (WaitForAnimation(AnimNoticeHash))
                     {
-                        GoTo(CurrentTarget.Position);
+                        GoTo(Focus.Position);
 
-                        // If in range, pick the target up
-                        if (CurrentTarget.Interaction.RunInteraction(Me, Interactions.PickUp))
+                        // If in range, pick the food up
+                        if (Focus.Interaction.RunInteraction(Me, Interactions.PickUp))
                         {
-                            IsAware = false;
-                            CurrentTarget = null;
+                            ClearStatus();
                             ResetTimer();
+                            return;
                         }
                     }
                 }
-                // If DG is not yet aware of the target, play the "notice" animation
+                // If not yet aware of the food, play the "notice" animation
                 else
                 {
-                    Me.FlipTo(CurrentTarget.Position);
+                    Me.FlipTo(Focus.Position);
                     PlayAnimation(AnimNoticeHash);
                     IsAware = true;
                 }
             }
-            // Otherwise look for a target
+            // If hasn't found food already
             else
             {
                 Stop();
 
+                // Look for food after the grace period has passed
                 if (WaitForTimer(0.5f))
                 {
-                    CurrentTarget = Awareness.FindNearest("Chicken Wing", false);
+                    Focus = Awareness.FindNearest(EntityTags.Food);
                 }
             }
         }

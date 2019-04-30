@@ -185,6 +185,25 @@ namespace TosserWorld.Modules
         }
 
         /// <summary>
+        /// Searches this inventory for an entity that has a certain tag.
+        /// </summary>
+        /// <param name="name">The tag to filter</param>
+        /// <returns>The first stored stack that has the tag (may be null)</returns>
+        public StackingModule Search(EntityTags tag)
+        {
+            foreach (var item in Storage)
+            {
+                if (item != null)
+                {
+                    if (item.Owner.TagList.HasTag(tag))
+                        return item;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Takes a stack from a container slot.
         /// </summary>
         /// <param name="slot">The slot to take from</param>
